@@ -6,6 +6,7 @@
 #include <set>
 #include <cassert>
 #include <list>
+
 using namespace std;
 
 class LRUCache
@@ -20,7 +21,7 @@ public:
     void set(int key, int value)
     {
         pair<int,int> p(key,value);
-        auto it = find( l.begin(), l.end(), p);
+        auto it = lower_bound( l.cbegin(), l.cend(), p);
         
         if ( it != l.end())
         {
@@ -36,12 +37,15 @@ public:
     
     int get( int key )
     {
-        auto it = l.cbegin();
-        while( it != l.cend())
+        auto itf = l.begin();
+
+        for(; itf != l.end() ; itf++)
         {
-            if ( it->first == key)
-                return it->second;
-            it++;
+            if ( itf->first == key )
+            {
+                return itf->second; 
+            }
+            continue;
         }
         return -1;
     }
