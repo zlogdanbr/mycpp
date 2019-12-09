@@ -1,3 +1,5 @@
+// this was a hackerrank challenge
+
 #include <cmath>
 #include <cstdio>
 #include <vector>
