@@ -1,3 +1,6 @@
+
+// https://www.hackerrank.com/challenges/simple-text-editor/problem
+
 #include <cmath>
 #include <cstdio>
 #include <vector>
