@@ -19,69 +19,11 @@
 using namespace std;
 /* Head ends here */
 
-#define _DEBUG
-
-/*
-
-TEST CASE 1:
-7
-r 1
-a 1
-a 2
-a 1
-r 1
-r 2
-r 1
-
-TEST CASE 2
-6										
-a -2147483648					
-a -2147483648
-a -2147483647
-r -2147483648
-a 2147483647
-r -2147483648
-
-OUTPUT
--2147483648
--2147483648
--2147483648
--2147483647.5
--2147483647
-0
-
-TEST CASE 3
-3
-a -2147483648
-a -2147483648
-a -2147483647
-
-
-*/
 template<typename T>
 inline
 bool isEven( T& n )
 {
     return ( n % 2 == 0);
-}
-
-template <typename T>
-inline 
-void pr( const T& fv )
-{
-	if ( fv.size() == 0 )
-	{
-		cout << "[nullptr]" << endl;
-		return;
-	}
-	
-	int i = 0;
-	for( auto f: fv )
-	{
-		cout << "f[" << i << "]= " << f << endl;
-		i++;
-	}
-
 }
 
 // from Bjarne Stroustrup The Pratice Of Programming
@@ -92,193 +34,106 @@ inline In _find(In first, In last, const T& val)
         return first;
 }
 
+inline double ComputeLargeAverage( const long long& a, const long long& b)
+{
+    return (double)( (a+b)/(double)2 );
+}
+
 template <typename T>
 inline
-float calculateMedian( T& orig)
+double calculateMedian( T& _MySetContainer)
 {
-
-	int size =  orig.size();	
-		
-    if ( isEven( size ) ) 	
-	{
-		orig.sort();
-		auto it  = orig.begin();
-		int i = 0;
-		float n = 0;
-		
-#ifdef _DEBUG
-		for(; i < (size/2); i++,it=next(it))
-		{
-			cout << "i: " << i << " *it: " << *it << " it->next:  " << *next(it) << endl;
-		}
-#else
-		for(; i < (size/2); i++,it=next(it));
-#endif		
-		n = ( (float)(*it) + (float)*(prev(it)))/ (float)2;		
-	    return (float)n ;			
-	}
+    
+    int size =  _MySetContainer.size();    
+        
+    if ( isEven( size ) )     
+    {
+        auto it  = _MySetContainer.begin();
+        for(int i = 0; i < (size/2); i++,it=next(it));  
+        return ComputeLargeAverage( (*it), *(prev(it)) ) ;            
+    }
     else
-	{							
-		//  1 2 3 4 5
-		int i = 0;
-		float n = 0;
-		if ( size > 1 )
-		{
-			orig.sort();
-			auto it = orig.begin();
-			
-#ifdef _DEBUG
-			for(; i < (size+1)/2; i++,it=next(it));
-			{
-				cout << "i: " << i << " *it: " << *it << " it->next:  " << *next(it) << endl;
-			}
-#else
-			for(; i < (size+1)/2; i++,it=next(it));
-#endif			
-			n = (float)*(prev(it));
-		}
-		else
-		{
-			auto it = orig.begin();
-			n = (float)(*it);
-			i++;
-		}
-			
-        return n;	
-	}
+    {                            
+        if ( size > 1 )
+        {
+            auto it = _MySetContainer.begin();           
+            for( int i = 0; i < (size+1)/2; i++,it=next(it));          
+            return (double)*(prev(it));
+        }
+        else
+            return(double)(*_MySetContainer.begin());             
+    }
 }
 
-inline void printmedian( float& __median, int precision )
+inline void printmedian( double __median )
 {
-
-	if ( __median == (int)__median)
-	{
-
-#ifdef _DEBUG
-		cout << "Median actually calculated( integer )" << endl;
-#endif
-		cout << static_cast<int>(__median) << endl;
-	}
-	else
-	{
-#ifdef _DEBUG
-		cout << "Median actually calculated(float)" << endl;
-#endif
-		cout << fixed << setprecision(precision) << __median << endl;
-	}
+    if ( __median == (long long)__median)
+        cout << static_cast<long long>(__median) << endl;
+    else
+        cout << fixed << setprecision(1) << __median << endl;
 }
 
-void median( vector<char> s, vector<int> X) 
+void median( vector<char> s, vector<long long> X) 
 {
-    list<int> myset;
+    multiset<long long> myset;
     auto vit = X.begin();
 
     for( const auto& cmd: s )   
     {
         if ( cmd == 'a')
-        {
-			
-#ifdef _DEBUG
-			cout << "----------------------------------" << endl;
-			cout << "Command to add " << *vit << endl;
-			cout << "----------------------------------" << endl;
-			cout << "Before adding:" << endl;		
-			pr(myset);
-#endif	
-			myset.push_front(*vit);
-			// if ( myset.size() < 2 )
-				// myset.push_back(*vit);
-			// else
-				// myset.push_front(*vit);
-			
-#ifdef _DEBUG	
-			cout << "After adding:" << endl;
-			pr(myset);			
-#endif
-		    float m = calculateMedian(myset);
-			printmedian(m,1);	
-	
+        {  
+            myset.emplace(*vit);
+            printmedian( calculateMedian(myset));       
         }
-        else if ( cmd == 'r')
-        {
-			
-#ifdef _DEBUG
-			cout << "----------------------------------" << endl;
-			cout << "Command to remove: " << *vit << endl;
-			cout << "----------------------------------" << endl;			
-			cout << "Before delete:" << endl;
-			pr(myset);
-			cout << "Size is : " << myset.size() << endl;
-#endif	
-
-			if  ( myset.size() == 0 )
-			{
-				cout << "Wrong!" << endl;
-				vit++;
-				
-#ifdef _DEBUG	
-				cout << "After:" << endl;
-				pr(myset);
-#endif					
-				continue;
-			};
-			
-			//auto fit = find(myset.begin(), myset.end(), *vit);
-			auto fit = _find(myset.begin(), myset.end(), *vit);
+        //else if ( cmd == 'r')
+        else
+        {  
+            if  ( myset.size() == 0 )
+            {
+                cout << "Wrong!" << endl;
+                vit++;                   
+                continue;
+            };
+        
+            auto fit = _find(myset.begin(), myset.end(), *vit);
             if (  fit == myset.end() )
             {
                 cout << "Wrong!" << endl;
-				vit++;
-
-#ifdef _DEBUG	
-				cout << "After:" << endl;
-				pr(myset);
-#endif	
-				continue;
+                vit++;  
+                continue;
             }
             else
             {
-				myset.erase(fit);
-
-#ifdef _DEBUG	
-				cout << "After delete:" << endl;
-				pr(myset);
-#endif				
-			
-				if ( myset.size() != 0 )
-				{					
-					float m =  calculateMedian(myset);
-					printmedian(m,1);
-				}
-				else
-					cout << "Wrong!" << endl;
-            }			
-		
-        }		
+                myset.erase(fit);                        
+                if ( myset.size() != 0 )
+                    printmedian(calculateMedian(myset));
+                else
+                    cout << "Wrong!" << endl;
+            }                  
+        }        
         vit++;
     }
 }
 
     
-int main(){
+int main(void){
 
-//Helpers for input and output
+    //Helpers for input and output
 
-	int N;
-	cin >> N;
-	
-	vector<char> s;
-    vector<int> X;
-	char temp;
-    int tempint;
-	for(int i = 0; i < N; i++){
-		cin >> temp >> tempint;
+    long long N;
+    cin >> N;
+    
+    vector<char> s;
+    vector<long long> X;
+    char temp;
+    long long tempint;
+    for(long long i = 0; i < N; i++){
+        cin >> temp >> tempint;
         s.push_back(temp);
         X.push_back(tempint);
-	}
-	
-	median(s,X);
-	return 0;
-
+    }
+    
+    median(s,X);
+    return 0;
 }
 
