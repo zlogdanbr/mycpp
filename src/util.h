@@ -32,6 +32,7 @@ using namespace std::chrono;
 
 typedef long long ll;
 typedef multiset<long long> mset_long;
+typedef high_resolution_clock::time_point tp;
 
 namespace _dutil_ 
 {
@@ -125,12 +126,56 @@ namespace _dutil_
 		}	
 
 		// from Bjarne Stroustrup The Pratice Of Programming
-		// optimized search function
+		// optimized search function, if the container is not
+		// sorted this is the best algorithm
 		template<typename In, typename T>
 		inline In _find(In first, In last, const T& val)
 		{
 			while (first!=last && *first != val) ++first;
 				return first;
+		}
+		
+		
+		// implementation of binary search from the - excellent - book 
+		// C++ Data Structures and Algorithm Design Principles
+		// divide and conquere O(nlogn)
+		/*
+									element
+									
+				first-------------------M-------------------last				
+				if element > M				
+				                        first---------------last				
+				else										
+				first---------------last
+				
+				:				
+			
+		*/
+		template<typename T>
+		bool binary_search(T N, vector<T>& S)
+		{
+			auto first = S.begin();
+			auto last = S.end();
+
+			while (true)
+			{
+				// Get the middle element of the current range
+				auto range_length = std::distance(first, last);
+				auto mid_element_index = std::floor(range_length / 2);
+				auto mid_element = *(first + mid_element_index);
+
+				// Compare the middle element of current range with N
+				if (mid_element == N)
+					return true;
+				else if (mid_element > N)
+					std::advance(last, -mid_element_index);
+				if (mid_element < N)
+					std::advance(first, mid_element_index);
+
+				// If only one element left in the current range
+				if (range_length == 1)
+					return false;
+			}
 		}
 
 		// Implements a pair class of two integers
@@ -481,7 +526,7 @@ namespace _dutil_
 		
 		// starts computing the execution time of a code
 		inline
-		high_resolution_clock::time_point start_tracking()
+		const tp start_tracking()
 		{
 			return high_resolution_clock::now(); 
 		}
@@ -489,7 +534,7 @@ namespace _dutil_
 		// stops  computing the execution time of a code and print 
 		// elapsed time
 		inline
-		void end_tracking( high_resolution_clock::time_point& start, const char* msg )
+		void end_tracking( tp& start, const char* msg="" )
 		{
 			cout << "________________________________________" << endl;
 			cout << msg << endl;
@@ -504,13 +549,12 @@ namespace _dutil_
 	namespace _buffer
 	{
 		
-		int ConvertHexStringToDecimalString( const char* HexInputString, std::string& Output ) ;
-		char* vSetCurrentTimeStamp( char* szTimeStamp );
-		char* vSetCurrentTimeStamp( char* szTimeStamp, int isize );
-		int calculateCRC( char* buffer, int size );
-		unsigned char* sConvertHexBin2String( 	unsigned char ch, 
-												unsigned char* buffer);
-		char* szConvertStringToData( char* stringbuffer, char* hexbuffer, int size);
+		int ConvertHexStringToDecimalString( const char* , std::string&  ) ;
+		char* vSetCurrentTimeStamp( char*  );
+		char* vSetCurrentTimeStamp( char* , int  );
+		int calculateCRC( char* , int  );
+		unsigned char* sConvertHexBin2String( unsigned char , unsigned char* );
+		char* szConvertStringToData( char* , char* , int );
 		
 		inline
 		int iConvertBin2Ascii(char* bBindata, int iDataSize, char* szDataAscii )
@@ -520,7 +564,7 @@ namespace _dutil_
 			//     0x00 gets converted to . to avoid problems with NULL terminators
 			//     control chars get converted to .
 
-			if (( bBindata == NULL )||(szDataAscii) == NULL )
+			if (( bBindata == nullptr )||(szDataAscii) == nullptr )
 				return 1;
 
 			for(int i = 0; i < iDataSize; i++ )
@@ -552,7 +596,7 @@ namespace _dutil_
 										char* szDataString ) 
 		{	
 
-			if (( bBindata == NULL )||(szDataString) == NULL )
+			if (( bBindata == nullptr )||(szDataString) == nullptr )
 				return 1;
 
 			for(int i = 0; i < iDataSize ; i++)
@@ -568,7 +612,7 @@ namespace _dutil_
 		
 		/************************************************************************************
 		*unsigned char* sConvertHexBin2String(unsigned char ch, unsigned char* buffer)
-		* description: Originally the data from the MF is binary, thus to print it in a file we must convert
+		* description: Originally the data is binary, thus to print it in a file we must convert
 		*			   it to an ASCII representation of this array of bytes. This convertion is not literal,
 		*			   because each nibble of the bin values is converted to an ASCII byte. The output is
 		*			   twice as big as the input. This method actually converts each nibble of a byte to
@@ -592,7 +636,7 @@ namespace _dutil_
 			}
 			else
 			{
-				sprintf(tmp,"%x",ch);
+				snprintf(tmp, 3, "%x",ch);
 				if ( tmp[1] == 0 )
 					tmp[1] = 0x30;
 			}
@@ -601,25 +645,25 @@ namespace _dutil_
 		  if ( ((ch&0xF0)<<4) == 0 )
 		  {
 			char cfix = 0x00;
-			sprintf(tmp,"%x",ch);
+			snprintf(tmp,3,"%x",ch);
 			cfix = tmp[0];
 			tmp[0] = 0x30;
 			tmp[1] = cfix;
 		  }
 		  else
-				sprintf(tmp,"%x",ch);
+				snprintf(tmp,3,"%x",ch);
 		  memcpy(buffer,tmp,3);	
 		  return buffer;  
 		}
 
 		inline
-		int ConvertHexStringToDecimalString( const char* HexInputString, std::string& Output )
+		int ConvertHexStringToDecimalString( const char* HexInputString, string& Output )
 		{
 			// Given an input like "0E0AFF1245EE99"
 			// convert it to "14 10 255 18 69 238 153"
 			char Out[ 528 ];
 
-			if ( HexInputString == NULL )
+			if ( HexInputString == nullptr )
 					return -1;
 
 			memset( Out, 0x00, sizeof( Out ) );
@@ -632,8 +676,8 @@ namespace _dutil_
 			for( int i = 0; i < len + 1 ; i ++ )
 			{
 				string tmp2 = tmp.substr( 2*i , 2 );
-				int tmpInteger =  strtol( tmp2.c_str(), NULL, 16 );
-				sprintf( Out + strlen( Out ), "%d", tmpInteger );
+				int tmpInteger =  strtol( tmp2.c_str(), nullptr, 16 );
+				snprintf( Out + strlen( Out ), 528, "%d", tmpInteger );
 				if( i == len )
 				{                   
 					break;
@@ -656,8 +700,8 @@ namespace _dutil_
 			char buffer[32];
 			memset(buffer,0,sizeof( buffer));
 
-			if ( szTimeStamp == NULL )
-			  return NULL;
+			if ( szTimeStamp == nullptr )
+			  return nullptr;
 
 			time ( &rawtime );
 			timeinfo = localtime ( &rawtime );
@@ -680,8 +724,8 @@ namespace _dutil_
 			char buffer[32];
 			memset(buffer,0,sizeof( buffer));
 
-			if ( szTimeStamp == NULL )
-					return NULL;
+			if ( szTimeStamp == nullptr )
+					return nullptr;
 
 			time ( &rawtime );
 			timeinfo = localtime ( &rawtime );
@@ -713,14 +757,14 @@ namespace _dutil_
 				memset(buf,0,3);
 				memcpy(buf,&stringbuffer[2*i],2);
 				buf[2] = 0;
-				hexbuffer[ i ] = strtol( buf, NULL, 16 );
+				hexbuffer[ i ] = strtol( buf, nullptr, 16 );
 			}
 			return hexbuffer;
 		}
 		
 
 		inline 
-		void ReplaceCharsFromString( std::string& mystring, char whattoChange, char changeTo )
+		void ReplaceCharsFromString( string& mystring, char whattoChange, char changeTo )
 		{
 			for( int IndexOnString = 0; IndexOnString < (int)mystring.size() ; IndexOnString++ )
 			{
@@ -732,7 +776,7 @@ namespace _dutil_
 		}
 
 		inline
-		void GetTimeStamp( std::string& stamp )
+		void GetTimeStamp( string& stamp )
 		{
 			time_t rawtime;
 			struct tm * timeinfo;
