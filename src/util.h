@@ -5,14 +5,16 @@
 #ifndef _UTIL_D
 #define _UTIL_D
 
-#include <iostream>
+
 #include <vector>
 #include <map>
 #include <string>
-#include <algorithm>
-#include <set>
-#include <cassert>
 #include <list>
+#include <set>
+#include <queue>
+#include <algorithm>
+#include <cassert>
+#include <iostream>
 #include <sstream>
 #include <fstream>
 #include <chrono>
@@ -25,6 +27,12 @@ typedef multiset<long long> mset_long;
 
 namespace _dutil_ 
 {
+	
+	auto CompStdStrings = 
+	[]( const std::string& s1, const std::string& s2 )
+	{
+		return  s1.size() < s2.size();
+	};
 
 	/*
 	*	For as long as you send output to stringstream& out
@@ -85,7 +93,7 @@ namespace _dutil_
 	*/
 	template<typename T, typename M>
 	inline
-	void pr( const list<pair<T,M>>& m, stringstream& out )
+	void pr( const list<pair<T,M> >& m, stringstream& out )
 	{
 		for( const auto& im: m )
 		{
@@ -93,6 +101,17 @@ namespace _dutil_
 		}
 		out << "\n";  
 	}
+	
+	template<typename T, typename M>
+	inline
+	void pr_vec( const vector<pair<T,M> >& m, stringstream& out )
+	{
+		for( const auto& im: m )
+		{
+			out << "[" << im.first << "," << im.second << "]" << " ";
+		}
+		out << "\n";  
+	}	
 
 	// from Bjarne Stroustrup The Pratice Of Programming
 	// optimized search function
@@ -105,24 +124,25 @@ namespace _dutil_
 
 	// Implements a pair class of two integers
 	// it should be used mostly because of performance issues
-	class PairDerived
+	template<typename T, typename S>
+	class mPair
 	{
 	public:
-		PairDerived(int& one, int& two ):first(one),second(two){};
-		PairDerived( const PairDerived& pd)
+		mPair(T& one, S& two ):first(one),second(two){};
+		mPair( const mPair& pd)
 		{
 			this->first = pd.first;
 			this->second = pd.second;
 
 		};
-		PairDerived& operator=( const PairDerived& pd )
+		mPair& operator=( const mPair& pd )
 		{
 			this->first = pd.first;
 			this->second = pd.second;
 			return *this;
 		};
 
-		friend bool operator==( const PairDerived& p1, const PairDerived& p2 )
+		friend bool operator==( const mPair& p1, const mPair& p2 )
 		{
 			if  ( p1.first == p2.first)
 				if ( p1.second == p2.second)
@@ -130,51 +150,15 @@ namespace _dutil_
 			return false;   
 		}
 
-		friend bool operator!=( const PairDerived& p1, const PairDerived& p2 )
+		friend bool operator!=( const mPair& p1, const mPair& p2 )
 		{
 			return ( p1.first != p2.first );
 		}
 
-		int first;
-		int second;
+		T first;
+		S second;
 	};
 
-
-	/*
-	*	Optmized search function
-	*/
-	inline mset_long::iterator _find2(mset_long& s, const ll& v )
-	{
-		mset_long::iterator it = s.begin();
-		int a = 0; 
-		int b = s.size()-1;
-		int i = 0;
-
-		while( a <= b )
-		{
-			int k = (a+b)/2;
-			for(; i < k; i++,it++);
-			if ( *it == v)
-			{
-				return it;
-			}
-
-			if ( *it > v ) 
-			{
-				b = k - 1;
-				it--;
-				i--;
-			}
-			else 
-			{
-				a = k + 1;
-				it++;
-				i++;
-			}
-
-		}
-		return it;
-	}
 
 	/*
 	*	Giving two sets of sizes N and M,  this function will redefine them
@@ -238,34 +222,44 @@ namespace _dutil_
 		return invertions;
 	}
 	
-	
+	inline 
+	vector<int>& slice_vector( const vector<int>& _arr, int posi, int posf, vector<int>& o )
+	{
+		for( int i = posi; i < posf; i++)
+			o.push_back( _arr[i] );
+		return o;
+	}
+		
 	inline
 	vector<int> split_vector( const vector<int>& _arr, int _left_right)
 	{
 		int n = _arr.size();
+		vector<int> A;
 		
-		int lfirst = 0;
 		int llast = 0;
 		int rfirst = 0;
-		int rlast = n-1;
 		
 		if ( _arr.size()%2 == 0 )
 		{
-			llast = (n/2) -1;
+			llast = n/2;
 			rfirst = n/2;			
 		}
 		else
 		{
-			llast  = (n-1)/2;
+			llast  = (n+1)/2;
 			rfirst = (n+1)/2;
 		}
+		
 		if ( _left_right == 0 )
 		{
-			vector<int> A{  _arr.begin()+lfirst, _arr.begin()+ llast};
-			return A;
+			return slice_vector( _arr, 0, llast, A );
 		}
-		vector<int> B{  _arr.begin()+rfirst, _arr.begin()+ rlast  };
-		return B;
+		else
+		{
+			return slice_vector( _arr, rfirst, n, A );
+		}
+
+
 	}
 
 	// Implementation of search for inversions from the book
@@ -276,8 +270,12 @@ namespace _dutil_
 	inline
 	int num_inverstions( const vector<int>& _arr )
 	{
-		vector<int> A = split_vector( _arr, 0 );
-		vector<int> B = split_vector( _arr, 1 );
+		
+		vector<int> a  = split_vector( _arr, 0 );
+		vector<int> b  = split_vector( _arr, 1 );
+		
+		// TODO implement
+		
 		return 0;
 		
 	}
