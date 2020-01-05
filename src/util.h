@@ -17,6 +17,7 @@
 #include <set>
 #include <queue>
 #include <algorithm>
+#include <numeric>
 #include <cassert>
 #include <iostream>
 #include <sstream>
@@ -26,6 +27,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <cmath>
 
 using namespace std;
 using namespace std::chrono;
@@ -37,7 +39,7 @@ typedef high_resolution_clock::time_point tp;
 namespace _dutil_ 
 {
 	
-	namespace ds
+	namespace ds_algo
 	{
 		auto CompStdStrings = 
 		[]( const std::string& s1, const std::string& s2 )
@@ -178,6 +180,50 @@ namespace _dutil_
 			}
 		}
 
+        // based on binary_search above
+        // adapted for a set  if option != 0, deletes it    
+        inline
+        bool my_binary_search( mset_long& values, const ll& v, int option = 0 )
+        {
+            auto first = values.begin();
+            
+            if ( *first == v )
+            {
+                values.erase( first );
+                return true;
+            }
+            
+            auto last = values.end();
+            auto mid_element_del = first;  
+            while (true)
+            {
+                // Get the middle element of the current range
+                auto range_length = std::distance(first, last);
+                auto mid_element_index = std::floor(range_length / 2); 
+
+                // Compare the middle element of current range with N
+                if ( *mid_element_del == v)
+                {  
+                    if ( option != 0 )
+                        values.erase(mid_element_del);
+                    return true;
+                }
+                else if ( *mid_element_del > v)
+                {
+                    std::advance(last, -mid_element_index);
+                    mid_element_del = last;
+                }
+                if ( *mid_element_del < v)
+                {
+                    std::advance(first, mid_element_index);
+                    mid_element_del = first;
+                }
+
+                // If only one element left in the current range
+                if (range_length == 1)
+                    return false;
+            }   
+        }
 		// Implements a pair class of two integers
 		// it should be used mostly because of performance issues
 		template<typename T, typename S>
@@ -322,7 +368,7 @@ namespace _dutil_
 				for( const auto& rows: data )
 				{
 					if ( rows.size() != 0 )
-						_dutil_::ds::pr_vec<int,int>( rows, out );
+						pr_vec<int,int>( rows, out );
 					else
 						out << "empty" << "\n";
 				}
@@ -342,7 +388,9 @@ namespace _dutil_
 		void balance_halfs( mset_long& mysetl, mset_long& mysetr )
 		{
 		 
-			if ( mysetl.size() == mysetr.size() || abs( mysetl.size()-mysetr.size() ) == 1  )
+			if ( mysetl.size() == mysetr.size() || 
+                 mysetl.size() - mysetr.size()  == 1 ||
+                 mysetr.size() - mysetl .size()  == 1 )
 				return; 
 			   
 			if ( mysetl.size() < mysetr.size() )
@@ -381,7 +429,7 @@ namespace _dutil_
 			return invertions;
 		}
 		
-		// supports genertic types
+		// supports generic types
 		template<typename T>
 		inline
 		int num_inverstions_brute( const vector<T>& _arr )
@@ -396,19 +444,21 @@ namespace _dutil_
 			return invertions;
 		}
 		
+        template<typename T>
 		inline 
-		vector<int>& slice_vector( const vector<int>& _arr, int posi, int posf, vector<int>& o )
+		vector<int>& slice_vector( const vector<T>& _arr, int posi, int posf, vector<T>& o )
 		{
 			for( int i = posi; i < posf; i++)
 				o.push_back( _arr[i] );
 			return o;
 		}
-			
+		
+        template<typename T>
 		inline
-		vector<int> split_vector( const vector<int>& _arr, int _left_right)
+		vector<T> split_vector( const vector<T>& _arr, int _left_right)
 		{
 			int n = _arr.size();
-			vector<int> A;
+			vector<T> A;
 			
 			int llast = 0;
 			int rfirst = 0;
