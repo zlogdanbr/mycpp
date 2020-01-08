@@ -16,13 +16,292 @@
 #include <iostream>
 #include <algorithm>
 #include <iomanip>
+#include <chrono>
 using namespace std;
-
+using namespace std::chrono;
 typedef long long ll;
 typedef multiset<long long> mset_long;
-  
+typedef high_resolution_clock::time_point tp;
 
-//#define _DEBUG
+
+// starts computing the execution time of a code
+inline
+const tp start_tracking()
+{
+	return high_resolution_clock::now(); 
+}
+
+// stops  computing the execution time of a code and print 
+// elapsed time
+inline
+double end_tracking( tp& start, int opt=0 )
+{
+	auto stop = high_resolution_clock::now(); 
+	if (opt != 0 )
+	{
+		auto duration = duration_cast<seconds>(stop - start);    
+		return (duration.count());
+	}
+	else
+	{
+		auto duration = duration_cast<microseconds>(stop - start);    
+		return (duration.count());
+	}
+}
+	
+#define _DEBUG
+	
+class Median
+{
+public:
+
+#ifdef _DEBUG
+	Median()
+	{
+		
+		t_exec_algo1 = 0;
+		t_exec_algo2 = 0;
+		t_exec_algo3 = 0;
+		cnt    = 1;
+	}
+
+	~Median()
+	{	
+		print();	
+	}	
+		
+	inline void print()
+	{
+		cout << "Average time adding: 			 : " << fixed << setprecision(6) << t_exec_algo1/cnt << " microseconds\n";
+		cout << "Average time deleting			 : " << fixed << setprecision(6) << t_exec_algo2/cnt << " microseconds\n";
+		cout << "Average time balancing			 : " << fixed << setprecision(6) << t_exec_algo3/cnt << " microseconds\n";
+	}
+
+
+#endif	
+    
+	void pr()
+	{
+		cout << out.str() ;
+	}
+	
+    void median( char& cmd,  long long& value) 
+    { 
+		if ( cmd == 'a')
+		{
+#ifdef _DEBUG			
+			auto t = start_tracking();
+#endif
+			
+			add_value( value );
+			
+#ifdef _DEBUG			
+			t_exec_algo1 = t_exec_algo1 + end_tracking(t);
+#endif			
+		}
+		else
+		{ 
+#ifdef _DEBUG	
+			auto t = start_tracking();
+#endif			
+			if ( delete_value(value) < 0 )
+			{                          
+				out << "Wrong!" << "\n" ;
+
+#ifdef _DEBUG				
+				t_exec_algo2 = t_exec_algo2 + end_tracking(t);
+#endif				
+				return;
+			}
+			
+#ifdef _DEBUG			
+			t_exec_algo2 = t_exec_algo2 + end_tracking(t);
+#endif			
+		} 
+		
+		
+#ifdef _DEBUG
+		auto t = start_tracking();
+#endif
+		
+		balance_halfs();
+		
+#ifdef _DEBUG		
+		t_exec_algo3 = t_exec_algo3 + end_tracking(t);
+#endif		
+	
+		printmedian(calculateMedian()); 
+		
+#ifdef _DEBUG		
+		cnt++;
+#endif			
+
+    }    
+
+private:
+
+    inline void printmedian( double __median) 
+    {
+        if ( __median == (long long)__median)
+            out << static_cast<long long>(__median) << "\n";
+        else
+            out << fixed << setprecision(1) << __median << "\n";
+    }
+
+    inline double ComputeLargeAverage( const long long& a, const long long& b) 
+    {
+        //return static_cast<double>( 0.5*(a+b) );
+		return  0.5*(a+b);
+    }
+
+
+    inline int sl() const
+    {
+        return mysetl.size();
+    }
+
+    inline int sr() const
+    {
+        return mysetr.size();
+    }
+    
+    inline 
+    double calculateMedian()
+    {
+        int left_size = sl();
+        int right_size = sr();
+        
+        //  1 2 3    4 5 6
+        //  1 2      3 4
+        //  1        1
+        if ( left_size == right_size )
+        {
+            return  ComputeLargeAverage( *prev( mysetl.end() ), *mysetr.begin() );
+        }
+        else
+        //  1       3  4
+        //  1 2 5   7  8  9 10
+        // nullptr 1
+        if ( left_size < right_size )
+        {
+            return *mysetr.begin();
+        }
+        else
+        // 1 2 3 4  5 6 7
+        // 1  nullptr
+        {
+            return *prev( mysetl.end() );
+        }
+            
+    }    
+	   
+    inline 
+    bool _find_Del(mset_long& cont, mset_long::iterator first, mset_long::iterator last, ll val)
+    {
+        while (first!=last && *first != val) ++first;
+        if ( first == last )
+            return false;
+        cont.erase(first);
+        return true;
+    }
+	
+    inline
+    void balance_halfs()
+    {
+     
+        if ( sl() == sr() || abs( sl()-sr() ) == 1  )
+            return; 
+           
+        if ( sl() < sr() )
+        {
+            ll tmp = *mysetr.begin();
+            mysetr.erase( mysetr.begin() );
+            mysetl.emplace( tmp );
+            
+        }
+        else if ( sl() > sr() )
+        {
+            ll tmp = *prev( mysetl.end() );
+            mysetl.erase( prev( mysetl.end()) );
+            mysetr.emplace( tmp );
+        }
+
+        balance_halfs();
+            
+    }
+
+	
+    inline
+    int delete_value( const ll& v)
+    {
+        
+        if ( mysetl.empty() == true && mysetr.empty() == true )
+            return -1;
+        
+        if ( v <  *mysetl.begin() )
+            return -1;
+
+		
+        
+        if ( v <= *prev(mysetl.end() ) )
+        {
+            if ( _find_Del( mysetl, mysetl.begin(), mysetl.end(), v ) == false )
+                return -1;
+        }
+        else
+        {
+            if ( _find_Del( mysetr, mysetr.begin(), mysetr.end(), v ) == false )
+                return -1;
+        }
+        
+        if ( mysetl.empty() == true && mysetr.empty() == true )
+            return -1;
+        
+        return 0;
+            
+    }
+
+    void add_value( const ll& v)
+    {
+        if ( mysetl.empty() == true && mysetr.empty() == true )
+        {
+            mysetl.emplace(v);
+        }
+        else
+        if ( mysetr.empty() == true && mysetl.size() == 1 )
+        {
+            mysetr.emplace(v);
+        }
+        else
+        {
+            if ( v <= *prev( mysetl.end()) )
+                mysetl.emplace(v);
+            else
+                mysetr.emplace(v);           
+        }
+        
+        if ( sl() == 1 && sr() == 1 )
+        {
+            if (  *mysetr.begin() < *mysetl.begin() )
+            {
+                mysetr.swap( mysetl );
+            }
+        }
+    }
+    
+    mset_long mysetl;
+    mset_long mysetr;
+	stringstream out;
+	
+#ifdef _DEBUG	
+	double t_exec_algo1;
+	double t_exec_algo2;
+	double t_exec_algo3;
+	int cnt;
+#endif	
+
+};    
+
 
 /*
 7  
@@ -74,151 +353,41 @@ a 1073741827
 
 */
 
-stringstream out;
-
-inline double ComputeLargeAverage( const long long& a, const long long& b)
-{
-    return static_cast<double>( 0.5*(a+b) );
-}
-
-inline void printmedian( double __median )
-{
-    if ( __median == (long long)__median)
-        cout << static_cast<long long>(__median) << "\n";
-    else
-        cout << fixed << setprecision(1) << __median << "\n";
-}
-
-// from Bjarne Stroustrup The Pratice Of Programming
-template<typename In, typename T>
-inline In _find(In first, In last, const T& val)
-{
-    while (first!=last && *first != val) ++first;
-        return first;
-}
-
-
-inline 
-void pr( const multiset<ll>& t ) 
-{
-	out << "[ ";
-	for( const auto& _el: t )
-	{
-		out << _el << " ";
-	}
-	out << "]\n";
-}
-
-inline
-ll calculateMedian( mset_long& values )
-{
-	if ( values.size() == 1 )
-		return *values.begin();
-
-	auto range_length = std::distance(values.begin(), values.end());
-	auto mid_element_index = std::floor(range_length / 2);
-	auto it = values.begin();
-	std::advance( it, -mid_element_index );
-	
-	if ( values.size()%2 == 0 )
-		return ComputeLargeAverage( *it, *next(it) );
-	
-	return *it;
-	
-}
-
-inline
-int delete_value( const ll& v, mset_long& values)
-{  
-
-	if ( values.empty() == true )
-		return -1;
-	
-	if ( binary_search( values.begin(), values.end(), v ) == true )
-		values.erase( v );
-	else
-		return -1;
-
-	if ( values.empty() == true )
-		return -1;
-	
-    return 0;
-        
-}
-
-inline
-void add_value( const ll& v, mset_long& values)
-{
-	values.emplace( v );
-}
-
-inline
-void median( vector<char> s, vector<long long> X) 
-{
-    auto vit = X.cbegin();
-	mset_long v;
-    
-    for( const auto& cmd: s )   
-    { 
-		
-        if ( cmd == 'a')
-        {  
-			out << "-------------------------------------------" << endl;
-			out << "Before add" << endl;
-			pr( v );
-			
-            add_value( *vit, v );          
-			
-			out << "After add" << endl;
-			pr( v );
-			
-        }
-        else
-        {  
-			out << "-------------------------------------------" << endl;
-			out << "Before delete" << endl;
-			pr( v );
-			
-            if ( delete_value(*vit,v) < 0 )
-            {                          
-                cout << "Wrong!" << "\n" ;
-				out << "value not in set" << endl;
-                vit++;
-                continue;
-            }
-
-			out << "After delete" << endl;
-			pr( v );
-                                         
-        } 
-		
-		auto m = calculateMedian(v);
-		out << "Median: " <<  m << endl;
-		printmedian(m); 
-        vit++;
-    }
-}
 
     
 int main(void){
 
     //Helpers for input and output
-
+        //Helpers for input and output
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+	
+	
+	
     int N;
     cin >> N;
     
-    vector<char> s;
-    vector<long long> X;
     char temp;
     long long tempint;
-    for(int i = 0; i < N; i++){
+	Median m;
+
+#ifdef _DEBUG			
+	auto t = start_tracking();
+#endif	
+	
+    for(int i = 0; i < N; i++)
+	{
         cin >> temp >> tempint;
-        s.push_back(temp);
-        X.push_back(tempint);
+        m.median( temp, tempint );
     }
-    
-    median(s,X);
-	cout << out.str();
+
+#ifdef _DEBUG		
+	double t1 = end_tracking(t,1);
+#endif	
+
+	m.pr();
+#ifdef _DEBUG	
+	cout << "it took " << t1  << " seconds to execute the algo" << endl;
+#endif	
     return 0;
 }
-
