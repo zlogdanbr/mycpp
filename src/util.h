@@ -46,6 +46,19 @@ namespace _dutil_
 		{
 			return  s1.size() < s2.size();
 		};
+		
+		void print_debug( const vector<long long>& v )
+		{
+			if ( v.size() == 0 )
+				cout << "[ nullptr ]" << endl;
+			else
+			{
+				cout << "[ ";
+				for(const auto& it: v )
+					cout << it << " ";
+				cout << "]\n";
+			}
+		}
 
 		/*
 		*	For as long as you send output to stringstream& out
@@ -136,7 +149,7 @@ namespace _dutil_
 			while (first!=last && *first != val) ++first;
 				return first;
 		}
-		
+			
 		
 		// implementation of binary search from the - excellent - book 
 		// C++ Data Structures and Algorithm Design Principles
@@ -179,7 +192,17 @@ namespace _dutil_
 					return false;
 			}
 		}
-
+		
+		inline 
+		bool _find_Del(mset_long& cont, mset_long::iterator first, mset_long::iterator last, ll val)
+		{
+			while (first!=last && *first != val) ++first;
+			if ( first == last )
+				return false;
+			cont.erase(first);
+			return true;
+		}
+		
         // based on binary_search above
         // adapted for a set  if option != 0, deletes it    
         inline
