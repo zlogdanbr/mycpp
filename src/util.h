@@ -402,6 +402,32 @@ namespace _dutil_
 			vector< vector< pair<int,int> > > data;
 			int n_nodes;
 		};
+		
+		// class cList
+		// {
+		
+		// public:
+			// cList():size(0)
+			// {
+				
+			// };
+			
+			// ~cList()
+			// {
+				
+			// };
+			
+			// list<mPair>::iterator& add( mPair& p )
+			// {
+				// if ( internal_list.size() == 0 )
+			// }
+			
+		// private:
+			// list<mPair> internal_list;
+			// list<mPair>::iterator mid_it;
+			// list<mPair>::iterator max_it;
+			// int size;
+		// };
 
 		/*
 		*	Giving two sets of sizes N and M,  this function will redefine them
@@ -861,6 +887,32 @@ namespace _dutil_
 			strftime (buffer,16,"%d%m%Y_%H%M%S",timeinfo);
 
 			stamp = buffer;
+		}
+		
+		// by https://stackoverflow.com/questions/216823/whats-the-best-way-to-trim-stdstring
+		// 
+		std::string& trimMe(std::string& str)
+		{
+		   // right trim
+		   while (str.length () > 0 && (str [str.length ()-1] == ' ' || str [str.length ()-1] == '\t'))
+			  str.erase (str.length ()-1, 1);
+		   // left trim
+		   while (str.length () > 0 && (str [0] == ' ' || str [0] == '\t'))
+			  str.erase (0, 1);
+		   return str;
+		}
+
+		// the above adapted by me
+		char* lactrim(char* cstr)
+		{
+			string str = cstr;
+		   // right trim
+		   while (str.length () > 0 && (str [str.length ()-1] == ' ' || str [str.length ()-1] == '\t'))
+			  str.erase (str.length ()-1, 1);
+		   // left trim
+		   while (str.length () > 0 && (str [0] == ' ' || str [0] == '\t'))
+			  str.erase (0, 1);
+		   return (char*)str.c_str();
 		}
 	
 	}
