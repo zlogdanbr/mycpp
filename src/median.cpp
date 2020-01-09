@@ -17,8 +17,10 @@
 #include <algorithm>
 #include <iomanip>
 #include <chrono>
+
 using namespace std;
 using namespace std::chrono;
+
 typedef long long ll;
 typedef multiset<long long> mset_long;
 typedef high_resolution_clock::time_point tp;
@@ -49,16 +51,16 @@ double end_tracking( tp& start, int opt=0 )
 	}
 }
 	
-#define _DEBUG
+#define _TIME_EXEC
 	
 class Median
 {
 public:
 
-#ifdef _DEBUG
+#ifdef _TIME_EXEC
+
 	Median()
-	{
-		
+	{		
 		t_exec_algo1 = 0;
 		t_exec_algo2 = 0;
 		t_exec_algo3 = 0;
@@ -76,6 +78,23 @@ public:
 		cout << "Average time deleting			 : " << fixed << setprecision(6) << t_exec_algo2/cnt << " microseconds\n";
 		cout << "Average time balancing			 : " << fixed << setprecision(6) << t_exec_algo3/cnt << " microseconds\n";
 	}
+	
+	inline
+	void printme()
+	{	
+		
+		out << "Left:" << endl;
+		out << "[";
+		for( const auto v: mysetl )
+			out << v << " ";
+		out << "]\n";
+		
+		out << "Right:" << endl;
+		out << "[";
+		for( const auto v: mysetr )
+			out << v << " ";
+		out << "]\n";
+	}
 
 
 #endif	
@@ -89,52 +108,48 @@ public:
     { 
 		if ( cmd == 'a')
 		{
-#ifdef _DEBUG			
-			auto t = start_tracking();
-#endif
 			
-			add_value( value );
-			
-#ifdef _DEBUG			
+#ifdef _TIME_EXEC			
+			auto t = start_tracking();			
+			add_value( value );			
 			t_exec_algo1 = t_exec_algo1 + end_tracking(t);
-#endif			
+#else
+			add_value( value );	
+#endif
+		
 		}
 		else
 		{ 
-#ifdef _DEBUG	
-			auto t = start_tracking();
-#endif			
+#ifdef _TIME_EXEC	
+			auto t = start_tracking();	
 			if ( delete_value(value) < 0 )
 			{                          
-				out << "Wrong!" << "\n" ;
-
-#ifdef _DEBUG				
-				t_exec_algo2 = t_exec_algo2 + end_tracking(t);
-#endif				
+				out << "Wrong!" << "\n" ;			
+				t_exec_algo2 = t_exec_algo2 + end_tracking(t);			
 				return;
-			}
-			
-#ifdef _DEBUG			
+			}				
+					
 			t_exec_algo2 = t_exec_algo2 + end_tracking(t);
-#endif			
+#else
+			if ( delete_value(value) < 0 )
+			{                          
+				out << "Wrong!" << "\n" ;						
+				return;
+			}				
+#endif	
 		} 
 		
 		
-#ifdef _DEBUG
-		auto t = start_tracking();
-#endif
-		
-		balance_halfs();
-		
-#ifdef _DEBUG		
-		t_exec_algo3 = t_exec_algo3 + end_tracking(t);
-#endif		
-	
-		printmedian(calculateMedian()); 
-		
-#ifdef _DEBUG		
+#ifdef _TIME_EXEC
+		auto t = start_tracking();	
+		balance_halfs();		
+		t_exec_algo3 = t_exec_algo3 + end_tracking(t);			
+		printmedian(calculateMedian()); 	
 		cnt++;
-#endif			
+#else
+		balance_halfs();				
+		printmedian(calculateMedian()); 
+#endif	
 
     }    
 
@@ -154,7 +169,6 @@ private:
 		return  0.5*(a+b);
     }
 
-
     inline int sl() const
     {
         return mysetl.size();
@@ -170,29 +184,20 @@ private:
     {
         int left_size = sl();
         int right_size = sr();
-        
-        //  1 2 3    4 5 6
-        //  1 2      3 4
-        //  1        1
+
         if ( left_size == right_size )
         {
             return  ComputeLargeAverage( *prev( mysetl.end() ), *mysetr.begin() );
         }
         else
-        //  1       3  4
-        //  1 2 5   7  8  9 10
-        // nullptr 1
         if ( left_size < right_size )
         {
             return *mysetr.begin();
         }
         else
-        // 1 2 3 4  5 6 7
-        // 1  nullptr
         {
             return *prev( mysetl.end() );
-        }
-            
+        }           
     }    
 	   
     inline 
@@ -229,7 +234,6 @@ private:
         balance_halfs();
             
     }
-
 	
     inline
     int delete_value( const ll& v)
@@ -240,8 +244,7 @@ private:
         
         if ( v <  *mysetl.begin() )
             return -1;
-
-		
+	
         
         if ( v <= *prev(mysetl.end() ) )
         {
@@ -261,6 +264,7 @@ private:
             
     }
 
+	inline
     void add_value( const ll& v)
     {
         if ( mysetl.empty() == true && mysetr.empty() == true )
@@ -293,7 +297,7 @@ private:
     mset_long mysetr;
 	stringstream out;
 	
-#ifdef _DEBUG	
+#ifdef _TIME_EXEC	
 	double t_exec_algo1;
 	double t_exec_algo2;
 	double t_exec_algo3;
@@ -361,9 +365,7 @@ int main(void){
         //Helpers for input and output
     ios::sync_with_stdio(0);
     cin.tie(0);
-	
-	
-	
+		
     int N;
     cin >> N;
     
@@ -371,7 +373,7 @@ int main(void){
     long long tempint;
 	Median m;
 
-#ifdef _DEBUG			
+#ifdef _TIME_EXEC			
 	auto t = start_tracking();
 #endif	
 	
@@ -381,13 +383,15 @@ int main(void){
         m.median( temp, tempint );
     }
 
-#ifdef _DEBUG		
+#ifdef _TIME_EXEC		
 	double t1 = end_tracking(t,1);
 #endif	
 
 	m.pr();
-#ifdef _DEBUG	
+	
+#ifdef _TIME_EXEC	
 	cout << "it took " << t1  << " seconds to execute the algo" << endl;
 #endif	
+
     return 0;
 }
