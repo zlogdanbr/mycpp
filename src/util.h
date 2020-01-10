@@ -203,7 +203,58 @@ namespace _dutil_
 			return true;
 		}
 		
-        // based on binary_search above
+		inline
+		int get_midindex(mset_long::iterator first, mset_long::iterator last)
+		{
+            return std::floor( (std::distance(first, last)/ 2)); 
+		}
+
+
+		struct IndexHandler
+		{
+
+			IndexHandler(int m, int index):mo(m),mo_index(index)
+			{
+			};
+			
+			inline
+			int get_midindex_new_add( int size, int maxv, int minv, int v )
+			{
+				
+				bool isEven = ( size%2 == 0 );
+			
+				if ( v <= minv )
+				{
+					if ( isEven == false )
+						mo_index--;
+				}
+				else
+				if ( v >= maxv )
+				{
+					if ( isEven == true )
+						mo_index--;	
+				}
+				else
+				{
+					if ( v <= mo )
+					{
+						if ( isEven == false )
+							 mo_index--;
+					}
+					else
+					{
+						if ( isEven == true )
+							 mo_index++	;	
+					}
+				}
+				
+				return mo_index;
+			}			
+			int mo;
+			int mo_index;
+		};
+		
+        // based on binary_search
         // adapted for a set  if option != 0, deletes it    
         inline
         bool my_binary_search( mset_long& values, const ll& v, int option = 0 )
@@ -403,31 +454,6 @@ namespace _dutil_
 			int n_nodes;
 		};
 		
-		// class cList
-		// {
-		
-		// public:
-			// cList():size(0)
-			// {
-				
-			// };
-			
-			// ~cList()
-			// {
-				
-			// };
-			
-			// list<mPair>::iterator& add( mPair& p )
-			// {
-				// if ( internal_list.size() == 0 )
-			// }
-			
-		// private:
-			// list<mPair> internal_list;
-			// list<mPair>::iterator mid_it;
-			// list<mPair>::iterator max_it;
-			// int size;
-		// };
 
 		/*
 		*	Giving two sets of sizes N and M,  this function will redefine them
@@ -681,7 +707,7 @@ namespace _dutil_
 		* int iConvertBinArray2String( char* bBindata, 
 		*												 int iDataSize,
 		*												 char* szDataString )
-		* description: Originally the data from the MF is binary, thus to print it in a file we must convert
+		* description: Originally the data is binary, thus to print it in a file we must convert
 		*			   it to an ASCII representation of this array of bytes. This convertion is not literal,
 		*			   because each nibble of the bin values is converted to an ASCII byte. The output is
 		*			   twice as big as the input
@@ -903,16 +929,19 @@ namespace _dutil_
 		}
 
 		// the above adapted by me
-		char* lactrim(char* cstr)
+		const char* lactrim(char* cstr)
 		{
-			string str = cstr;
+			if ( cstr == nullptr )
+				return nullptr;
+			
+		   string str = cstr;
 		   // right trim
 		   while (str.length () > 0 && (str [str.length ()-1] == ' ' || str [str.length ()-1] == '\t'))
 			  str.erase (str.length ()-1, 1);
 		   // left trim
 		   while (str.length () > 0 && (str [0] == ' ' || str [0] == '\t'))
 			  str.erase (0, 1);
-		   return (char*)str.c_str();
+		   return str.c_str();
 		}
 	
 	}
