@@ -1,951 +1,119 @@
-//--------------------------------------------------------------------------
-//	namepsace _dutil_
-//	contains useful code for search, debug, file, buffer handling etc
-//	you can use this freely but I don't take responsability for whatever
-//  problems this will likely cause
-//  I use C++14
-//  I use stl
-//--------------------------------------------------------------------------
-#ifndef _UTIL_D
-#define _UTIL_D
+#include "util.h"
+
+using namespace _dutil_;
+using namespace _dutil_::_other_util;
 
 
-#include <vector>
-#include <map>
-#include <string>
-#include <list>
-#include <set>
-#include <queue>
-#include <algorithm>
-#include <numeric>
-#include <cassert>
-#include <iostream>
-#include <sstream>
-#include <fstream>
-#include <chrono>
-#include <ctime>
-#include <cstdio>
-#include <cstdlib>
-#include <cstring>
-#include <cmath>
 
-using namespace std;
-using namespace std::chrono;
-
-typedef long long ll;
-typedef multiset<long long> mset_long;
-typedef high_resolution_clock::time_point tp;
-
-namespace _dutil_ 
+void testcase(int N, int pos )
 {
+	cout << "-------------------------------------" << endl;
+	cout << "N is " << N << endl;
+	vector<int> v;
 	
-	namespace ds_algo
+	cout << "Initializing data..." << endl;
+	for( int i = 0; i < N ; i++ )
+		v.push_back( rand() );
+	
+	cout << "Sorting data...";
+	sort( v.begin(), v.end() );
+	cout << "done." << endl;
+		
+	cout << "Searching using recursion...";
+	auto t = start_tracking();
+	if ( algo::binary_search_recursive<int>( v[pos], v.begin(), v.end() ) == true )
+			cout << "found: " << v[pos] << endl;
+	end_tracking(t);
+	cout << "done." << endl;
+
+	cout << "Searching  using STL...";
+	t = start_tracking();
+	if ( binary_search( v.begin() , v.end() , v[pos]) == true )
+			cout << "found: " << v[pos] << endl;		
+	end_tracking(t);
+	cout << "done." << endl;	
+	
+	cout << "Searching  using STL Stroustrup...";
+	t = start_tracking();
+	if ( algo::_find( v.begin() , v.end() , v[pos] ) != v.end() )
+			cout << "found: " << v[pos] << endl;		
+	end_tracking(t);
+	cout << "done." << endl;	
+		
+}
+
+void testcase2(int N )
+{
+	cout << "-------------------------------------" << endl;
+	cout << "N is " << N << endl;
+	multiset<int> v;
+	
+	cout << "Initializing data..." << endl;
+	for( int i = 0; i < N ; i++ )
+		v.emplace( rand() );
+	
+	int pos = *prev(v.end());
+	
+	cout << "Searching  using STL binary search...";
+	auto t = start_tracking();
+	if ( binary_search( v.begin() , v.end() , pos ) == true )
+			cout << "found: " << pos << endl;		
+	end_tracking(t);
+	cout << "done." << endl;	
+	
+	cout << "Searching  using my algo...";
+	t = start_tracking();
+	if ( algo::binary_search_recursive_set( pos, v.begin() , v.end() ) == true )
+			cout << "found: " << pos << endl;		
+	end_tracking(t);
+	cout << "done." << endl;	
+	
+	cout << "Searching  using STL Stroustrup...";
+	t = start_tracking();
+	if ( algo::_find( v.begin() , v.end() , pos ) != v.end() )
+			cout << "found: " << pos << endl;		
+	end_tracking(t);
+	cout << "done." << endl;	
+	
+	cout << "Searching  using STL ...";
+	t = start_tracking();
+	if ( find( v.begin() , v.end() , pos ) != v.end() )
+			cout << "found: " << pos << endl;		
+	end_tracking(t);
+	cout << "done." << endl;		
+		
+}
+
+void testcase3()
+{
+	multiset<int> v{ 1, 3, 4, 5 ,6 , 7, 8, 1000, 24 , 24, 56, -1 };
+
+	if ( algo::binary_search_recursive_set( -1, v.begin() , v.end() ) == true )
+			cout << "found: " << -1 << endl;		
+}
+
+
+void testcase4()
+{
+
+
+	algo::List<std::string> l;
+
+	l.push("itemxxxxxxxx");
+	l.push("itemyy");
+	l.push("itemz");
+
+	cout << "Elements: " << endl;
+
+
+	for ( algo::iterator<std::string> it = l.begin(); it.crt != l.end().crt; it.crt = it.crt->next)
 	{
-		auto CompStdStrings = 
-		[]( const std::string& s1, const std::string& s2 )
-		{
-			return  s1.size() < s2.size();
-		};
-		
-		void print_debug( const vector<long long>& v )
-		{
-			if ( v.size() == 0 )
-				cout << "[ nullptr ]" << endl;
-			else
-			{
-				cout << "[ ";
-				for(const auto& it: v )
-					cout << it << " ";
-				cout << "]\n";
-			}
-		}
-
-		/*
-		*	For as long as you send output to stringstream& out
-		*	this function should output it all at the file  filename
-		*/
-		inline
-		void print_all_debugs( stringstream& out, string& filename )
-		{
-			ofstream myFile;
-			myFile.open( filename, ios_base::out);
-			if (myFile.is_open())
-			{
-				myFile << out.str() << endl;
-				myFile.close();
-			}
-		}
-
-
-		/*
-		*	For as long as the container type T supports the
-		*   increment operator for the iterator this should
-		*   print the container in the stringstream out
-		*/
-		template<typename T>
-		inline 
-		void pr( const T& t, stringstream& out ) 
-		{
-			out << "[ ";
-			for( const auto& _el: t )
-			{
-				out << _el << " ";
-			}
-			out << "]\n";
-		}
-		
-		/*
-		*	For as long as the container type T supports the
-		*   increment operator for the iterator this should
-		*   print the container in the stringstream out
-		*   type O must be an output stream
-		*/
-		template<typename T, typename O>
-		inline 
-		void pr( const T& t, O& out ) 
-		{
-			out << "[ ";
-			for( const auto& _el: t )
-			{
-				out << _el << " ";
-			}
-			out << "]\n";
-		}
-		
-
-		/*
-		*	Prints a list of pairs, which is a double linked list
-		*	of pairs
-		*/
-		template<typename T, typename M>
-		inline
-		void pr( const list<pair<T,M> >& m, stringstream& out )
-		{
-			for( const auto& im: m )
-			{
-				out << "[" << im.first << "," << im.second << "]" << " ";
-			}
-			out << "\n";  
-		}
-		
-		
-		template<typename T, typename M>
-		inline
-		void pr_vec( const vector<pair<T,M> >& m, stringstream& out )
-		{
-			for( const auto& im: m )
-			{
-				out << "[" << im.first << "," << im.second << "]" << " ";
-			}
-			out << "\n";  
-		}	
-
-		// from Bjarne Stroustrup The Pratice Of Programming
-		// optimized search function, if the container is not
-		// sorted this is the best algorithm
-		template<typename In, typename T>
-		inline In _find(In first, In last, const T& val)
-		{
-			while (first!=last && *first != val) ++first;
-				return first;
-		}
-			
-		
-		// implementation of binary search from the - excellent - book 
-		// C++ Data Structures and Algorithm Design Principles
-		// divide and conquere O(nlogn)
-		/*
-									element
-									
-				first-------------------M-------------------last				
-				if element > M				
-				                        first---------------last				
-				else										
-				first---------------last
-				
-				:				
-			
-		*/
-		template<typename T>
-		bool binary_search(T N, vector<T>& S)
-		{
-			auto first = S.begin();
-			auto last = S.end();
-
-			while (true)
-			{
-				// Get the middle element of the current range
-				auto range_length = std::distance(first, last);
-				auto mid_element_index = std::floor(range_length / 2);
-				auto mid_element = *(first + mid_element_index);
-
-				// Compare the middle element of current range with N
-				if (mid_element == N)
-					return true;
-				else if (mid_element > N)
-					std::advance(last, -mid_element_index);
-				if (mid_element < N)
-					std::advance(first, mid_element_index);
-
-				// If only one element left in the current range
-				if (range_length == 1)
-					return false;
-			}
-		}
-		
-		inline 
-		bool _find_Del(mset_long& cont, mset_long::iterator first, mset_long::iterator last, ll val)
-		{
-			while (first!=last && *first != val) ++first;
-			if ( first == last )
-				return false;
-			cont.erase(first);
-			return true;
-		}
-		
-		inline
-		int get_midindex(mset_long::iterator first, mset_long::iterator last)
-		{
-            return std::floor( (std::distance(first, last)/ 2)); 
-		}
-
-
-		struct IndexHandler
-		{
-
-			IndexHandler(int m, int index):mo(m),mo_index(index)
-			{
-			};
-			
-			inline
-			int get_midindex_new_add( int size, int maxv, int minv, int v )
-			{
-				
-				bool isEven = ( size%2 == 0 );
-			
-				if ( v <= minv )
-				{
-					if ( isEven == false )
-						mo_index--;
-				}
-				else
-				if ( v >= maxv )
-				{
-					if ( isEven == true )
-						mo_index--;	
-				}
-				else
-				{
-					if ( v <= mo )
-					{
-						if ( isEven == false )
-							 mo_index--;
-					}
-					else
-					{
-						if ( isEven == true )
-							 mo_index++	;	
-					}
-				}
-				
-				return mo_index;
-			}			
-			int mo;
-			int mo_index;
-		};
-		
-        // based on binary_search
-        // adapted for a set  if option != 0, deletes it    
-        inline
-        bool my_binary_search( mset_long& values, const ll& v, int option = 0 )
-        {
-            auto first = values.begin();
-            
-            if ( *first == v )
-            {
-                values.erase( first );
-                return true;
-            }
-            
-            auto last = values.end();
-            auto mid_element_del = first;  
-            while (true)
-            {
-                // Get the middle element of the current range
-                auto range_length = std::distance(first, last);
-                auto mid_element_index = std::floor(range_length / 2); 
-
-                // Compare the middle element of current range with N
-                if ( *mid_element_del == v)
-                {  
-                    if ( option != 0 )
-                        values.erase(mid_element_del);
-                    return true;
-                }
-                else if ( *mid_element_del > v)
-                {
-                    std::advance(last, -mid_element_index);
-                    mid_element_del = last;
-                }
-                if ( *mid_element_del < v)
-                {
-                    std::advance(first, mid_element_index);
-                    mid_element_del = first;
-                }
-
-                // If only one element left in the current range
-                if (range_length == 1)
-                    return false;
-            }   
-        }
-		// Implements a pair class of two integers
-		// it should be used mostly because of performance issues
-		template<typename T, typename S>
-		class mPair
-		{
-		public:
-			mPair(T& one, S& two ):first(one),second(two){};
-			mPair( const mPair& pd)
-			{
-				this->first = pd.first;
-				this->second = pd.second;
-
-			};
-			
-			mPair& operator=( const mPair& pd )
-			{
-				this->first = pd.first;
-				this->second = pd.second;
-				return *this;
-			};
-			
-			mPair( mPair&& pd)
-			{
-				this->first = pd.first;
-				this->second = pd.second;
-				pd.first = 0;
-				pd.second = 0;
-
-			};
-			
-			mPair& operator=( mPair&& pd )
-			{
-				this->first = pd.first;
-				this->second = pd.second;
-				pd.first = 0;
-				pd.second = 0;
-				return *this;
-			};
-
-			friend bool operator==( const mPair& p1, const mPair& p2 )
-			{
-				if  ( p1.first == p2.first)
-					if ( p1.second == p2.second)
-						return true;
-				return false;   
-			}
-
-			friend bool operator!=( const mPair& p1, const mPair& p2 )
-			{
-				return ( p1.first != p2.first );
-			}
-
-			T first;
-			S second;
-		};
-		
-		// implementation of a graph according to the - excellent - book 
-		// C++ Data Structures and Algorithm Design Principles
-		template<typename T>
-		class graph
-		{
-		public:
-			graph( int atn_nodes ):n_nodes(atn_nodes)
-			{
-				data = vector<vector< pair<int, int> > >( atn_nodes, vector< pair<int, int >>());
-			}
-			
-			graph( const graph& g )
-			{
-				this->n_nodes = g.n_nodes;
-				this->data = g.data;
-			}
-			
-			graph& operator=( const graph& g )
-			{
-				if ( this != &g )
-				{
-					this->n_nodes = g.n_nodes;
-					this->data = g.data;
-				}
-				return *this;
-			}
-			
-			// A move constructor simply needs to cleanup whatever memory has been
-			// allocated by the original resource g and move everything to this
-			graph( graph&& g )
-			{		
-				this->n_nodes = g.n_nodes;
-				this->data = g.data;
-				g.n_nodes = 0;
-				g.data.clear();	
-			}
-			
-			// A move assignment simply needs to cleanup whatever memory has been
-			// allocated by the original resource g and move everything to this
-			graph& operator=( graph&& g )
-			{
-				if ( this != &g)
-				{
-					this->n_nodes = g.n_nodes;
-					this->data = g.data;
-					g.n_nodes = 0;
-					g.data.clear();	
-				}
-				return *this;
-			}
-			
-			virtual ~graph(){};
-			
-			
-			// type T should be an enum type
-			void addEdge(const T c1, const T c2, int dis)
-			{
-				auto n1 = static_cast<int>(c1);
-				auto n2 = static_cast<int>(c2);
-				
-				data[n1].emplace_back( n2, dis);
-				data[n2].emplace_back( n1, dis );
-			}
-			
-			// type T should be an enum type
-			void removeEdge( const T c1, const T c2 )
-			{
-				auto n1 = static_cast<int>(c1);
-				auto n2 = static_cast<int>(c2);	
-
-				remove_if( data[n1].begin(), data[n1].end(), [n2](const auto& pair)
-				{
-					return pair.first == n2;
-				});
-				
-				remove_if(data[n2].begin(), data[n2].end(), [n1](const auto& pair)
-				{
-					return pair.first == n1;
-				});		
-			}
-			
-			void print_me() const
-			{
-				stringstream out;
-				// pr_vec
-				for( const auto& rows: data )
-				{
-					if ( rows.size() != 0 )
-						pr_vec<int,int>( rows, out );
-					else
-						out << "empty" << "\n";
-				}
-				cout << out.str();
-			}
-			
-		private:	
-			vector< vector< pair<int,int> > > data;
-			int n_nodes;
-		};
-		
-
-		/*
-		*	Giving two sets of sizes N and M,  this function will redefine them
-		*	so that their sizes are T or T-1 
-		*/
-		inline
-		void balance_halfs( mset_long& mysetl, mset_long& mysetr )
-		{
-		 
-			if ( mysetl.size() == mysetr.size() || 
-                 mysetl.size() - mysetr.size()  == 1 ||
-                 mysetr.size() - mysetl .size()  == 1 )
-				return; 
-			   
-			if ( mysetl.size() < mysetr.size() )
-			{
-				ll tmp = *mysetr.begin();
-				mysetr.erase( mysetr.begin() );
-				mysetl.emplace( tmp );
-				
-			}
-			else if ( mysetl.size() > mysetr.size() )
-			{
-				ll tmp = *prev( mysetl.end() );
-				mysetl.erase( prev( mysetl.end()) );
-				mysetr.emplace( tmp );
-			}
-
-			balance_halfs(mysetl,mysetr);
-				
-		}
-		
-		// Implementation of search for inversions from the book
-		// algorithm  illuminated using brute force
-		//  given 1 4 2, an inversion is the pair 4 and 2 because
-		// 4 > 2 but the indexes of them in the array are index1< index2
-		// Complexity O(n)
-		inline
-		int num_inverstions_brute( const vector<int>& _arr )
-		{
-			int invertions = 0;
-			int n = _arr.size();
-			for( int i = 0; i < n; i++ )
-			{
-				for( int j = i+1;  j < n-1; j++)
-					if ( _arr[i] > _arr[j] ) invertions++;
-			}
-			return invertions;
-		}
-		
-		// supports generic types
-		template<typename T>
-		inline
-		int num_inverstions_brute( const vector<T>& _arr )
-		{
-			int invertions = 0;
-			int n = _arr.size();
-			for( int i = 0; i < n; i++ )
-			{
-				for( int j = i+1;  j < n-1; j++)
-					if ( _arr[i] > _arr[j] ) invertions++;
-			}
-			return invertions;
-		}
-		
-        template<typename T>
-		inline 
-		vector<int>& slice_vector( const vector<T>& _arr, int posi, int posf, vector<T>& o )
-		{
-			for( int i = posi; i < posf; i++)
-				o.push_back( _arr[i] );
-			return o;
-		}
-		
-        template<typename T>
-		inline
-		vector<T> split_vector( const vector<T>& _arr, int _left_right)
-		{
-			int n = _arr.size();
-			vector<T> A;
-			
-			int llast = 0;
-			int rfirst = 0;
-			
-			if ( _arr.size()%2 == 0 )
-			{
-				llast = n/2;
-				rfirst = n/2;			
-			}
-			else
-			{
-				llast  = (n+1)/2;
-				rfirst = (n+1)/2;
-			}
-			
-			if ( _left_right == 0 )
-			{
-				return slice_vector( _arr, 0, llast, A );
-			}
-			else
-			{
-				return slice_vector( _arr, rfirst, n, A );
-			}
-
-
-		}
-
-		// Implementation of search for inversions from the book
-		// algorithm  illuminated using the divide and conquer strategy
-		//  given 1 4 2, an inversion is the pair 4 and 2 because
-		// 4 > 2 but the indexes of them in the array are index1< index2
-		// Complexity O(nlong(n))	
-		inline
-		int num_inverstions( const vector<int>& _arr )
-		{
-			
-			vector<int> a  = split_vector( _arr, 0 );
-			vector<int> b  = split_vector( _arr, 1 );
-			
-			// TODO implement
-			
-			return 0;
-			
-		}
-	
-	}
-	
-	namespace _other_util
-	{
-		class csvprocessing
-		{
-		public:
-		
-			csvprocessing(std::string& filename)
-			{
-				this->filename = filename;
-			}
-			
-			~csvprocessing(){};
-			
-			int readCSV(vector<vector<double>>& obs, int nfields)
-			{
-				ifstream myFile;
-				myFile.open(filename, ios_base::in);
-
-				if (myFile.is_open())
-				{
-					while (myFile.good())
-					{
-						string Line;
-						getline(myFile, Line);
-						if (Line.length() == 0)
-						{
-							break;
-						}
-
-						int pos = 0;
-						int start = 0;
-						vector<double> ob;
-						int cnt = 0;
-						while (pos != -1)
-						{
-							if (cnt < nfields)
-							{
-								pos = Line.find(',', start);
-								string tmp = Line.substr(start, pos - start);
-								start = pos + 1;
-								double f = stof(tmp);
-								ob.push_back(f);
-								cnt++;
-							}
-							else
-							{
-								break;
-							}
-						}
-						obs.push_back(ob);
-					}
-					myFile.close();
-				}
-				else
-				{
-					return -1;
-				}
-
-				return 0;
-			};
-			
-		private:
-			csvprocessing(const csvprocessing&) = delete;
-			csvprocessing operator=(const csvprocessing&) = delete;
-			std::string filename;
-		};
-
-		
-		// starts computing the execution time of a code
-		inline
-		const tp start_tracking()
-		{
-			return high_resolution_clock::now(); 
-		}
-
-		// stops  computing the execution time of a code and print 
-		// elapsed time
-		inline
-		void end_tracking( tp& start, const char* msg="" )
-		{
-			cout << "________________________________________" << endl;
-			cout << msg << endl;
-			auto stop = high_resolution_clock::now(); 
-			auto duration = duration_cast<microseconds>(stop - start);    
-			cout << "Execution timing:" << duration.count() << endl; 
-			cout << "________________________________________" << endl;
-		}
-	
-	}
-	
-	namespace _buffer
-	{
-		
-		int ConvertHexStringToDecimalString( const char* , std::string&  ) ;
-		char* vSetCurrentTimeStamp( char*  );
-		char* vSetCurrentTimeStamp( char* , int  );
-		int calculateCRC( char* , int  );
-		unsigned char* sConvertHexBin2String( unsigned char , unsigned char* );
-		char* szConvertStringToData( char* , char* , int );
-		
-		inline
-		int iConvertBin2Ascii(char* bBindata, int iDataSize, char* szDataAscii )
-		{
-			// ex: 0x55 = U
-			//     0x21 = !
-			//     0x00 gets converted to . to avoid problems with NULL terminators
-			//     control chars get converted to .
-
-			if (( bBindata == nullptr )||(szDataAscii) == nullptr )
-				return 1;
-
-			for(int i = 0; i < iDataSize; i++ )
-			{
-				if ( bBindata[i] < 0x20 )
-					szDataAscii[i] = '.';
-				else
-					szDataAscii[i] =  bBindata[i] ;
-			}
-
-			return 0;
-		}
-
-		/************************************************************************************
-		* int iConvertBinArray2String( char* bBindata, 
-		*												 int iDataSize,
-		*												 char* szDataString )
-		* description: Originally the data is binary, thus to print it in a file we must convert
-		*			   it to an ASCII representation of this array of bytes. This convertion is not literal,
-		*			   because each nibble of the bin values is converted to an ASCII byte. The output is
-		*			   twice as big as the input
-		* INPUT:		Original data buffer and its size
-		* OUTPUT:	 	New buffer	
-		* RETURNS:	    returns 0 OK else 1
-		*************************************************************************************/
-		inline
-		int iConvertBinArray2String(	char* bBindata, 
-										int iDataSize,
-										char* szDataString ) 
-		{	
-
-			if (( bBindata == nullptr )||(szDataString) == nullptr )
-				return 1;
-
-			for(int i = 0; i < iDataSize ; i++)
-			{
-				char tmp[3];
-				memset(tmp,0,3);
-				sConvertHexBin2String((unsigned char)bBindata[i],(unsigned char*)tmp);
-				memcpy((szDataString+2*i),tmp,2);
-			}
-
-			return 0;
-		}
-		
-		/************************************************************************************
-		*unsigned char* sConvertHexBin2String(unsigned char ch, unsigned char* buffer)
-		* description: Originally the data is binary, thus to print it in a file we must convert
-		*			   it to an ASCII representation of this array of bytes. This convertion is not literal,
-		*			   because each nibble of the bin values is converted to an ASCII byte. The output is
-		*			   twice as big as the input. This method actually converts each nibble of a byte to
-		*			   its ascii representation.
-		* INPUT:		A char
-		* OUTPUT:	 	2 byte ASCII array representation
-		* RETURNS:	    Pointer of the first byte of this array ( includes NULL terminator )
-		*************************************************************************************/
-		inline
-		unsigned char* sConvertHexBin2String(unsigned char ch, unsigned char* buffer)
-		{
-		  char tmp[3];
-		  memset(tmp,0,3);
-		  if ( (ch&0x0F) == 0 )
-		  {
-			if ( ch == 0x00 )
-			{
-				tmp[0] = 0x30;
-				tmp[1] = 0x30;
-				tmp[2] = 0x00;
-			}
-			else
-			{
-				snprintf(tmp, 3, "%x",ch);
-				if ( tmp[1] == 0 )
-					tmp[1] = 0x30;
-			}
-		  }
-		  else
-		  if ( ((ch&0xF0)<<4) == 0 )
-		  {
-			char cfix = 0x00;
-			snprintf(tmp,3,"%x",ch);
-			cfix = tmp[0];
-			tmp[0] = 0x30;
-			tmp[1] = cfix;
-		  }
-		  else
-				snprintf(tmp,3,"%x",ch);
-		  memcpy(buffer,tmp,3);	
-		  return buffer;  
-		}
-
-		inline
-		int ConvertHexStringToDecimalString( const char* HexInputString, string& Output )
-		{
-			// Given an input like "0E0AFF1245EE99"
-			// convert it to "14 10 255 18 69 238 153"
-			char Out[ 528 ];
-
-			if ( HexInputString == nullptr )
-					return -1;
-
-			memset( Out, 0x00, sizeof( Out ) );
-
-
-			std::string tmp( HexInputString );
-			Output.clear();
-			int len = ( ( tmp.length() - 2 )/2 );
-
-			for( int i = 0; i < len + 1 ; i ++ )
-			{
-				string tmp2 = tmp.substr( 2*i , 2 );
-				int tmpInteger =  strtol( tmp2.c_str(), nullptr, 16 );
-				snprintf( Out + strlen( Out ), 528, "%d", tmpInteger );
-				if( i == len )
-				{                   
-					break;
-				}
-			}
-
-			Output.append( Out );
-
-			if ( Output.length() <= 0 )
-			   return -1;
-			return 0;
-		}
-
-		inline
-		char* vSetCurrentTimeStamp( char* szTimeStamp )
-		{
-			time_t rawtime;
-			struct tm * timeinfo;
-
-			char buffer[32];
-			memset(buffer,0,sizeof( buffer));
-
-			if ( szTimeStamp == nullptr )
-			  return nullptr;
-
-			time ( &rawtime );
-			timeinfo = localtime ( &rawtime );
-
-			// 01012000_HHMMSS
-			strftime (buffer,16,"%d%m%Y_%H%M%S",timeinfo);
-			memcpy(szTimeStamp,buffer,15);
-			*(szTimeStamp+15)= 0x00;
-
-			return szTimeStamp;
-
-		}
-		
-		inline
-		char* vSetCurrentTimeStamp( char* szTimeStamp, const char* szFormat, int isize )
-		{
-			time_t rawtime;
-			struct tm * timeinfo;
-
-			char buffer[32];
-			memset(buffer,0,sizeof( buffer));
-
-			if ( szTimeStamp == nullptr )
-					return nullptr;
-
-			time ( &rawtime );
-			timeinfo = localtime ( &rawtime );
-
-			strftime (buffer, isize, szFormat ,timeinfo);
-			memcpy(szTimeStamp,buffer,isize);
-			*(szTimeStamp+isize)= 0x00;
-
-			return szTimeStamp;
-		}
-
-		inline
-		int calculateCRC( char* buffer, int size )
-		{
-			int CRC = 0;
-			int Index = 0;
-			for( Index = 0; Index < size ; Index++ )
-					CRC = CRC + buffer[ Index ];
-			return CRC;
-		}
-		
-		inline
-		char* szConvertStringToData( char* stringbuffer, char* hexbuffer, int size )
-		{
-			int i = 0;
-			for( i = 0 ; i < size/2 ; i++  )
-			{
-				char buf[3];
-				memset(buf,0,3);
-				memcpy(buf,&stringbuffer[2*i],2);
-				buf[2] = 0;
-				hexbuffer[ i ] = strtol( buf, nullptr, 16 );
-			}
-			return hexbuffer;
-		}
-		
-
-		inline 
-		void ReplaceCharsFromString( string& mystring, char whattoChange, char changeTo )
-		{
-			for( int IndexOnString = 0; IndexOnString < (int)mystring.size() ; IndexOnString++ )
-			{
-				if ( mystring[ IndexOnString ] == whattoChange )
-				{
-					mystring[ IndexOnString ] =  changeTo;
-				}
-			}
-		}
-
-		inline
-		void GetTimeStamp( string& stamp )
-		{
-			time_t rawtime;
-			struct tm * timeinfo;
-			char buffer [128];
-
-			memset( buffer, 0x00, sizeof( buffer ) );
-			time ( &rawtime );
-			timeinfo = localtime ( &rawtime );
-			strftime (buffer,16,"%d%m%Y_%H%M%S",timeinfo);
-
-			stamp = buffer;
-		}
-		
-		// by https://stackoverflow.com/questions/216823/whats-the-best-way-to-trim-stdstring
-		// 
-		std::string& trimMe(std::string& str)
-		{
-		   // right trim
-		   while (str.length () > 0 && (str [str.length ()-1] == ' ' || str [str.length ()-1] == '\t'))
-			  str.erase (str.length ()-1, 1);
-		   // left trim
-		   while (str.length () > 0 && (str [0] == ' ' || str [0] == '\t'))
-			  str.erase (0, 1);
-		   return str;
-		}
-
-		// the above adapted by me
-		const char* lactrim(char* cstr)
-		{
-			if ( cstr == nullptr )
-				return nullptr;
-			
-		   string str = cstr;
-		   // right trim
-		   while (str.length () > 0 && (str [str.length ()-1] == ' ' || str [str.length ()-1] == '\t'))
-			  str.erase (str.length ()-1, 1);
-		   // left trim
-		   while (str.length () > 0 && (str [0] == ' ' || str [0] == '\t'))
-			  str.erase (0, 1);
-		   return str.c_str();
-		}
-	
+		std::cout << it.crt->v << std::endl;
 	}
 
 }
 
-#endif
+int main()
+{
+	testcase4();
+}
