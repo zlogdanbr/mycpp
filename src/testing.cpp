@@ -1,11 +1,10 @@
 #include "util.h"
 
-using namespace _dutil_;
-using namespace _dutil_::_other_util;
+using namespace mytools;
+using namespace mytools::util;
 
 
-
-void testcase(int N, int pos )
+void testcase1(int N, int pos )
 {
 	cout << "-------------------------------------" << endl;
 	cout << "N is " << N << endl;
@@ -80,24 +79,21 @@ void testcase2(int N )
 	if ( find( v.begin() , v.end() , pos ) != v.end() )
 			cout << "found: " << pos << endl;		
 	end_tracking(t);
-	cout << "done." << endl;		
-		
+	cout << "done." << endl;				
 }
 
 void testcase3()
 {
 	multiset<int> v{ 1, 3, 4, 5 ,6 , 7, 8, 1000, 24 , 24, 56, -1 };
-
 	if ( algo::binary_search_recursive_set( -1, v.begin() , v.end() ) == true )
 			cout << "found: " << -1 << endl;		
 }
-
 
 void testcase4()
 {
 
 
-	algo::List<std::string> l;
+	algo::cllist<std::string> l;
 
 	l.push("itemxxxxxxxx");
 	l.push("itemyy");
@@ -115,11 +111,25 @@ void testcase4()
 
 void testcase5()
 {	
+	mset_long s1{ -1 , -2, 	0, 		1, 3, 	3, 		5, 	6, 		8, 8 };
+	mset_long s2{ 9  , 120, 320, 500, 1000, 1020, 1050, 1056, 2000, 4000, 7000, 10000, 7899000, 652777 };
 	
+	cout<< s1.size() << endl;
+	algo::print_stlc(s1);
+	cout<< s2.size() << endl; 	
+	algo::print_stlc(s2);	
+	
+	algo::balance_halfs( s1, s2 );
+	
+	cout<< s1.size() << endl;
+	algo::print_stlc(s1);
+	cout<< s2.size() << endl; 	
+	algo::print_stlc(s2);
 
 }
 
+
 int main()
 {
-	testcase4();
+	testcase5();
 }
