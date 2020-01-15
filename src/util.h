@@ -1,10 +1,24 @@
 //--------------------------------------------------------------------------
-//	namepsace _dutil_
-//	contains useful code for search, debug, file, buffer handling etc
-//	you can use this freely but I don't take responsability for whatever
-//  problems this will likely cause
+//	namespace mytools
+//
+//	Contains useful code for search, debug, file, buffer handling etc
+//	You can use this freely but I don't take responsability for whatever
+//  problems this will likely cause. I use this as a library for my code.
+//  
+//  IMPORTANT:
 //  I use C++14
-//  I use stl
+//  I use STL
+//
+//	It contains the following nested namespaces
+//	>namespace mytools::algo
+//  Contains code to be used with STL, DS and algorithms
+//  >namespace mytools::util
+//	Contains useful code not buffer/string related
+//	>namespace mytools::buffer_handlers
+//  Contains useful code buffer/string related
+//
+//--------------------------------------------------------------------------
+//	2020 Daniel V. Gomes
 //--------------------------------------------------------------------------
 #ifndef _UTIL_D
 #define _UTIL_D
@@ -36,44 +50,41 @@ typedef long long ll;
 typedef multiset<long long> mset_long;
 typedef high_resolution_clock::time_point tp;
 
-namespace _dutil_ 
+namespace mytools 
 {
 	
 	namespace algo
 	{
-		auto CompStdStrings = 
-		[]( const std::string& s1, const std::string& s2 )
+		auto compstrsize = 
+		[]( const std::string& s1, 
+			const std::string& s2 )
 		{
 			return  s1.size() < s2.size();
 		};
 		
-		auto compint = [](const int& a, const int &b) -> bool { return a == b; };
-		auto compstr = [](const std::string& a, const std::string& b) -> bool { return a == b; };
-		auto isgreaterthan = [](const int& a, const int& b) -> bool { return a > b; };
-		auto isgreaterthans = [](const std::string& a, const std::string& b) -> bool
+		auto compint = [](	const int& a, 
+							const int &b) -> bool { return a == b; };
+						  
+		auto compstr = [](	const std::string& a, 
+							const std::string& b) -> bool { return a == b; };
+							
+		auto isgreaterthan = [](	const int& a, 
+									const int& b) -> bool { return a > b; };
+									
+		auto isgreaterthans = [](	const std::string& a, 
+									const std::string& b) -> bool
 		{
 			return  (a.length() >= b.length());
 		};		
 		
-		void print_debug( const vector<long long>& v )
-		{
-			if ( v.size() == 0 )
-				cout << "[ nullptr ]" << endl;
-			else
-			{
-				cout << "[ ";
-				for(const auto& it: v )
-					cout << it << " ";
-				cout << "]\n";
-			}
-		}
 
 		/*
 		*	For as long as you send output to stringstream& out
 		*	this function should output it all at the file  filename
 		*/
 		inline
-		void print_all_debugs( stringstream& out, string& filename )
+		void print_all_debugs( 	stringstream& out, 
+								string& filename )
 		{
 			ofstream myFile;
 			myFile.open( filename, ios_base::out);
@@ -91,7 +102,8 @@ namespace _dutil_
 		*/
 		template<typename T, typename M>
 		inline
-		void pr( const list<pair<T,M> >& m, stringstream& out )
+		void print_pairs( 	const list<pair<T,M> >& m, 
+							stringstream& out )
 		{
 			for( const auto& im: m )
 			{
@@ -102,7 +114,8 @@ namespace _dutil_
 		
 		template<typename T, typename M>
 		inline
-		void pr_vec( const vector<pair<T,M> >& m, stringstream& out )
+		void print_vector( 	const vector<pair<T,M> >& m, 
+							stringstream& out )
 		{
 			for( const auto& im: m )
 			{
@@ -110,27 +123,26 @@ namespace _dutil_
 			}
 			out << "\n";  
 		}
-	
-	
 
+		template<typename T>
+		inline
+		void print_stlc( T& m )
+		{
+			cout << "[ ";
+			for( const auto& im: m )
+			{
+				cout << im << " ";
+			}
+			cout << "]\n";  
+		}		
+	
 		// implementation of binary search for a multiset
-		// not as fast as brute force search by Stroustrup
-		/*
-									element
-									
-				first-------------------M-------------------last				
-				if element > M				
-				                        first---------------last				
-				else										
-				first---------------last
-				
-				:				
-			
-		*/
-		
+		// not as fast as brute force search by Stroustrup	
 		template<typename T, typename Iterator>
 		inline
-		bool binary_search_recursive_set( T N, Iterator first, Iterator last)
+		bool binary_search_recursive_set( 	T N, 
+											Iterator first, 
+											Iterator last)
 		{
 
 			Iterator mid = first;
@@ -162,7 +174,9 @@ namespace _dutil_
 		
 		template<typename T, typename Iterator>
 		inline
-		bool binary_search_recursive( T N, Iterator first, Iterator last)
+		bool binary_search_recursive( 	T N, 
+										Iterator first, 
+										Iterator last)
 		{
 
 			// Get the middle element of the current range
@@ -199,7 +213,9 @@ namespace _dutil_
 		// optimized search function, if the container is not
 		// sorted this is the best algorithm
 		template<typename In, typename T>
-		inline In _find(In first, In last, const T& val)
+		inline In _find(	In first, 
+							In last, 
+							const T& val)
 		{
 			while (first!=last && *first != val) ++first;
 				return first;
@@ -274,7 +290,9 @@ namespace _dutil_
 		};
 		
 		
-		// trying to implement a graph using a map
+		// trying to implement a graph using a map according to the - excellent - book 
+		// C++ Data Structures and Algorithm Design Principles. The author does not use
+		// a map but I am adapting it according to another great algo book Grokking Algorithms
 		class graph2
 		{
 		public:
@@ -285,24 +303,19 @@ namespace _dutil_
 						
 			virtual ~graph2(){};
 			
-			void addEdge(const string c1, const string c2, float dis )
+			void addEdge(	const string c1, 
+							const string c2, 
+							float dis )
 			{
 				data[c1].insert( make_pair( c2, dis )  );
 			}
 
 
-			void removeEdge( const string c1, const string c2 )
+			void removeEdge( 	const string c1, 
+								const string c2 )
 			{
 
-				remove_if( data[c1].begin(), data[c1].end(), [c2](const auto& pair)
-				{
-					return pair.first == c2;
-				});
-				
-				remove_if(data[c2].begin(), data[c2].end(), [c1](const auto& pair)
-				{
-					return pair.first == c1;
-				});		
+	
 			}			
 			
 		private:	
@@ -365,7 +378,9 @@ namespace _dutil_
 			
 			
 			// type T should be an enum type
-			void addEdge(const T c1, const T c2, int dis)
+			void addEdge(	const T c1, 
+							const T c2, 
+							int dis)
 			{
 				auto n1 = static_cast<int>(c1);
 				auto n2 = static_cast<int>(c2);
@@ -375,7 +390,8 @@ namespace _dutil_
 			}
 			
 			// type T should be an enum type
-			void removeEdge( const T c1, const T c2 )
+			void removeEdge( 	const T c1, 
+								const T c2 )
 			{
 				auto n1 = static_cast<int>(c1);
 				auto n2 = static_cast<int>(c2);	
@@ -394,13 +410,13 @@ namespace _dutil_
 			void print_me() const
 			{
 				stringstream out;
-				// pr_vec
+				// print_vector
 				for( const auto& rows: data )
 				{
 					if ( rows.size() != 0 )
-						pr_vec<int,int>( rows, out );
+						print_vector<int,int>( rows, out );
 					else
-						out << "empty" << "\n";
+						out << "[empty]" << "\n";
 				}
 				cout << out.str();
 			}			
@@ -416,14 +432,13 @@ namespace _dutil_
 		*	so that their sizes are T or T-1 
 		*/
 		inline
-		void balance_halfs( mset_long& mysetl, mset_long& mysetr )
+		void balance_halfs( 	mset_long& mysetl, 
+								mset_long& mysetr )
 		{
-		 
-			if ( mysetl.size() == mysetr.size() || 
-                 mysetl.size() - mysetr.size()  == 1 ||
-                 mysetr.size() - mysetl .size()  == 1 )
+			
+			if ( mysetl.size() == mysetr.size() || abs( mysetl.size()-mysetr.size()  ) == 1  )
 				return; 
-			   
+		 
 			if ( mysetl.size() < mysetr.size() )
 			{
 				ll tmp = *mysetr.begin();
@@ -441,6 +456,7 @@ namespace _dutil_
 			balance_halfs(mysetl,mysetr);
 				
 		}
+			
 		
 		template<typename T>
 		class Node
@@ -487,18 +503,24 @@ namespace _dutil_
 			}
 		};
 
+		// this is an implementation of a Double LL. The only thing useful with this is
+		// actually writing it for the sake of fun. 
+		// it is much better do this:
+		//
+		// #include <list>		// from STL
+		// 
 		template<typename T >
-		class List
+		class cllist
 		{
 		public:
-			List()
+			cllist()
 			{
 				head = nullptr;
 				tail = nullptr;
 				size = 0;
 			}
 
-			~List()
+			~cllist()
 			{
 				clear();
 			}
@@ -588,8 +610,8 @@ namespace _dutil_
 			template<typename F>
 			int find(T v, F& f)
 			{
-				Node<T>* it = List<T>::tail;
-				for (int i = 0; i < List<T>::size; i++, it = it->next)
+				Node<T>* it = cllist<T>::tail;
+				for (int i = 0; i < cllist<T>::size; i++, it = it->next)
 				{
 					if (f(v, it->v) == true)
 						return i;
@@ -600,34 +622,34 @@ namespace _dutil_
 			template<typename F>
 			bool remove(T v, F& f)
 			{
-				Node<T>* it = List<T>::tail;
-				for (int i = 0; i < List<T>::size; i++, it = it->next)
+				Node<T>* it = cllist<T>::tail;
+				for (int i = 0; i < cllist<T>::size; i++, it = it->next)
 				{
 					if (f(v, it->v) == true)
 					{
-						if (it == List<T>::tail)
+						if (it == cllist<T>::tail)
 						{
-							List<T>::tail = it->next;
+							cllist<T>::tail = it->next;
 							delete it;
-							List<T>::size--;
+							cllist<T>::size--;
 							return true;
 						}
-						else if (it == List<T>::head)
+						else if (it == cllist<T>::head)
 						{
-							delete List<T>::head;
-							List<T>::size--;
-							Node<T>* it2 = List<T>::tail;
-							for (int k = 0; i < List<T>::size; k++, it2 = it2->next)
+							delete cllist<T>::head;
+							cllist<T>::size--;
+							Node<T>* it2 = cllist<T>::tail;
+							for (int k = 0; i < cllist<T>::size; k++, it2 = it2->next)
 							{
-								List<T>::head = it2;
+								cllist<T>::head = it2;
 							}
 						}
 						else
 						{
-							Node<T>* it2 = List<T>::tail;
+							Node<T>* it2 = cllist<T>::tail;
 							for (int j = 0; j < (i - 1); j++, it2 = it2->next);
 							it2->next = it->next;
-							List<T>::size--;
+							cllist<T>::size--;
 							delete it;
 						}
 					}
@@ -646,7 +668,7 @@ namespace _dutil_
 	
 	}
 	
-	namespace _other_util
+	namespace util
 	{
 		class csvprocessing
 		{
@@ -659,7 +681,9 @@ namespace _dutil_
 			
 			~csvprocessing(){};
 			
-			int readCSV(vector<vector<double>>& obs, int nfields)
+			
+			int readCSV(	vector<vector<double>>& obs, 
+							int nfields)
 			{
 				ifstream myFile;
 				myFile.open(filename, ios_base::in);
@@ -735,18 +759,30 @@ namespace _dutil_
 	
 	}
 	
-	namespace _buffer
+	namespace buffer_handlers
 	{
 		
-		int ConvertHexStringToDecimalString( const char* , std::string&  ) ;
+		int ConvertHexStringToDecimalString( 	const char* , 
+												std::string&  ) ;
+												
 		char* vSetCurrentTimeStamp( char*  );
-		char* vSetCurrentTimeStamp( char* , int  );
-		int calculateCRC( char* , int  );
-		unsigned char* sConvertHexBin2String( unsigned char , unsigned char* );
-		char* szConvertStringToData( char* , char* , int );
+		
+		char* vSetCurrentTimeStamp( char* , 
+									int  );
+									
+		int calculateCRC( 	char* , 
+							int  );
+							
+		unsigned char* sConvertHexBin2String( 	unsigned char , 
+												unsigned char* );
+		char* szConvertStringToData( 	char* , 
+										char* , 
+										int );
 		
 		inline
-		int iConvertBin2Ascii(char* bBindata, int iDataSize, char* szDataAscii )
+		int iConvertBin2Ascii(	char* bBindata, 
+								int iDataSize, 
+								char* szDataAscii )
 		{
 			// ex: 0x55 = U
 			//     0x21 = !
@@ -811,7 +847,8 @@ namespace _dutil_
 		* RETURNS:	    Pointer of the first byte of this array ( includes NULL terminator )
 		*************************************************************************************/
 		inline
-		unsigned char* sConvertHexBin2String(unsigned char ch, unsigned char* buffer)
+		unsigned char* sConvertHexBin2String(	unsigned char ch, 
+												unsigned char* buffer)
 		{
 		  char tmp[3];
 		  memset(tmp,0,3);
@@ -846,7 +883,8 @@ namespace _dutil_
 		}
 
 		inline
-		int ConvertHexStringToDecimalString( const char* HexInputString, string& Output )
+		int ConvertHexStringToDecimalString( 	const char* HexInputString, 
+												string& Output )
 		{
 			// Given an input like "0E0AFF1245EE99"
 			// convert it to "14 10 255 18 69 238 153"
@@ -905,7 +943,9 @@ namespace _dutil_
 		}
 		
 		inline
-		char* vSetCurrentTimeStamp( char* szTimeStamp, const char* szFormat, int isize )
+		char* vSetCurrentTimeStamp( 	char* szTimeStamp, 
+										const char* szFormat, 
+										int isize )
 		{
 			time_t rawtime;
 			struct tm * timeinfo;
@@ -927,7 +967,8 @@ namespace _dutil_
 		}
 
 		inline
-		int calculateCRC( char* buffer, int size )
+		int calculateCRC( 	char* buffer, 
+							int size )
 		{
 			int CRC = 0;
 			int Index = 0;
@@ -937,7 +978,9 @@ namespace _dutil_
 		}
 		
 		inline
-		char* szConvertStringToData( char* stringbuffer, char* hexbuffer, int size )
+		char* szConvertStringToData( 	char* stringbuffer, 
+										char* hexbuffer, 
+										int size )
 		{
 			int i = 0;
 			for( i = 0 ; i < size/2 ; i++  )
@@ -953,7 +996,9 @@ namespace _dutil_
 		
 
 		inline 
-		void ReplaceCharsFromString( string& mystring, char whattoChange, char changeTo )
+		void ReplaceCharsFromString( 	string& mystring, 
+										char whattoChange, 
+										char changeTo )
 		{
 			for( int IndexOnString = 0; IndexOnString < (int)mystring.size() ; IndexOnString++ )
 			{
@@ -992,7 +1037,8 @@ namespace _dutil_
 		   return str;
 		}
 
-		// the above adapted by me
+		// the above adapted by me to be used under a code that uses C NULL terminated
+		// strings rather than std::string
 		const char* lactrim(char* cstr)
 		{
 			if ( cstr == nullptr )
