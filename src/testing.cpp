@@ -98,14 +98,26 @@ void testcase4()
 	l.push("itemxxxxxxxx");
 	l.push("itemyy");
 	l.push("itemz");
+	
+	
 
 	cout << "Elements: " << endl;
+	for ( algo::iterator<std::string> it = l.begin(); it.crt != l.end().crt; it.crt = it.crt->next)
+	{
+		std::cout << it.crt->v << std::endl;
+	}	
 
-
+	l.pop();
+	
+	cout << "Elements: " << endl;
 	for ( algo::iterator<std::string> it = l.begin(); it.crt != l.end().crt; it.crt = it.crt->next)
 	{
 		std::cout << it.crt->v << std::endl;
 	}
+	
+	std::string s = "itemxxxxxxxx";
+	std::string s2 = "itemxxasddddxxxxxx";
+	
 
 }
 
@@ -128,8 +140,37 @@ void testcase5()
 
 }
 
+void testcase6()
+{
+
+
+	algo::cllist<int> l;
+
+	l.push(1);
+	l.push(2);
+	l.push(3);
+	
+	
+
+	cout << "Elements: " << endl;
+	for ( algo::iterator<int> it = l.begin(); it.crt != l.end().crt; it.crt = it.crt->next)
+	{
+		std::cout << it.crt->v << std::endl;
+	}	
+
+	l.pop();
+	
+	cout << "Elements: " << endl;
+	for ( algo::iterator<int> it = l.begin(); it.crt != l.end().crt; it.crt = it.crt->next)
+	{
+		std::cout << it.crt->v << std::endl;
+	}
+	
+	
+
+}
 
 int main()
 {
-	testcase5();
+	testcase6();
 }
