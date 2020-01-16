@@ -311,12 +311,12 @@ namespace mytools
 			}
 
 
-			void removeEdge( 	const string c1, 
-								const string c2 )
-			{
+			// void removeEdge( 	const string c1, 
+								// const string c2 )
+			// {
 
 	
-			}			
+			// }			
 			
 		private:	
 			map< string, map<string, float >> data;
@@ -470,6 +470,44 @@ namespace mytools
 			Node<T>* next;
 			Node<T>* prev;
 			T v;
+
+			Node( const Node& n )
+			{
+				this->next = n.next;
+				this->prev = n.prev;
+				this->v    = n.v ;
+			}
+			
+			Node<T>& operator=( const Node& n )
+			{
+				if ( this != &n )
+				{
+					this->next = n.next;
+					this->prev = n.prev;
+					this->v    = n.v ;
+				}
+				return *this;
+			}			
+			
+			friend bool operator==(  const Node& n1, const Node& n2 )
+			{
+				return ( n1.v == n2.v );
+			}
+
+			friend bool operator!=(  const Node& n1, const Node& n2 )
+			{
+				return ( n1.v != n2.v );
+			}
+			
+			friend bool operator<(  const Node& n1, const Node& n2 )
+			{
+				return ( n1.v < n2.v );
+			}
+			
+			friend bool operator>(  const Node& n1, const Node& n2 )
+			{
+				return ( n1.v < n2.v );
+			}			
 		};
 
 		template<typename T>
@@ -496,11 +534,39 @@ namespace mytools
 
 			iterator<T> operator =(const iterator& it)
 			{
-				this->next = it.next;
-				this->pre = it.prev;
-				this->crt = it.crt;
+				if ( this != &it )
+				{
+					this->next = it.next;
+					this->pre = it.prev;
+					this->crt = it.crt;
+				}
 				return this;
 			}
+			
+			iterator<T>* operator++( int  )
+			{
+				this->crt = this->next;
+				return this;
+			}
+			
+			iterator<T>* operator++()
+			{
+				this->crt = this->next;
+				return this;
+			}			
+					
+			
+			T operator*( )
+			{
+				return this->crt->v;
+			}
+			
+			friend bool operator==( iterator<T>& a1, iterator<T>& a2 )
+			{
+				return ( a1->crt->v == a2->crt->v );
+			}
+			
+			
 		};
 
 		// this is an implementation of a Double LL. The only thing useful with this is
@@ -583,12 +649,10 @@ namespace mytools
 
 				if (size != 0)
 				{
+					Node<T>* new_head = head->prev;
 					delete head;
-					size--;
-					Node<T>* it = tail;
-					for (int i = 0; i < size; i++, it = it->next);
-					head = it;
-					head->prev = it->prev;
+					head = nullptr;
+					head = new_head;
 					head->next = nullptr;
 				}
 				else
@@ -601,7 +665,18 @@ namespace mytools
 				return 0;
 
 			}
+			
 
+			void advance( iterator<T>& it, int pos )
+			{
+				int i = 0;
+				do
+				{
+					it++;;
+				} while( i++ < pos );
+
+			}
+			
 			virtual int getSize() const final
 			{
 				return this->size;
@@ -617,6 +692,39 @@ namespace mytools
 						return i;
 				}
 				return -1;
+			}
+			
+
+			bool binary_search( iterator<T> first, iterator<T> last, T v )
+			{
+				
+				int range_length = &last - &first;
+				int mid_element_index = std::floor(range_length / 2);
+				iterator<T> mid_element = first;
+				advance( mid_element, mid_element_index);	
+
+				if (*mid_element == v )
+					return true;
+				
+				if ( *mid_element > v )
+				{
+					binary_search( mid_element, last, v );
+				}
+				else
+				if ( *mid_element < v )
+				{
+					binary_search( first, mid_element,  v );
+				}	
+
+				if ( range_length == 1 )
+					return false;
+				
+				return true;
+			}
+			
+			bool remove( T v )
+			{
+				return true;
 			}
 
 			template<typename F>
