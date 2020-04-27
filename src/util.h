@@ -5,8 +5,8 @@
 //	You can use this freely but I don't take responsability for whatever
 //  problems this will likely cause. I use this as a library for my code.
 //  
-//  IMPORTANT:
 //  I use C++14
+//  IMPORTANT:
 //  I use STL
 //
 //	It contains the following nested namespaces
@@ -287,40 +287,6 @@ namespace mytools
 
 			T first;
 			S second;
-		};
-		
-		
-		// trying to implement a graph using a map according to the - excellent - book 
-		// C++ Data Structures and Algorithm Design Principles. The author does not use
-		// a map but I am adapting it according to another great algo book Grokking Algorithms
-		class graph2
-		{
-		public:
-			graph2( int n ): n_nodes(n)
-			{
-				n_nodes = 0;
-			}
-						
-			virtual ~graph2(){};
-			
-			void addEdge(	const string c1, 
-							const string c2, 
-							float dis )
-			{
-				data[c1].insert( make_pair( c2, dis )  );
-			}
-
-
-			// void removeEdge( 	const string c1, 
-								// const string c2 )
-			// {
-
-	
-			// }			
-			
-		private:	
-			map< string, map<string, float >> data;
-			int n_nodes;
 		};
 				
 		// implementation of a graph according to the - excellent - book 
@@ -722,10 +688,6 @@ namespace mytools
 				return true;
 			}
 			
-			bool remove( T v )
-			{
-				return true;
-			}
 
 			template<typename F>
 			bool remove(T v, F& f)
@@ -782,7 +744,7 @@ namespace mytools
 		{
 		public:
 		
-			csvprocessing(std::string& filename)
+			csvprocessing( const std::string& filename)
 			{
 				this->filename = filename;
 			}
@@ -791,7 +753,8 @@ namespace mytools
 			
 			
 			int readCSV(	vector<vector<double>>& obs, 
-							int nfields)
+							int nfields,
+							bool ignoreheader)
 			{
 				ifstream myFile;
 				myFile.open(filename, ios_base::in);
@@ -800,8 +763,16 @@ namespace mytools
 				{
 					while (myFile.good())
 					{
+					
 						string Line;
 						getline(myFile, Line);
+						
+						if ( ignoreheader == true )
+						{
+							ignoreheader = false;
+							continue;
+						}
+						
 						if (Line.length() == 0)
 						{
 							break;
@@ -839,6 +810,15 @@ namespace mytools
 				return 0;
 			};
 			
+			inline vector<double>& getcol( const vector<vector<double>>& obs, vector<double>& vec, int col ) const
+			{
+				for( const auto& v: obs )
+				{
+					vec.push_back( v[col] );
+				}
+				return vec;
+			}
+			
 		private:
 			csvprocessing(const csvprocessing&) = delete;
 			csvprocessing operator=(const csvprocessing&) = delete;
@@ -865,6 +845,48 @@ namespace mytools
 		
 		
 	
+	}
+	
+	namespace mymath
+	{
+		// Adapted from
+		// https://www.codewithc.com/c-program-for-linear-exponential-curve-fitting/
+		int exponentialRegression( 	const vector<double>& x, 
+									const vector<double>& y,
+									double& a,
+									double& b)
+		{
+		 
+			double sumx = 0;
+			double sumy = 0;
+			double sumxy = 0;
+			double sumx2 = 0;
+			double A;
+			vector<double> Y;
+			
+			for( const auto& item: y )
+			{
+				double tmp = item;
+				Y.push_back( log( tmp ) );
+			}
+			
+			int n = Y.size();
+			
+			for( int i = 0; i <= n-1; i++)
+			{
+				sumx = sumx +x[i];
+				sumx2 = sumx2 +x[i]*x[i];
+				sumy = sumy + Y[i];
+				sumxy = sumxy +x[i]*Y[i];
+		 
+			}
+			
+			A=((sumx2*sumy -sumx*sumxy)*1.0/(n*sumx2-sumx*sumx)*1.0);
+			b=((n*sumxy-sumx*sumy)*1.0/(n*sumx2-sumx*sumx)*1.0);
+			a=exp(A);
+			printf("The curve is Y= %4.3fe^%4.3fX\n",a,b);
+			return 0;
+		}
 	}
 	
 	namespace buffer_handlers
