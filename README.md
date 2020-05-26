@@ -5,8 +5,7 @@ You can use this freely but I don't take responsability for whatever problems th
 
 
 IMPORTANT:
-I use STL
-I use C++14
+I use STL and C++14
 
 It contains the following nested namespaces
 >namespace mytools::algo
