@@ -887,6 +887,224 @@ namespace mytools
 			printf("The curve is Y= %4.3fe^%4.3fX\n",a,b);
 			return 0;
 		}
+		
+		template<typename T>
+		class Dmatrix final {
+
+		public:
+
+			explicit Dmatrix(){};
+			explicit Dmatrix(int _N, int _M):N(_N),M(_M)
+			{
+				for( int i = 0; i < _N; i++ )
+				{
+					vector<T> tmp(_M,0);
+					data.emplace_back( tmp );
+				}
+			};
+			
+			explicit Dmatrix( const Dmatrix&  m )
+			{
+				this->N = m.N;
+				this->M = m.M;
+				this->data = m.data;
+			}
+			
+			explicit Dmatrix( vector<vector<T>>& data, int _N, int _M )
+			{
+				this->N = _N;
+				this->M = _M;
+				this->data = data;
+			}
+			
+			Dmatrix& operator=( const Dmatrix&  m )
+			{
+				this->N = m.N;
+				this->M = m.M;
+				this->data = m.data;
+				return *this;
+			}
+			
+			Dmatrix( Dmatrix&&  m )
+			{
+				this->N = m.N;
+				this->M = m.M;
+				this->data = m.data;
+				N = 0;
+				M = 0;
+				data.clear();
+			}
+			
+			Dmatrix& operator=( Dmatrix&&  m )
+			{
+				if ( this != &m )
+				{
+					this->N = m.N;
+					this->M = m.M;
+					N = 0;
+					M = 0;
+					this->data = m.data;
+					data.clear();
+				}
+				return *this;
+			}
+			
+			// Access the individual elements                                                                                                                                                                                               
+			T& operator()(int& row, const int& col)
+			{
+				return this->data[row][col];
+			}
+			
+			const T& operator()(const int& row, const int& col) const
+			{
+				return this->data[row][col];
+			}
+			
+			vector<vector<T>>& getdata(){ return this->data;};	
+			const int& rows() const { return this->N;};
+			const int& cols() const { return this->M;};
+			
+			friend ostream& operator<<(ostream& os, const Dmatrix& m)
+			{
+				for( int i = 0; i < m.N; i++ )
+				{
+					for( int j = 0; j < m.N; j++ )
+					{
+						os << m.data[i][j] << " ";
+					}
+					os << "\n";
+				}
+				os << "\n";
+				return os;
+			}
+			
+			
+		private:
+			
+			vector<vector<T>> data;
+			int N = 0;
+			int M = 0;
+		};
+
+
+		template<typename T>
+		inline bool sum( 	const Dmatrix<T>& m1,
+					const Dmatrix<T>& m2, 
+					Dmatrix<T>& m3 )
+		{		
+			if (( m1.rows() == m2.rows() ) && ( m1.cols() == m2.cols() ))
+			{
+				for( int i = 0; i < m1.rows(); i++)
+				{
+					for( int j = 0; j < m1.cols(); j++)
+					{					
+						m3(i,j) = m1(i,j) + m2(i,j);
+					}
+				}
+				return true;
+			}
+
+			return false;	
+		}
+
+		template<typename T>
+		inline bool sub( 	const Dmatrix<T>& m1, 
+								const Dmatrix<T>& m2, 
+								Dmatrix<T>& m3 )
+		{		
+			if (( m1.rows() == m2.rows() ) && ( m1.cols() == m2.cols() ))
+			{
+				for( int i = 0; i < m1.rows(); i++)
+				{
+					for( int j = 0; j < m1.cols(); j++)
+					{					
+						m3(i,j) = m1(i,j) - m2(i,j);
+					}
+				}
+				return true;
+			}
+
+			return false;
+			
+		}
+
+
+		template<typename T>
+		inline bool mult( 	const Dmatrix<T>& m1, // (m x n)
+					const Dmatrix<T>& m2, // (p x q)
+					Dmatrix<T>& m3 )
+		{
+				if ( m1.cols() != m2.cols() )
+				{
+					return false;
+				}
+				else
+				{
+					Dmatrix<T> c(  m1.rows(), m2.cols() );
+					for( int i = 0; i < m1.rows();  i++ )
+					{
+						for( int j= 0; j < m2.cols(); j++ )
+						{
+							for( int k = 0; k < m2.rows();  k++ )
+							{
+								c(i, j) = c(i, j) + (m1(i, k) * m2(k, j));
+							}
+						}
+					}
+					m3 = c;
+				}
+				
+				return true;
+						
+		}
+
+		template<typename T>
+		inline void transpose( 	const Dmatrix<T>& m1, 
+							Dmatrix<T>& out )
+		{
+			int rows = m1.rows();
+			int cols = m1.cols();
+			
+			for( int i = 0; i < rows; i++ )
+			{
+				for( unsigned int j = 0; j < cols ; j++ )
+				{
+					out(j,i) = m1(i,j);
+				}
+			}				
+		}
+
+
+		template<typename M, typename T>
+		inline void times( Dmatrix<M>& a , T ct )
+		{
+			for( int i = 0; i < a.Rows(); i++ )
+			{
+				for( int j = 0; j < a.Cols() ; j++ )
+				{
+					a(i,j) =ct * a(i,j);
+				}
+			}
+		}
+
+		void test()
+		{
+			  
+			vector<vector<double>> data1  	{{2, 4, 1},
+											{2, 3, 9},
+											{3, 1, 8}};
+									
+			vector<vector<double>> data2  	{{1, 2, 3},
+											{3, 6, 1},
+											{2, 4, 7}};
+			
+			Dmatrix<double> d1{data1,3,3};
+			Dmatrix<double> d2{data2,3,3};	
+			Dmatrix<double> d3{3,3};
+			mult<double>( d1,d2,d3 );
+			cout << d3;
+		}
+
 	}
 	
 	namespace buffer_handlers
