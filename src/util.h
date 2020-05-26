@@ -902,6 +902,26 @@ namespace mytools
 					data.emplace_back( tmp );
 				}
 			};
+
+			void pr( const vector<T>& y )
+			{
+				for( const auto& v: y )
+				{
+					cout << v << " " ;
+				}
+				cout << "\n";
+			}	
+			
+			explicit Dmatrix(int _M):M(_M)
+			{
+				this->N = 1;
+				
+				vector<T> tmp( M, 0 );
+				pr( tmp );
+				
+				data.push_back(tmp);
+				
+			};
 			
 			explicit Dmatrix( const Dmatrix&  m )
 			{
@@ -968,7 +988,7 @@ namespace mytools
 			{
 				for( int i = 0; i < m.N; i++ )
 				{
-					for( int j = 0; j < m.N; j++ )
+					for( int j = 0; j < m.M; j++ )
 					{
 						os << m.data[i][j] << " ";
 					}
@@ -978,69 +998,51 @@ namespace mytools
 				return os;
 			}
 			
-			
-		private:
-			
-			vector<vector<T>> data;
-			int N = 0;
-			int M = 0;
-		};
-
-
-		template<typename T>
-		inline bool sum( 	const Dmatrix<T>& m1,
-					const Dmatrix<T>& m2, 
-					Dmatrix<T>& m3 )
-		{		
-			if (( m1.rows() == m2.rows() ) && ( m1.cols() == m2.cols() ))
+			friend Dmatrix operator+( const Dmatrix& m1, const Dmatrix& m2 )
 			{
-				for( int i = 0; i < m1.rows(); i++)
+				Dmatrix<T> m3( m1.rows(), m1.cols());
+				if (( m1.rows() == m2.rows() ) && ( m1.cols() == m2.cols() ))
 				{
-					for( int j = 0; j < m1.cols(); j++)
-					{					
-						m3(i,j) = m1(i,j) + m2(i,j);
+					for( int i = 0; i < m1.rows(); i++)
+					{
+						for( int j = 0; j < m1.cols(); j++)
+						{					
+							m3(i,j) = m1(i,j) + m2(i,j);
+						}
 					}
+					return m3;
 				}
-				return true;
+
+				return m3;
 			}
-
-			return false;	
-		}
-
-		template<typename T>
-		inline bool sub( 	const Dmatrix<T>& m1, 
-								const Dmatrix<T>& m2, 
-								Dmatrix<T>& m3 )
-		{		
-			if (( m1.rows() == m2.rows() ) && ( m1.cols() == m2.cols() ))
-			{
-				for( int i = 0; i < m1.rows(); i++)
-				{
-					for( int j = 0; j < m1.cols(); j++)
-					{					
-						m3(i,j) = m1(i,j) - m2(i,j);
-					}
-				}
-				return true;
-			}
-
-			return false;
 			
-		}
-
-
-		template<typename T>
-		inline bool mult( 	const Dmatrix<T>& m1, // (m x n)
-					const Dmatrix<T>& m2, // (p x q)
-					Dmatrix<T>& m3 )
-		{
-				if ( m1.cols() != m2.cols() )
+			friend Dmatrix operator-( const Dmatrix& m1, const Dmatrix& m2 )
+			{
+				Dmatrix<T> m3( m1.rows(), m1.cols());
+				if (( m1.rows() == m2.rows() ) && ( m1.cols() == m2.cols() ))
 				{
-					return false;
+					for( int i = 0; i < m1.rows(); i++)
+					{
+						for( int j = 0; j < m1.cols(); j++)
+						{					
+							m3(i,j) = m1(i,j) - m2(i,j);
+						}
+					}
+					return m3;
+				}
+
+				return m3;
+			}	
+
+			friend Dmatrix operator*( const Dmatrix& m1, const Dmatrix& m2 )
+			{
+				Dmatrix<T> c(  m1.rows(), m2.cols() );
+				if ( m1.cols() != m2.rows() )
+				{
+					return c;
 				}
 				else
 				{
-					Dmatrix<T> c(  m1.rows(), m2.cols() );
 					for( int i = 0; i < m1.rows();  i++ )
 					{
 						for( int j= 0; j < m2.cols(); j++ )
@@ -1051,36 +1053,44 @@ namespace mytools
 							}
 						}
 					}
-					m3 = c;
 				}
 				
-				return true;
-						
-		}
+				return c;
+			}
+			
+		private:
+			
+			vector<vector<T>> data;
+			int N = 0;
+			int M = 0;
+		};
 
 		template<typename T>
-		inline void transpose( 	const Dmatrix<T>& m1, 
-							Dmatrix<T>& out )
+		inline Dmatrix<T> transpose( const Dmatrix<T>& m1  )
 		{
 			int rows = m1.rows();
 			int cols = m1.cols();
 			
+			Dmatrix<T> out( cols,rows);
+			
 			for( int i = 0; i < rows; i++ )
 			{
-				for( unsigned int j = 0; j < cols ; j++ )
+				for( int j = 0; j < cols ; j++ )
 				{
 					out(j,i) = m1(i,j);
 				}
-			}				
+			}	
+
+			return out;
 		}
 
 
 		template<typename M, typename T>
 		inline void times( Dmatrix<M>& a , T ct )
 		{
-			for( int i = 0; i < a.Rows(); i++ )
+			for( int i = 0; i < a.rows(); i++ )
 			{
-				for( int j = 0; j < a.Cols() ; j++ )
+				for( int j = 0; j < a.cols() ; j++ )
 				{
 					a(i,j) =ct * a(i,j);
 				}
@@ -1100,9 +1110,9 @@ namespace mytools
 			
 			Dmatrix<double> d1{data1,3,3};
 			Dmatrix<double> d2{data2,3,3};	
-			Dmatrix<double> d3{3,3};
-			mult<double>( d1,d2,d3 );
+			Dmatrix<double> d3 = d1*d2;
 			cout << d3;
+
 		}
 
 	}
