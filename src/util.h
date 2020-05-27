@@ -986,6 +986,7 @@ namespace mytools
 			
 			friend ostream& operator<<(ostream& os, const Dmatrix& m)
 			{
+
 				for( int i = 0; i < m.N; i++ )
 				{
 					for( int j = 0; j < m.M; j++ )
@@ -994,7 +995,7 @@ namespace mytools
 					}
 					os << "\n";
 				}
-				os << "\n";
+
 				return os;
 			}
 			
@@ -1018,7 +1019,10 @@ namespace mytools
 			
 			friend Dmatrix operator-( const Dmatrix& m1, const Dmatrix& m2 )
 			{
+				// cout << "m1: " << m1.rows() << " " << m1.cols() << endl;
+				// cout << "m2: " << m2.rows() << " " << m2.cols() << endl;
 				Dmatrix<T> m3( m1.rows(), m1.cols());
+				//cout << "m3: " << m3.rows() << " " << m3.cols() << endl;
 				if (( m1.rows() == m2.rows() ) && ( m1.cols() == m2.cols() ))
 				{
 					for( int i = 0; i < m1.rows(); i++)
@@ -1028,6 +1032,9 @@ namespace mytools
 							m3(i,j) = m1(i,j) - m2(i,j);
 						}
 					}
+					// cout << "m1: " << m1.rows() << " " << m1.cols() << endl;
+					// cout << "m2: " << m2.rows() << " " << m2.cols() << endl;
+					// cout << "m3: " << m3.rows() << " " << m3.cols() << endl;
 					return m3;
 				}
 
@@ -1096,22 +1103,48 @@ namespace mytools
 				}
 			}
 		}
+		
+		template<typename M>
+		void d( Dmatrix<M>& a)
+		{
+			cout << "Size: " << a.rows() << " x " << a.cols() << endl;
+			cout << "Contents:" << endl;
+			cout << a ;
+		}
 
 		void test()
 		{
 			  
-			vector<vector<double>> data1  	{{2, 4, 1},
-											{2, 3, 9},
-											{3, 1, 8}};
+			// vector<vector<double>> data1  	{{2, 4, 1},
+											// {2, 3, 9},
+											// {3, 1, 8}};
 									
-			vector<vector<double>> data2  	{{1, 2, 3},
-											{3, 6, 1},
-											{2, 4, 7}};
+			// vector<vector<double>> data2  	{{1, 2, 3},
+											// {3, 6, 1},
+											// {2, 4, 7}};
 			
-			Dmatrix<double> d1{data1,3,3};
-			Dmatrix<double> d2{data2,3,3};	
-			Dmatrix<double> d3 = d1*d2;
-			cout << d3;
+			// Dmatrix<double> d1{data1,3,3};
+			// Dmatrix<double> d2{data2,3,3};	
+			// Dmatrix<double> d3 = d1*d2;
+			// cout << d3;
+			
+			
+			// vector<vector<double>> data3  	{{2, 4, 1}};
+									
+			// vector<vector<double>> data4  	{{1, 2, 3}};	
+			
+			vector<vector<double>> data3  	{{2},{4},{1}};
+									
+			vector<vector<double>> data4  	{{1}, {2}, {3}};
+
+			Dmatrix<double> d4{data3,3,1};
+			Dmatrix<double> d5{data4,3,1};	
+			cout << d4;
+			cout << d5;	
+			Dmatrix<double> d6( 3,1);
+			
+			d6 = d5-d4;
+			d<double>(d6);
 
 		}
 
