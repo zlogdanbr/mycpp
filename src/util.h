@@ -537,7 +537,7 @@ namespace mytools
 
 		// this is an implementation of a Double LL. The only thing useful with this is
 		// actually writing it for the sake of fun. 
-		// it is much better do this:
+		// it is much better to do this:
 		//
 		// #include <list>		// from STL
 		// 
@@ -849,6 +849,7 @@ namespace mytools
 	
 	namespace mymath
 	{
+		
 		// Adapted from
 		// https://www.codewithc.com/c-program-for-linear-exponential-curve-fitting/
 		int exponentialRegression( 	const vector<double>& x, 
@@ -1072,26 +1073,6 @@ namespace mytools
 			int M = 0;
 		};
 
-		template<typename T>
-		inline Dmatrix<T> transpose( const Dmatrix<T>& m1  )
-		{
-			int rows = m1.rows();
-			int cols = m1.cols();
-			
-			Dmatrix<T> out( cols,rows);
-			
-			for( int i = 0; i < rows; i++ )
-			{
-				for( int j = 0; j < cols ; j++ )
-				{
-					out(j,i) = m1(i,j);
-				}
-			}	
-
-			return out;
-		}
-
-
 		template<typename M, typename T>
 		inline void times( Dmatrix<M>& a , T ct )
 		{
@@ -1112,42 +1093,61 @@ namespace mytools
 			cout << a ;
 		}
 
-		void test()
+		Dmatrix<double> convertVector2Matrix( vector<vector<double>>& data )
 		{
-			  
-			// vector<vector<double>> data1  	{{2, 4, 1},
-											// {2, 3, 9},
-											// {3, 1, 8}};
-									
-			// vector<vector<double>> data2  	{{1, 2, 3},
-											// {3, 6, 1},
-											// {2, 4, 7}};
 			
-			// Dmatrix<double> d1{data1,3,3};
-			// Dmatrix<double> d2{data2,3,3};	
-			// Dmatrix<double> d3 = d1*d2;
-			// cout << d3;
+			int N = data.size();
+			int M = data[0].size()-1;
 			
+			Dmatrix<double> t(N,M);
 			
-			// vector<vector<double>> data3  	{{2, 4, 1}};
-									
-			// vector<vector<double>> data4  	{{1, 2, 3}};	
+			for(  int i = 0; i < N ; i++  )
+			{
+				for(  int j = 0; j < M ; j++  )
+				{
+					t(i,j) = data[i][j];
+				}
+			}
 			
-			vector<vector<double>> data3  	{{2},{4},{1}};
-									
-			vector<vector<double>> data4  	{{1}, {2}, {3}};
-
-			Dmatrix<double> d4{data3,3,1};
-			Dmatrix<double> d5{data4,3,1};	
-			cout << d4;
-			cout << d5;	
-			Dmatrix<double> d6( 3,1);
-			
-			d6 = d5-d4;
-			d<double>(d6);
-
+			return t;
 		}
 
+		Dmatrix<double> convertcol2Matrix( vector<double>& y )
+		{
+			
+			int N = y.size();
+			
+			Dmatrix<double> t(N,1);
+			
+			for(  int i = 0; i < N ; i++  )
+			{
+				t(i,0) = y[i];
+			}
+			return t;
+		}
+		
+		template<typename T>
+		inline Dmatrix<T> transpose( const Dmatrix<T>& m1  )
+		{
+			int rows = m1.rows();
+			int cols = m1.cols();
+			
+			cout << "rows: " << rows << endl;
+			cout << "cols: " << cols << endl;
+			
+			Dmatrix<T> out( cols,rows);
+			
+			for( int i = 0; i < rows; i++ )
+			{
+				for( int j = 0; j < cols ; j++ )
+				{
+					out(j,i) = m1(i,j);
+				}
+			}	
+
+			return out;
+		}
+		
 	}
 	
 	namespace buffer_handlers
