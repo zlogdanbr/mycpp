@@ -16,6 +16,8 @@
 //	Contains useful code not buffer/string related
 //	>namespace mytools::buffer_handlers
 //  Contains useful code buffer/string related
+//	>namespace mytools::mymath
+//  Linear algebra, matrix, numerical methods
 //
 //--------------------------------------------------------------------------
 //	2020 Daniel V. Gomes
@@ -889,6 +891,56 @@ namespace mytools
 			return 0;
 		}
 		
+		// adapted from
+		// https://cp-algorithms.com/linear_algebra/linear-system-gauss.html
+		template<typename T >
+		int gauss(	vector < vector<T> > a, vector<T> & ans)
+		{
+			const double EPS = 1e-9;
+			const int INF = 2; 
+			int n = (int) a.size();
+			int m = (int) a[0].size() - 1;
+
+			vector<int> where (m, -1);
+			for (int col=0, row=0; col<m && row<n; ++col) 
+			{
+				int sel = row;
+				for (int i=row; i<n; ++i)
+					if (abs (a[i][col]) > abs (a[sel][col]))
+						sel = i;
+				if (abs (a[sel][col]) < EPS)
+					continue;
+				for (int i=col; i<=m; ++i)
+					swap (a[sel][i], a[row][i]);
+				where[col] = row;
+
+				for (int i=0; i<n; ++i)
+					if (i != row) {
+						T c = a[i][col] / a[row][col];
+						for (int j=col; j<=m; ++j)
+							a[i][j] -= a[row][j] * c;
+					}
+				++row;
+			}
+
+			ans.assign (m, 0);
+			for (int i=0; i<m; ++i)
+				if (where[i] != -1)
+					ans[i] = a[where[i]][m] / a[where[i]][i];
+			for (int i=0; i<n; ++i) {
+				T sum = 0;
+				for (int j=0; j<m; ++j)
+					sum += ans[j] * a[i][j];
+				if (abs (sum - a[i][m]) > EPS)
+					return 0;
+			}
+
+			for (int i=0; i<m; ++i)
+				if (where[i] == -1)
+					return INF;
+			return 1;
+		}
+		
 		template<typename T>
 		class Dmatrix final {
 
@@ -1020,10 +1072,8 @@ namespace mytools
 			
 			friend Dmatrix operator-( const Dmatrix& m1, const Dmatrix& m2 )
 			{
-				// cout << "m1: " << m1.rows() << " " << m1.cols() << endl;
-				// cout << "m2: " << m2.rows() << " " << m2.cols() << endl;
+
 				Dmatrix<T> m3( m1.rows(), m1.cols());
-				//cout << "m3: " << m3.rows() << " " << m3.cols() << endl;
 				if (( m1.rows() == m2.rows() ) && ( m1.cols() == m2.cols() ))
 				{
 					for( int i = 0; i < m1.rows(); i++)
@@ -1033,9 +1083,7 @@ namespace mytools
 							m3(i,j) = m1(i,j) - m2(i,j);
 						}
 					}
-					// cout << "m1: " << m1.rows() << " " << m1.cols() << endl;
-					// cout << "m2: " << m2.rows() << " " << m2.cols() << endl;
-					// cout << "m3: " << m3.rows() << " " << m3.cols() << endl;
+
 					return m3;
 				}
 
@@ -1110,6 +1158,27 @@ namespace mytools
 			}
 			
 			return t;
+		}
+		
+		vector<vector<double>> convertMatrix2vector( Dmatrix<double>& mat )
+		{
+			
+			int N = mat.rows();
+			int M = mat.cols();
+			
+			vector<vector<double>> out;
+			
+			for(  int i = 0; i < N ; i++  )
+			{
+				vector<double> tmp;
+				for(  int j = 0; j < M ; j++  )
+				{					
+					tmp.push_back( mat(i,j) );
+				}
+				out.push_back( tmp );
+			}
+			
+			return out;
 		}
 
 		Dmatrix<double> convertcol2Matrix( vector<double>& y )
