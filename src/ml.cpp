@@ -5,11 +5,12 @@ using namespace mytools::util;
 using namespace mytools::mymath;
 
 
-Dmatrix<double> calculate_gradient( 	Dmatrix<double>& x, 
-										Dmatrix<double>& y, 
-										Dmatrix<double>& coef, 
+inline Dmatrix<double> calculate_gradient( 	const Dmatrix<double>& x, 
+										const Dmatrix<double>& y, 
+										const Dmatrix<double>& coef, 
 										double m)
 {	
+
 	Dmatrix<double> ao = x*coef ;
 	Dmatrix<double> a1 = ao - y;
 	Dmatrix<double> a2 = transpose<double>(x);
@@ -17,52 +18,16 @@ Dmatrix<double> calculate_gradient( 	Dmatrix<double>& x,
 	return a2*a1;
 }
 
-Dmatrix<double> convertVector2Matrix( vector<vector<double>>& data )
+inline void gradient_batch( 	std::string filename, 
+								int col_data, 
+								int col_y,
+								int samples,
+								double learning_rate,
+								bool has_header,
+								int iterations,
+								Dmatrix<double>& coef )
 {
 	
-	int N = data.size();
-	int M = data[0].size()-1;
-	
-	Dmatrix<double> t(N,M);
-	
-	for(  int i = 0; i < N ; i++  )
-	{
-		for(  int j = 0; j < M ; j++  )
-		{
-			t(i,j) = data[i][j];
-		}
-	}
-	
-	return t;
-}
-
-Dmatrix<double> convertcol2Matrix( vector<double>& y )
-{
-	
-	int N = y.size();
-	
-	Dmatrix<double> t(N,1);
-	
-	for(  int i = 0; i < N ; i++  )
-	{
-		t(i,0) = y[i];
-	}
-	return t;
-}
- 
- 
-void pr( const vector<double>& y )
-{
-	for( const auto& v: y )
-	{
-		cout << v << " " ;
-	}
-	cout << "\n";
-}
-
-
-void test_case01( std::string filename, unsigned int col_data, int col_y, bool has_header )
-{
 	csvprocessing csv{filename};
 	vector<vector<double>> data;
 	vector<double> yr;
@@ -71,31 +36,45 @@ void test_case01( std::string filename, unsigned int col_data, int col_y, bool h
 	Dmatrix<double> x  = convertVector2Matrix( data );	
 	csv.getcol( data, yr, col_y );	
 	Dmatrix<double> y  = convertcol2Matrix( yr );
-	
-	// coef, we have 3 variables so we need 4 coeficients	
-	Dmatrix<double> coef(col_data - 1, 1);
-	
-	
-	for( int i = 0; i < 1000; i++ )
+		
+	double s = (2/static_cast<double>(samples));
+		
+	for( int i = 0; i < iterations; i++ )
 	{
-		Dmatrix<double> grad = calculate_gradient( x, y, coef, 1 ) ;
-		times<double,double>(grad,0.1);
-		coef = coef - grad;	
+		Dmatrix<double> grad = calculate_gradient( x, y, coef, s) ;
+		times<double,double>(grad,learning_rate);
+		Dmatrix<double> tmp = coef - grad;
+		coef = tmp;
 	}
 	
-	cout << coef(0,0) << endl;
-	cout << coef(0,1) << endl;
-	cout << coef(0,2) << endl;
-	
+	cout << "coef final" << endl;
+	cout << coef ;
 
 }
 
+void test_case01()
+{
+	vector<vector<double>> data3  {{1},{1},{1}};
+	Dmatrix<double> d4{data3,3,1};
+	gradient_batch("petrol_consumption.csv", 4, 3, 49, 0.00000001, true, 10, d4);
+}
+
+void test_case02()
+{
+	vector<vector<double>> data3  {{15}};
+	Dmatrix<double> d4{data3,1,1};
+	gradient_batch("in.csv", 2, 1, 40, 0.02, true, 10000, d4);
+}
+
+void test_case03()
+{
+	vector<vector<double>> data3  {{2},{2}};
+	Dmatrix<double> d4{data3,2,1};
+	gradient_batch("heart.data.csv", 3, 2, 498, 0.1, true, 3, d4);
+}
 
 int main()
 {
-	//test_case01("test.csv", 4, 3, false );
-	test_case01("petrol_consumption.csv", 4, 3, true );
-	//test();
-	
-
+	test_case01();
 }
+
