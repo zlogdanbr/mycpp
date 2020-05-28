@@ -5,7 +5,45 @@ using namespace mytools::util;
 using namespace mytools::mymath;
 
 
-void image_sim()
+void test()
+{
+	vector<vector<double>> data { 	{ 1,2,3,4,5,6,7,8,9,0},
+									{ 1,2,3,4,5,6,7,8,9,0},
+									{ 1,2,3,4,5,6,7,8,9,0},
+									{ 1,2,3,4,5,6,7,8,9,0}};
+									
+	Dmatrix<double> d{data,4,10};
+	
+	
+	vector<vector<double>> a = convertMatrix2vector( d );
+	for( const auto& l1: a )
+	{
+		for( const auto& l2: l1 )
+		{
+			cout << l2 << " ";
+		}
+		cout << "\n";
+	}
+}
+
+void test_gauss()
+{
+	vector<vector<double>> a 	{ 	{1,1,2},
+									{1,2,3}};
+	
+	vector<double> x( 2,0 );   
+
+	gauss<double>( a, x );
+	
+	for( const auto& xi : x )
+	{
+		cout << xi << " " ;
+	}
+	cout << "\n";
+	
+}		
+
+void image_ops_tests()
 {
 	vector<vector<double>> data { 	{ 1,2,3,4,5,6,7,8,9,0},
 									{ 1,2,3,4,5,6,7,8,9,0},
@@ -29,7 +67,7 @@ void image_sim()
 	}		
 }
 
-void test()
+void matrix_ops_tests()
 {	
 
 	vector<vector<double>> data1  	{{1,1, 1},
@@ -71,23 +109,13 @@ void test()
 	Dmatrix<double> d7{data7,4,10};
 	Dmatrix<double> d8{data8,10,2};
 	
-	// Dmatrix<double> sum = d1 + d2;
-	// Dmatrix<double> sub = d2 - d1;
+	Dmatrix<double> sum = d1 + d2;
+	Dmatrix<double> sub = d2 - d1;
 	Dmatrix<double> mul = d7*d8;
 	
-	// cout << sum;
-	// cout << sub;
-	// cout << mul;
+	cout << sum;
+	cout << sub;
 	cout << mul;
-
-	
-	
-	
-	
-
-
-
-
 }		
 
 int main()
