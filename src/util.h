@@ -5,9 +5,10 @@
 //	You can use this freely but I don't take responsability for whatever
 //  problems this will likely cause. I use this as a library for my code.
 //  
-//  I use C++14
+//  
 //  IMPORTANT:
 //  I use STL
+//	I use C++14
 //
 //	It contains the following nested namespaces
 //	>namespace mytools::algo
@@ -57,6 +58,8 @@ namespace mytools
 	
 	namespace algo
 	{
+		
+		// Some useful lambda functions
 		auto compstrsize = 
 		[]( const std::string& s1, 
 			const std::string& s2 )
@@ -113,7 +116,11 @@ namespace mytools
 			}
 			out << "\n";  
 		}
-		
+
+		/*
+		*	Prints a list of pairs, which is a vector
+		*	of pairs
+		*/		
 		template<typename T, typename M>
 		inline
 		void print_vector( 	const vector<pair<T,M> >& m, 
@@ -126,6 +133,9 @@ namespace mytools
 			out << "\n";  
 		}
 
+		/*
+		*	Prints a generic STL containerwhich
+		*/
 		template<typename T>
 		inline
 		void print_stlc( T& m )
@@ -138,8 +148,10 @@ namespace mytools
 			cout << "]\n";  
 		}		
 	
-		// implementation of binary search for a multiset
-		// not as fast as brute force search by Stroustrup	
+		/* 
+		* 	implementation of binary search for a multiset
+		*	 not as fast as brute force search by Stroustrup	
+		*/
 		template<typename T, typename Iterator>
 		inline
 		bool binary_search_recursive_set( 	T N, 
@@ -173,7 +185,10 @@ namespace mytools
 			return true;
 
 		}			
-		
+
+		/* 
+		* 	implementation of recursive binary search 
+		*/		
 		template<typename T, typename Iterator>
 		inline
 		bool binary_search_recursive( 	T N, 
@@ -211,9 +226,11 @@ namespace mytools
 		}	
 		
 		
-		// from Bjarne Stroustrup The Pratice Of Programming
-		// optimized search function, if the container is not
-		// sorted this is the best algorithm
+		/*	
+		* from Bjarne Stroustrup The Pratice Of Programming
+		*	optimized search function, if the container is not
+		*	sorted this is the best algorithm
+		*/
 		template<typename In, typename T>
 		inline In _find(	In first, 
 							In last, 
@@ -222,7 +239,13 @@ namespace mytools
 			while (first!=last && *first != val) ++first;
 				return first;
 		}		
-		
+
+		/*	
+		* 	from Bjarne Stroustrup The Pratice Of Programming
+		*	optimized search function, if the container is not
+		*	sorted this is the best algorithm, adapted to delete
+		* 	a specific value
+		*/		
 		inline 
 		bool _find_Del(	mset_long& cont, 
 						mset_long::iterator first, 
@@ -236,8 +259,10 @@ namespace mytools
 			return true;
 		}
 
-		// Implements a pair class of two integers
-		// it should be used mostly because of performance issues
+		/*
+		* Implements a pair class of two integers
+		* it should be used mostly because of performance issues
+		*/
 		template<typename T, typename S>
 		class mPair
 		{
@@ -425,7 +450,9 @@ namespace mytools
 				
 		}
 			
-		
+
+		// this is an implementation of a node for the LL below. The only thing useful with this is
+		// actually writing it for the sake of fun. 	
 		template<typename T>
 		class Node
 		{
@@ -478,6 +505,7 @@ namespace mytools
 			}			
 		};
 
+		// The node class needs an iterator class
 		template<typename T>
 		class iterator
 		{
@@ -542,6 +570,7 @@ namespace mytools
 		// it is much better to do this:
 		//
 		// #include <list>		// from STL
+		// list<double> l;
 		// 
 		template<typename T >
 		class cllist
@@ -742,6 +771,9 @@ namespace mytools
 	
 	namespace util
 	{
+		
+		// Basically it reads a csv file and copies it to a const vector<vector<double>>& obs
+		// after you calling the readCSV method
 		class csvprocessing
 		{
 		public:
@@ -756,7 +788,7 @@ namespace mytools
 			
 			int readCSV(	vector<vector<double>>& obs, 
 							int nfields,
-							bool ignoreheader)
+							bool ignoreheader) const
 			{
 				ifstream myFile;
 				myFile.open(filename, ios_base::in);
@@ -854,6 +886,7 @@ namespace mytools
 		
 		// Adapted from
 		// https://www.codewithc.com/c-program-for-linear-exponential-curve-fitting/
+		// It performs an exponential regression
 		int exponentialRegression( 	const vector<double>& x, 
 									const vector<double>& y,
 									double& a,
@@ -893,6 +926,9 @@ namespace mytools
 		
 		// adapted from
 		// https://cp-algorithms.com/linear_algebra/linear-system-gauss.html
+		// Solves a linear system of size n, implicit at the vector a size
+		// I was looking for an algorithm for this when I stumbled upon the
+		// C++ code so why do it myself :-) ?
 		template<typename T >
 		int gauss(	vector < vector<T> > a, vector<T> & ans)
 		{
@@ -940,7 +976,9 @@ namespace mytools
 					return INF;
 			return 1;
 		}
-		
+
+
+		// My custom matrix class 
 		template<typename T>
 		class Dmatrix final {
 
@@ -955,23 +993,11 @@ namespace mytools
 					data.emplace_back( tmp );
 				}
 			};
-
-			void pr( const vector<T>& y )
-			{
-				for( const auto& v: y )
-				{
-					cout << v << " " ;
-				}
-				cout << "\n";
-			}	
 			
 			explicit Dmatrix(int _M):M(_M)
 			{
 				this->N = 1;
-				
-				vector<T> tmp( M, 0 );
-				pr( tmp );
-				
+				vector<T> tmp( M, 0 );				
 				data.push_back(tmp);
 				
 			};
@@ -1121,6 +1147,7 @@ namespace mytools
 			int M = 0;
 		};
 
+		// multiplies a matrix by a value ct
 		template<typename M, typename T>
 		inline void times( Dmatrix<M>& a , T ct )
 		{
@@ -1132,7 +1159,8 @@ namespace mytools
 				}
 			}
 		}
-		
+
+		// useful debug, prints all info on a matrix
 		template<typename M>
 		void d( Dmatrix<M>& a)
 		{
@@ -1141,6 +1169,7 @@ namespace mytools
 			cout << a ;
 		}
 
+		// converts a vector of a vector to a matrix
 		Dmatrix<double> convertVector2Matrix( vector<vector<double>>& data )
 		{
 			
@@ -1159,7 +1188,8 @@ namespace mytools
 			
 			return t;
 		}
-		
+
+		// converts a matrix to a vector of a vector
 		vector<vector<double>> convertMatrix2vector( Dmatrix<double>& mat )
 		{
 			
@@ -1181,6 +1211,8 @@ namespace mytools
 			return out;
 		}
 
+		// converts a vector ( typically a collumn of a csv file )
+		// to a matrix
 		Dmatrix<double> convertcol2Matrix( vector<double>& y )
 		{
 			
@@ -1194,7 +1226,9 @@ namespace mytools
 			}
 			return t;
 		}
-		
+
+			
+		// transpose NxN matrix and 1xN or Nx1
 		template<typename T>
 		inline Dmatrix<T> transpose( const Dmatrix<T>& m1  )
 		{
@@ -1230,17 +1264,17 @@ namespace mytools
 		char* vSetCurrentTimeStamp( char* , 
 									int  );
 									
-		int calculateCRC( 	char* , 
+		int calculateCRC( 	const char* , 
 							int  );
 							
 		unsigned char* sConvertHexBin2String( 	unsigned char , 
 												unsigned char* );
-		char* szConvertStringToData( 	char* , 
+		char* szConvertStringToData( 	const char* , 
 										char* , 
 										int );
 		
 		inline
-		int iConvertBin2Ascii(	char* bBindata, 
+		int iConvertBin2Ascii(	const char* bBindata, 
 								int iDataSize, 
 								char* szDataAscii )
 		{
@@ -1276,7 +1310,7 @@ namespace mytools
 		* RETURNS:	    returns 0 OK else 1
 		*************************************************************************************/
 		inline
-		int iConvertBinArray2String(	char* bBindata, 
+		int iConvertBinArray2String(	const char* bBindata, 
 										int iDataSize,
 										char* szDataString ) 
 		{	
@@ -1427,7 +1461,7 @@ namespace mytools
 		}
 
 		inline
-		int calculateCRC( 	char* buffer, 
+		int calculateCRC( 	const char* buffer, 
 							int size )
 		{
 			int CRC = 0;
@@ -1438,7 +1472,7 @@ namespace mytools
 		}
 		
 		inline
-		char* szConvertStringToData( 	char* stringbuffer, 
+		char* szConvertStringToData( 	const char* stringbuffer, 
 										char* hexbuffer, 
 										int size )
 		{
