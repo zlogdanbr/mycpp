@@ -20,5 +20,5 @@ Contains useful code buffer/string related
 >namespace mytools::mymath
 Contains matrix, linear algebra, interpolation
 
-
+It also includes examples of their usage.
 
