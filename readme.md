@@ -2,7 +2,8 @@
 This repository contains
 
 
-#template_lib
+template_lib
+===============
 
 A large header file with the usefull code I wrote or found on books, internet or forums. ( The sources are always mentioned when applicable ). 
 It is a large header file with a few namespaces. Contains useful code for search, debug, file, buffer handling etc
@@ -24,13 +25,16 @@ Contains useful code buffer/string related
 >namespace mytools::mymath
 Contains matrix, linear algebra, interpolation
 
+OBS: Pending some description of other namespaces.
+
 It also includes examples of their usage at the subfolder demo.
 
-#Job_interview_code
+Job_interview_code
+===============
 
 Code I wrote for job interview tests
 
-
-#exercises
+exercises
+===============
 
 Code I wrote to study a feature or algorithm
