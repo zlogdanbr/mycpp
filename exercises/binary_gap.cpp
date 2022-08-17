@@ -1,69 +1,90 @@
 #include <iostream>
 #include <sstream>
-#include "util.h"
-#include <bitset>
+#include <vector>
+#include <algorithm>
 
-std::string convertobitstring(int n)
+/**
+ *  
+ *  Write a function:
+
+int solution(vector<int> &A);
+
+that, given an array A of N integers, returns the smallest positive integer (greater than 0) that does not occur in A.
+
+For example, given A = [1, 3, 6, 4, 1, 2], the function should return 5.
+
+Given A = [1, 2, 3], the function should return 4.
+
+Given A = [−1, −3], the function should return 1.
+
+Write an efficient algorithm for the following assumptions:
+
+N is an integer within the range [1..100,000];
+each element of array A is an integer within the range [−1,000,000..1,000,000].
+
+
+Compilation successful.
+
+Example test:   [1, 3, 6, 4, 1, 2]
+OK
+
+Example test:   [1, 2, 3]
+WRONG ANSWER (got 1 expected 4)
+
+Example test:   [-1, -3]
+OK
+
+ */
+
+template<typename T>
+void print1D( const std::vector<T>& vec )
 {
-	std::stringstream ss;
-	ss << std::bitset<32>(n);
-	return ss.str();
+    for( const auto& v: vec )
+    {
+        std::cout << v;
+    }
+    std::cout << "\n";
 }
 
-void removeleadingzeroes( std::string& str )
+void DEBUG( std::vector<int> &A)
 {
-	str.erase(0, min(str.find_first_not_of('0'), str.size()-1));
+	print1D(A);
+	std::cout << "first: " << *A.begin() << std::endl;
+	std::cout << "Last : " << *A.rbegin() << std::endl;
 }
 
-int findgaps(std::string & s )
+int solution(std::vector<int>&& A) 
 {
-	int sum = 0;
-	int sumax = 0;
+    // write your code in C++14 (g++ 6.2.0)
+
+    sort( A.begin(), A.end());
 	
-#ifdef ___DEBUG	
-	std::string v = "";
-#endif	
+	//DEBUG(A);
+    auto last = *A.rbegin();
 	
-	// 10001001001011100100
-	for( const auto& c: s )
-	{
-		if ( c == '0' )
-		{
-			sum++;
-		}
-		else
-		if ( sum > 0 && c == '1')
-		{
-			if ( sumax < sum )
-			{
-				sumax = sum;					
-			}
-			sum = 0;
-		}
-		
-#ifdef ___DEBUG
-		std::cout << "_________________________________________" << std::endl;
-		v.push_back(c);
-		std::cout << "string : " << v << std::endl;
-		std::cout << "sumax  : " << sumax << std::endl;
-		std::cout << "sum    : " << sum << std::endl;
-#endif			
+	if ( last <= 0 )
+		return 1;
+	
+	int i = 1;
+	
+    for( ; i < last; i++ )
+    {
+        if  ( std::binary_search( A.begin(), A.end(), i ) == false )
+        {
+            return i;
+        }
+    }
 
-	}
-	return sumax;
+    return i+1;
+
 }
 
-int solution(int N)
-{
-	auto s  = convertobitstring(N);
-	removeleadingzeroes(s);
-#ifdef ___DEBUG
-	std::cout << s << std::endl;
-#endif		
-	return findgaps(s);
-}
 
 int main()
 {
-	std::cout << solution(561892) << std::endl;
+	
+	std::cout << solution({1, 3, 6, 4, 1, 2}) << std::endl;
+	std::cout << solution({1, 2, 3}) << std::endl;
+	std::cout << solution({-1, -3}) << std::endl;
+	
 }
