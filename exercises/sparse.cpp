@@ -37,39 +37,26 @@ N is an integer within the range [0..1,000,000,000].
  */
  
 #include <iostream>
-#include <sstream>
 #include <vector>
 #include <unordered_set>
-#include <algorithm>
-#include <stack>
-#include <bitset>
-#include <cmath>
 
 
-bool isSparse(int N )
+bool isSparse(int n )
 {
-	std::bitset<32> bs{static_cast<unsigned int>(N)};
-	std::stack<bool> mystack;
-	for( std::size_t i = 0; i < bs.size(); ++i )
+	static std::unordered_set<int> cache;
+	
+	if ( cache.find(n) != cache.end() )
+		return true;
+	
+    // n is not sparse if there is set
+    // in AND of n and n/2
+    if (n & (n>>1))
 	{
-		if ( bs[i] == true && mystack.size() == 1 )
-		{
-			return false;
-		}
-		else
-		if ( bs[i] == true )
-		{
-			mystack.push(true);
-		}
-		else
-		if ( bs[i]  == false && mystack.empty() == false )
-		{
-			mystack.pop();
-		}		
+        return false;
 	}
-	return true;
+	cache.insert(n);
+    return true;
 }
-
 
 int solution(int N)
 {
