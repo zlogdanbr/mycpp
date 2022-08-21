@@ -44,12 +44,12 @@ public:
 		}
 		else
 		{
-			auto pval = m_map.rbegin()->second;
-						
+			auto pval = m_map.rbegin()->second;			
 			if ( pval == val )
 				return;
+			auto range = keyEnd - keyBegin;
+			m_map[ range ] = val;		
 			
-			m_map[ 
 		}
 		
 		
@@ -110,9 +110,11 @@ public:
 int main()
 {
 	interval_map<int,char> M{'A'};
-	M.assign(1,3,'B');;
+	M.assign(1,3,'B');
+	M.printme();
 	M.assign(3,6,'A');	
+	M.printme();
+	M.assign(3,6,'C');
 	M.printme();
 	
 }
-
