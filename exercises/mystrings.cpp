@@ -2,19 +2,11 @@
 
 using namespace std;
 
-using namespace mytools::unittest;
-
-void print( const unordered_set<string>& myset )
-{
-	for( const auto& s: myset )
-		cout << s << " ";
-	cout << "\n";
-}
 
 unordered_set<string> generateAllSub(string& mys )
 {
 	unordered_set<string> ms;
-	string tmp = "";
+	// Complexity O(n2) double loop
 	for( size_t i = 0; i < mys.size(); i++ )
 	{
 		for( size_t j = 1; j < mys.size() + 1; j++ )
@@ -23,32 +15,43 @@ unordered_set<string> generateAllSub(string& mys )
 			ms.insert(tmp);
 		}
 	}
+	
 	return ms;
 }
 
+// Complexity O(n2)
+queue<string> generateAllSub2(string& mys )
+{
+	queue<string> ms;
+	// Complexity O(n2) double loop
+	for( size_t i = 0; i < mys.size(); i++ )
+	{
+		for( size_t j = 1; j < mys.size() + 1; j++ )
+		{
+			string tmp = mys.substr(i,j);			
+			ms.push(tmp);
+		}
+	}
+	
+	return ms;
+}
 
 string twoStrings(string&& s1, string&& s2) 
 {
-	unordered_set<string> ms1 = generateAllSub(s1);
+	queue<string> ms1 = generateAllSub2(s1);
 	unordered_set<string> ms2 = generateAllSub(s2);
 	
-	auto& myrefbigger = ms1.size() >= ms2.size() ? ms1: ms2;
-	auto& myrefsmallr = ms1.size() < ms2.size() ? ms1: ms2;
-	
-	for( auto it = myrefsmallr.begin(); it != myrefsmallr.end(); it++ )
-	{	
-		if ( myrefbigger.find( *it ) != myrefbigger.end() )
-		{
+	while ( ms1.size() > 0 )
+	{
+		auto f = ms1.front();
+		if ( ms2.find( f ) != ms2.end() )
 			return "YES";
-		}
+		ms1.pop();
 	}
-
 	return "NO";
 }
 
 int main()
-{
-	auto tp = start_tracking();
-	cout << twoStrings("hackerrankcommunity", "cdecdecdecde")  << endl;
-	end_tracking(tp);
+{	
+	cout << twoStrings("hackerrankcommunity", "cdecdecdecde")  << endl;	
 }
