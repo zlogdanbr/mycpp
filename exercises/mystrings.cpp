@@ -2,6 +2,12 @@
 
 using namespace std;
 
+/*
+https://www.hackerrank.com/challenges/two-strings/
+
+For some reason they ask you to code this using a hash/map
+Maybe, maybe their "driver" code sucks.
+*/
 
 unordered_set<string> generateAllSub(string& mys )
 {
