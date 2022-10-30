@@ -23,6 +23,9 @@
 //--------------------------------------------------------------------------
 //	2020/2021/2022 Daniel V. Gomes
 //--------------------------------------------------------------------------
+
+
+
 #ifndef _UTIL_D
 #define _UTIL_D
 
@@ -84,6 +87,10 @@ namespace mytools
 			return  (a.length() >= b.length());
 		};		
 		
+		void test()
+		{
+			
+		}
 
 		/*
 		*	For as long as you send output to stringstream& out
