@@ -89,7 +89,7 @@ namespace mytools
 		
 		void test()
 		{
-			
+			std::cout << "Test" << std::endl;
 		}
 
 		/*
