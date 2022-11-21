@@ -15,8 +15,6 @@
 //  Contains code to be used with STL, DS and algorithms
 //  >namespace mytools::util
 //	Contains useful code not buffer/string related
-//	>namespace mytools::buffer_handlers
-//  Contains useful code buffer/string related
 //	>namespace mytools::mymath
 //  Linear algebra, matrix, numerical methods
 //
