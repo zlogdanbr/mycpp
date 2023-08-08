@@ -94,8 +94,7 @@ namespace mytools
 		*	For as long as you send output to stringstream& out
 		*	this function should output it all at the file  filename
 		*/
-		inline
-			void print_all_debugs(stringstream& out,
+		void print_all_debugs(stringstream& out,
 				string& filename)
 		{
 			ofstream myFile;
@@ -113,8 +112,7 @@ namespace mytools
 		*	of pairs
 		*/
 		template<typename T, typename M>
-		inline
-			void print_pairs(const list<pair<T, M> >& m,
+		void print_pairs(const list<pair<T, M> >& m,
 				stringstream& out)
 		{
 			for (const auto& im : m)
@@ -129,8 +127,7 @@ namespace mytools
 		*	of pairs
 		*/
 		template<typename T, typename M>
-		inline
-			void print_vector(const vector<pair<T, M> >& m,
+		void print_vector(const vector<pair<T, M> >& m,
 				stringstream& out)
 		{
 			for (const auto& im : m)
@@ -144,8 +141,7 @@ namespace mytools
 		*	Prints a generic STL containerwhich
 		*/
 		template<typename T>
-		inline
-			void print_stlc(T& m)
+		void print_stlc(T& m)
 		{
 			cout << "[ ";
 			for (const auto& im : m)
@@ -160,8 +156,7 @@ namespace mytools
 		*	 not as fast as brute force search by Stroustrup
 		*/
 		template<typename T, typename Iterator>
-		inline
-			bool binary_search_recursive_set(T N,
+		bool binary_search_recursive_set(T N,
 				Iterator first,
 				Iterator last)
 		{
@@ -197,8 +192,7 @@ namespace mytools
 		* 	implementation of recursive binary search
 		*/
 		template<typename T, typename Iterator>
-		inline
-			bool binary_search_recursive(T N,
+		bool binary_search_recursive(T N,
 				Iterator first,
 				Iterator last)
 		{
@@ -239,7 +233,7 @@ namespace mytools
 		*	sorted this is the best algorithm
 		*/
 		template<typename In, typename T>
-		inline In _find(In first,
+		In _find(In first,
 			In last,
 			const T& val)
 		{
@@ -253,8 +247,7 @@ namespace mytools
 		*	sorted this is the best algorithm, adapted to delete
 		* 	a specific value
 		*/
-		inline
-			bool _find_Del(mset_long& cont,
+		bool _find_Del(mset_long& cont,
 				mset_long::iterator first,
 				mset_long::iterator last,
 				ll val)
@@ -431,9 +424,8 @@ namespace mytools
 		*	Giving two sets of sizes N and M,  this function will redefine them
 		*	so that their sizes are T or T-1
 		*/
-		inline
-			void balance_halfs(mset_long& mysetl,
-				mset_long& mysetr)
+		void balance_halfs(mset_long& mysetl,
+				  mset_long& mysetr)
 		{
 
 			if (mysetl.size() == mysetr.size() || llabs(mysetl.size() - mysetr.size()) == 1)
@@ -968,7 +960,7 @@ namespace mytools
 				return 0;
 			};
 
-			inline vector<double>& getcol(const vector<vector<double>>& obs, vector<double>& vec, int col) const
+			vector<double>& getcol(const vector<vector<double>>& obs, vector<double>& vec, int col) const
 			{
 				for (const auto& v : obs)
 				{
@@ -985,16 +977,14 @@ namespace mytools
 
 
 		// starts computing the execution time of a code
-		inline
-			const tp start_tracking()
+		const tp start_tracking()
 		{
 			return high_resolution_clock::now();
 		}
 
 		// stops  computing the execution time of a code and print 
 		// elapsed time
-		inline
-			void end_tracking(tp& start)
+		void end_tracking(tp& start)
 		{
 			auto stop = high_resolution_clock::now();
 			auto duration = duration_cast<microseconds>(stop - start);
@@ -1363,7 +1353,7 @@ namespace mytools
 
 		// multiplies a matrix by a value ct
 		template<typename M, typename T>
-		inline void times(Dmatrix<M>& a, T ct)
+	        void times(Dmatrix<M>& a, T ct)
 		{
 			for (int i = 0; i < a.rows(); i++)
 			{
@@ -1444,7 +1434,7 @@ namespace mytools
 
 		// transpose NxN matrix and 1xN or Nx1
 		template<typename T>
-		inline Dmatrix<T> transpose(const Dmatrix<T>& m1)
+		Dmatrix<T> transpose(const Dmatrix<T>& m1)
 		{
 			int rows = m1.rows();
 			int cols = m1.cols();
