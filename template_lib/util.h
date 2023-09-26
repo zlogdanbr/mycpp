@@ -841,7 +841,7 @@ namespace mytools
 
 
 		// this is a c++ thread wrapper pool
-		using  myThreads = vector< std::thread >;
+		using  myThreads = std::vector< std::thread >;
 
 		class ThreadWrapper
 		{
@@ -1035,7 +1035,9 @@ namespace mytools
 		// you are supposed to provide the == operator if the data type
 		// does not support it already
 		template<typename function, typename T, typename M>
-		bool myFunctionTester(function& f, const M& in, T& expected_value)  noexcept
+		bool myFunctionTester(	function& f, 
+								const M& in, 
+								T& expected_value)  noexcept
 		{
 
 			auto calculated_val = f(in);
@@ -1053,9 +1055,9 @@ namespace mytools
 		// f is a template for the function that you will test
 		// so it requires a parameter of input
 		template<typename IN, typename OUT, typename function>
-		void UnitTesting(const std::vector<IN>& InData,
-			const std::vector<OUT>& Expected,
-			function& f) noexcept
+		void UnitTesting(	const std::vector<IN>& InData,
+							const std::vector<OUT>& Expected,
+							function& f) noexcept
 		{
 
 			int ok = 0;
@@ -1110,7 +1112,7 @@ namespace mytools
 				Y.push_back(log(tmp));
 			}
 
-			int n = Y.size();
+			auto n = Y.size();
 
 			for (int i = 0; i <= n - 1; i++)
 			{
@@ -1377,8 +1379,8 @@ namespace mytools
 		Dmatrix<double> convertVector2Matrix(vector<vector<double>>& data)
 		{
 
-			int N = data.size();
-			int M = data[0].size() - 1;
+			auto N = data.size();
+			auto M = data[0].size() - 1;
 
 			Dmatrix<double> t(N, M);
 
@@ -1420,7 +1422,7 @@ namespace mytools
 		Dmatrix<double> convertcol2Matrix(vector<double>& y)
 		{
 
-			int N = y.size();
+			auto N = y.size();
 
 			Dmatrix<double> t(N, 1);
 
