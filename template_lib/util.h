@@ -1009,7 +1009,7 @@ namespace mytools
 		{
 			for (const auto& v : vec)
 			{
-				std::cout << v;
+				std::cout << v << " ";
 			}
 			std::cout << "\n";
 		}
