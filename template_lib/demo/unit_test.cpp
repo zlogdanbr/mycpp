@@ -4,7 +4,8 @@
 using namespace mytools::unittest;
 using namespace mytools::util;
 
- 
+
+// cl /W4 /EHsc /I"\Users\Administrador\Documents\GitHub\mycpp\mycpp\template_lib" unit_test.cpp
 // dentro essa funcao vc implementa a funcao a testar
 int calc( const std::vector<int>&  in)
 {

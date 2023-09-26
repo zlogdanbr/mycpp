@@ -1009,7 +1009,7 @@ namespace mytools
 		{
 			for (const auto& v : vec)
 			{
-				std::cout << v << " ";
+				std::cout << v;
 			}
 			std::cout << "\n";
 		}
@@ -1112,7 +1112,7 @@ namespace mytools
 				Y.push_back(log(tmp));
 			}
 
-			auto n = Y.size();
+			int n = Y.size();
 
 			for (int i = 0; i <= n - 1; i++)
 			{
@@ -1379,8 +1379,8 @@ namespace mytools
 		Dmatrix<double> convertVector2Matrix(vector<vector<double>>& data)
 		{
 
-			auto N = data.size();
-			auto M = data[0].size() - 1;
+			int N = data.size();
+			int M = data[0].size() - 1;
 
 			Dmatrix<double> t(N, M);
 
@@ -1422,7 +1422,7 @@ namespace mytools
 		Dmatrix<double> convertcol2Matrix(vector<double>& y)
 		{
 
-			auto N = y.size();
+			int N = y.size();
 
 			Dmatrix<double> t(N, 1);
 
