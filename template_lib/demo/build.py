@@ -5,8 +5,10 @@ from pathlib import Path
 import shutil
 import subprocess
 
-BUILD   =  "cl "  
-LINK    = " /link"
+BUILD           =  "cl /W4 /EHsc /std:c++17 "  
+LINK            = " /link"
+TEMPLATE_LIB    = "/I"+"C:\\Users\\Administrador\\Documents\\GitHub\\mycpp\\mycpp\\template_lib "
+INCLUDE         = ""
 
         
 def run_win_cmd(cmd):
@@ -53,16 +55,16 @@ def concat( argv ):
     return o
     
 def main(argv):
-           
+         
+    os.system("cls")
+    
     build_cmd = []
 
     if ( len(argv) > 2 ):
         str = concat(argv[1:])
-        build_cmd.append(BUILD)
-        build_cmd.append( OPTIONS + INCLUDES + LIB + str )
-        build_cmd.append(LINK)
+        build_cmd = BUILD + TEMPLATE_LIB + INCLUDE + str + LINK
     else:
-        build_cmd = BUILD + "%BUILD_ME% " + argv[1]
+        build_cmd = BUILD + TEMPLATE_LIB + INCLUDE + argv[1]
     
     print("Running {}".format(build_cmd))
     result = run_win_cmd(build_cmd)

@@ -108,22 +108,6 @@ void Format( char* ptr , Args&&... args)
 	std::cout << ( args + ... )  << ptr << "\n";
 }
 
-template<typename Tuple>
-void print(T& t, int n)
-{
-	for ( int i = 0; i < n ; i++)
-	{
-		std::cout << std::get<i>(t) << " ";
-	}
-	std::cout << std::endl;
-}
-
-template<typename Function, typename... Args>
-void stuff( Function& f , Args&&... args)
-{
-	f(std::forward<Args>(args)...);
-}
-
 void test4() 
 {
 	int a = 0;
@@ -136,7 +120,5 @@ void test4()
 
 int main()
 {
-	auto bar = std::make_tuple("test", 3.1, 14, 'y');
 
-	print<decltype(bar)>(bar);
 }
