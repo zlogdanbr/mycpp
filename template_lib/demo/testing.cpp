@@ -6,6 +6,12 @@
 #include <cstdlib>
 #include <functional>
 #include <tuple>
+#include <utility>
+#include <iomanip>
+#include "util.h"
+
+using namespace mytools::util;
+using namespace mytools::mymath;
 
 class B
 {
@@ -118,7 +124,48 @@ void test4()
 	Format( ptr, a, b, c );
 }
 
+template<typename N, typename M>
+void getTuple( std::tuple<N,M>& _mytuple)
+{
+	for( const auto& it: std::get<0>(_mytuple) )
+	{
+		std::cout << it << " ";
+	}
+	std::cout << std::endl;
+	
+	std::cout << std::get<1>(_mytuple) << std::endl;
+}
+
+void test5()
+{
+	std::vector<int> v{1,2,3};
+	std::string a{"Hello world"};
+	std::tuple<std::vector<int>,std::string> t(v,a);
+	getTuple<std::vector<int>,std::string>(t);
+	
+}
+
+using namespace std;
+
+// https://learn.microsoft.com/en-us/cpp/cpp/decltype-cpp?view=msvc-170
+template<typename T1, typename T2>
+auto Plus(T1&& t1, T2&& t2) ->decltype(forward<T1>(t1) + forward<T2>(t2))
+{
+   return forward<T1>(t1) + forward<T2>(t2);
+}
+
 int main()
 {
-
+	vector<vector<double>> data1  	{{1,1, 1},
+									{1, 1, 1},
+									{1, 1, 1}};
+							
+	vector<vector<double>> data2  	{{2, 2, 2},
+									{2, 2, 2},
+									{2, 2, 2}};
+									
+	Dmatrix<double> d1{data1,3,3};
+	Dmatrix<double> d2{data2,3,3};
+	std::cout << Plus(d1,d2);
+   
 }

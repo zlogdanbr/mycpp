@@ -4,6 +4,8 @@ import pathlib
 from pathlib import Path
 import shutil
 import subprocess
+import datetime
+import pathlib
 
 BUILD           =  "cl /W4 /EHsc /std:c++17 "  
 LINK            = " /link"
@@ -48,11 +50,19 @@ def remove_files(dir,ext):
                     print("removing {}".format(full))
                     os.remove(full)    
 
-def concat( argv ):
-    o = ""
+
+def checklastchanged(file):
+
+    filename = pathlib.Path(file)
+    modify_timestamp = filename.stat().st_mtime
+    print(modify_timestamp)
+
+def concatstrs( argv ):
+    
+    strttoconcat = ""
     for f in argv:
-        o = f + " " + o 
-    return o
+        strttoconcat = f + " " + strttoconcat 
+    return strttoconcat
     
 def main(argv):
          
@@ -61,7 +71,7 @@ def main(argv):
     build_cmd = []
 
     if ( len(argv) > 2 ):
-        str = concat(argv[1:])
+        str = concatstrs(argv[1:])
         build_cmd = BUILD + TEMPLATE_LIB + INCLUDE + str + LINK
     else:
         build_cmd = BUILD + TEMPLATE_LIB + INCLUDE + argv[1]
@@ -72,10 +82,11 @@ def main(argv):
     if result == 0:
         
         dir = os.getcwd()
-        remove_files(dir,"obj")
         file_name, t = os.path.splitext(argv[1])
+        remove_files(dir,"obj")        
         create_folder(dir,"out")
         move(file_name+".exe", dir+"\\out")
                  
 if __name__ == '__main__':
+    
     main(sys.argv)  

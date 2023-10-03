@@ -109,9 +109,13 @@ void matrix_ops_tests()
 	Dmatrix<double> d7{data7,4,10};
 	Dmatrix<double> d8{data8,10,2};
 	
-	Dmatrix<double> sum = d1 + d2;
-	Dmatrix<double> sub = d2 - d1;
-	Dmatrix<double> mul = d7*d8;
+	
+	Dmatrix<double> sum;	
+	sum = d1 + d2;
+	Dmatrix<double> sub;
+	sub = d2 - d1;	
+	Dmatrix<double> mul;
+	mul = d7*d8;
 	
 	cout << sum;
 	cout << sub;
@@ -120,5 +124,5 @@ void matrix_ops_tests()
 
 int main()
 {
-	test();
+	matrix_ops_tests();
 }

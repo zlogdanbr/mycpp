@@ -1210,6 +1210,7 @@ namespace mytools
 
 			explicit Dmatrix(const Dmatrix& m)
 			{
+				std::cout << "calling copy constructor" << std::endl;
 				this->N = m.N;
 				this->M = m.M;
 				this->data = m.data;
@@ -1230,27 +1231,25 @@ namespace mytools
 				return *this;
 			}
 
-			Dmatrix(Dmatrix&& m) noexcept
+			Dmatrix(Dmatrix&& m)
 			{
 				this->N = m.N;
 				this->M = m.M;
-				this->data = m.data;
-				N = 0;
-				M = 0;
-				data.clear();
+				copy_data( m.data, this->data );
+				m.N = 0;
+				m.M = 0;
+				m.data.clear();
 			}
 
 			Dmatrix& operator=(Dmatrix&& m)
 			{
-				if (this != &m)
-				{
-					this->N = m.N;
-					this->M = m.M;
-					N = 0;
-					M = 0;
-					this->data = m.data;
-					data.clear();
-				}
+
+				this->N = m.N;
+				this->M = m.M;
+				m.N = 0;
+				m.M = 0;
+				copy_data( m.data, this->data );
+				m.data.clear();
 				return *this;
 			}
 
@@ -1285,7 +1284,7 @@ namespace mytools
 			}
 
 			friend Dmatrix operator+(const Dmatrix& m1, const Dmatrix& m2)
-			{
+			{						
 				Dmatrix<T> m3(m1.rows(), m1.cols());
 				if ((m1.rows() == m2.rows()) && (m1.cols() == m2.cols()))
 				{
@@ -1298,7 +1297,7 @@ namespace mytools
 					}
 					return m3;
 				}
-
+				
 				return m3;
 			}
 
@@ -1315,7 +1314,6 @@ namespace mytools
 							m3(i, j) = m1(i, j) - m2(i, j);
 						}
 					}
-
 					return m3;
 				}
 
@@ -1351,6 +1349,14 @@ namespace mytools
 			vector<vector<T>> data;
 			int N = 0;
 			int M = 0;
+			
+			void copy_data( const vector<vector<T>>& orig , vector<vector<T>>& dest)
+			{
+				for( const auto& it: orig )
+				{
+					dest.emplace_back(it);
+				}
+			};
 		};
 
 		// multiplies a matrix by a value ct
