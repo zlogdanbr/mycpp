@@ -154,6 +154,12 @@ auto Plus(T1&& t1, T2&& t2) ->decltype(forward<T1>(t1) + forward<T2>(t2))
    return forward<T1>(t1) + forward<T2>(t2);
 }
 
+template<typename T1, typename T2>
+auto Mult(T1&& t1, T2&& t2) ->decltype(forward<T1>(t1)*forward<T2>(t2))
+{
+   return forward<T1>(t1)*forward<T2>(t2);
+}
+
 int main()
 {
 	vector<vector<double>> data1  	{{1,1, 1},
@@ -167,5 +173,6 @@ int main()
 	Dmatrix<double> d1{data1,3,3};
 	Dmatrix<double> d2{data2,3,3};
 	std::cout << Plus(d1,d2);
+	std::cout << Mult(d1,d2);;
    
 }

@@ -1340,7 +1340,6 @@ namespace mytools
 						}
 					}
 				}
-
 				return c;
 			}
 
