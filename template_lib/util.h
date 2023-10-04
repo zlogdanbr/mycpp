@@ -70,32 +70,29 @@ namespace mytools
 			return  s1.size() < s2.size();
 		};
 
-		auto compint = [](const int& a,
-			const int& b) -> bool { return a == b; };
+		auto compint = [](	const int& a,
+							const int& b) -> bool { return a == b; };
 
-		auto compstr = [](const std::string& a,
-			const std::string& b) -> bool { return a == b; };
+		auto compstr = [](	const std::string& a,
+							const std::string& b) -> bool { return a == b; };
 
-		auto isgreaterthan = [](const int& a,
-			const int& b) -> bool { return a > b; };
+		auto isgreaterthan = [](	const int& a,
+									const int& b) -> bool { return a > b; };
 
-		auto isgreaterthans = [](const std::string& a,
-			const std::string& b) -> bool
+		auto isgreaterthans = [](	const std::string& a,
+									const std::string& b) -> bool
 		{
 			return  (a.length() >= b.length());
 		};
 
-		void test()
-		{
-			std::cout << "Test" << std::endl;
-		}
 
 		/*
 		*	For as long as you send output to stringstream& out
 		*	this function should output it all at the file  filename
 		*/
-		void print_all_debugs(stringstream& out,
-				string& filename)
+		void 
+		print_all_debugs(	stringstream& out,
+							string& filename)
 		{
 			ofstream myFile;
 			myFile.open(filename, ios_base::out);
@@ -112,8 +109,9 @@ namespace mytools
 		*	of pairs
 		*/
 		template<typename T, typename M>
-		void print_pairs(const list<pair<T, M> >& m,
-				stringstream& out)
+		void 
+		print_pairs(	const list<pair<T, M> >& m,
+						stringstream& out)
 		{
 			for (const auto& im : m)
 			{
@@ -127,8 +125,9 @@ namespace mytools
 		*	of pairs
 		*/
 		template<typename T, typename M>
-		void print_vector(const vector<pair<T, M> >& m,
-				stringstream& out)
+		void 
+		print_vectoe(	const vector<pair<T, M> >& m,
+						stringstream& out)
 		{
 			for (const auto& im : m)
 			{
@@ -141,7 +140,8 @@ namespace mytools
 		*	Prints a generic STL containerwhich
 		*/
 		template<typename T>
-		void print_stlc(T& m)
+		void 
+		print_stlc(T& m)
 		{
 			cout << "[ ";
 			for (const auto& im : m)
@@ -156,9 +156,10 @@ namespace mytools
 		*	 not as fast as brute force search by Stroustrup
 		*/
 		template<typename T, typename Iterator>
-		bool binary_search_recursive_set(T N,
-				Iterator first,
-				Iterator last)
+		bool 
+		binary_search_recursive_set(T N,
+									Iterator first,
+									Iterator last)
 		{
 
 			Iterator mid = first;
@@ -192,9 +193,10 @@ namespace mytools
 		* 	implementation of recursive binary search
 		*/
 		template<typename T, typename Iterator>
-		bool binary_search_recursive(T N,
-				Iterator first,
-				Iterator last)
+		bool 
+		binary_search_recursive(	T N,
+									Iterator first,
+									Iterator last)
 		{
 
 			// Get the middle element of the current range
@@ -233,9 +235,10 @@ namespace mytools
 		*	sorted this is the best algorithm
 		*/
 		template<typename In, typename T>
-		In _find(In first,
-			In last,
-			const T& val)
+		In 
+		_find(	In first,
+				In last,
+				const T& val)
 		{
 			while (first != last && *first != val) ++first;
 			return first;
@@ -247,10 +250,11 @@ namespace mytools
 		*	sorted this is the best algorithm, adapted to delete
 		* 	a specific value
 		*/
-		bool _find_Del(mset_long& cont,
-				mset_long::iterator first,
-				mset_long::iterator last,
-				ll val)
+		bool 
+		_find_Del(	mset_long& cont,
+					mset_long::iterator first,
+					mset_long::iterator last,
+					ll val)
 		{
 			while (first != last && *first != val) ++first;
 			if (first == last)
@@ -371,9 +375,9 @@ namespace mytools
 
 
 			// type T should be an enum type
-			void addEdge(const T c1,
-				const T c2,
-				int dis)
+			void addEdge(	const T c1,
+							const T c2,
+							int dis)
 			{
 				auto n1 = static_cast<int>(c1);
 				auto n2 = static_cast<int>(c2);
@@ -384,7 +388,7 @@ namespace mytools
 
 			// type T should be an enum type
 			void removeEdge(const T c1,
-				const T c2)
+							const T c2)
 			{
 				auto n1 = static_cast<int>(c1);
 				auto n2 = static_cast<int>(c2);
@@ -424,8 +428,9 @@ namespace mytools
 		*	Giving two sets of sizes N and M,  this function will redefine them
 		*	so that their sizes are T or T-1
 		*/
-		void balance_halfs(mset_long& mysetl,
-				  mset_long& mysetr)
+		void 
+		balance_halfs(		mset_long& mysetl,
+							mset_long& mysetr)
 		{
 
 			if (mysetl.size() == mysetr.size() || llabs(mysetl.size() - mysetr.size()) == 1)
@@ -766,14 +771,16 @@ namespace mytools
 		};
 
 		template<typename T>
-		void initstack(std::vector<T>&& s1, std::stack<T>& mystack)
+		void 
+		initstack(std::vector<T>&& s1, std::stack<T>& mystack)
 		{
 			for (const auto& s : s1)
 				mystack.push(s);
 		}
 
 		template<typename T>
-		void clearStack(std::stack<T>& mystack)
+		void 
+		clearStack(std::stack<T>& mystack)
 		{
 			while (mystack.empty() == false)
 			{
@@ -782,7 +789,8 @@ namespace mytools
 		}
 
 		template<typename T>
-		void printstack(const std::stack<T>& mystack)
+		void 
+		printstack(const std::stack<T>& mystack)
 		{
 			std::stack<T> mystack2 = mystack;
 			while (mystack2.empty() == false)
@@ -794,7 +802,8 @@ namespace mytools
 		}
 
 		template<typename T>
-		T sumALLstack(std::stack<T>& mystack)
+		T 
+		sumALLstack(std::stack<T>& mystack)
 		{
 			std::stack<T> mystack2 = mystack;
 			T sum = 0;
@@ -807,7 +816,8 @@ namespace mytools
 		}
 
 		template<typename T>
-		T sumtlastwo(const std::stack<T>& mystack)
+		T 
+		sumtlastwo(const std::stack<T>& mystack)
 		{
 			std::stack<int> mystack2 = mystack;
 			auto p0 = mystack2.top();
@@ -817,14 +827,16 @@ namespace mytools
 		}
 
 		template<typename T>
-		void initqueue(std::vector<T>&& s1, std::queue<T>& myqueue)
+		void 
+		initqueue(std::vector<T>&& s1, std::queue<T>& myqueue)
 		{
 			for (const auto& s : s1)
 				myqueue.push(s);
 		}
 
 		template<typename T>
-		void printque(const std::queue<T>& myqueue)
+		void 
+		printque(const std::queue<T>& myqueue)
 		{
 			std::queue<T> myqueue2 = myqueue;
 			while (myqueue2.empty() == false)
@@ -903,8 +915,8 @@ namespace mytools
 
 
 			int readCSV(vector<vector<double>>& obs,
-				int nfields,
-				bool ignoreheader) const
+						int nfields,
+						bool ignoreheader) const
 			{
 				ifstream myFile;
 				myFile.open(filename, ios_base::in);
@@ -977,14 +989,16 @@ namespace mytools
 
 
 		// starts computing the execution time of a code
-		const tp start_tracking()
+		const tp 
+		start_tracking()
 		{
 			return high_resolution_clock::now();
 		}
 
 		// stops  computing the execution time of a code and print 
 		// elapsed time
-		void end_tracking(tp& start)
+		void 
+		end_tracking(tp& start)
 		{
 			auto stop = high_resolution_clock::now();
 			auto duration = duration_cast<microseconds>(stop - start);
@@ -1005,7 +1019,8 @@ namespace mytools
 
 		// Prints a one D vector
 		template<typename T>
-		void print1D(const std::vector<T>& vec) noexcept
+		void 
+		print1D(const std::vector<T>& vec) noexcept
 		{
 			for (const auto& v : vec)
 			{
@@ -1017,7 +1032,8 @@ namespace mytools
 
 		// prints a 2d vector
 		template<typename T>
-		void print2D(const std::vector<std::vector<T>>& mat) noexcept
+		void 
+		print2D(const std::vector<std::vector<T>>& mat) noexcept
 		{
 			for (const auto& l : mat)
 			{
@@ -1035,9 +1051,10 @@ namespace mytools
 		// you are supposed to provide the == operator if the data type
 		// does not support it already
 		template<typename function, typename T, typename M>
-		bool myFunctionTester(	function& f, 
-								const M& in, 
-								T& expected_value)  noexcept
+		bool 
+		myFunctionTester(	function& f, 
+							const M& in, 
+							T& expected_value)  noexcept
 		{
 
 			auto calculated_val = f(in);
@@ -1055,7 +1072,8 @@ namespace mytools
 		// f is a template for the function that you will test
 		// so it requires a parameter of input
 		template<typename IN, typename OUT, typename function>
-		void UnitTesting(	const std::vector<IN>& InData,
+		void 
+		UnitTesting(		const std::vector<IN>& InData,
 							const std::vector<OUT>& Expected,
 							function& f) noexcept
 		{
@@ -1093,10 +1111,11 @@ namespace mytools
 		// Adapted from
 		// https://www.codewithc.com/c-program-for-linear-exponential-curve-fitting/
 		// It performs an exponential regression
-		int exponentialRegression(const vector<double>& x,
-			const vector<double>& y,
-			double& a,
-			double& b)
+		int 
+		exponentialRegression(	const vector<double>& x,
+								const vector<double>& y,
+								double& a,
+								double& b)
 		{
 
 			double sumx = 0;
@@ -1136,7 +1155,9 @@ namespace mytools
 		// I was looking for an algorithm for this when I stumbled upon the
 		// C++ code so why do it myself :-) ?
 		template<typename T >
-		int gauss(vector < vector<T> > a, vector<T>& ans)
+		int 
+		gauss(	vector < vector<T> > a, 
+				vector<T>& ans)
 		{
 			const double EPS = 1e-9;
 			const int INF = 2;
@@ -1186,12 +1207,13 @@ namespace mytools
 
 		// My custom matrix class 
 		template<typename T>
-		class Dmatrix final {
+		class Dmatrix final 
+		{
 
 		public:
 
-			explicit Dmatrix() {};
-			explicit Dmatrix(int _N, int _M) :N(_N), M(_M)
+			Dmatrix() {};
+			Dmatrix(int _N, int _M) :N(_N), M(_M)
 			{
 				for (int i = 0; i < _N; i++)
 				{
@@ -1208,7 +1230,7 @@ namespace mytools
 
 			};
 
-			explicit Dmatrix(const Dmatrix& m)
+			Dmatrix(const Dmatrix& m)
 			{
 				std::cout << "calling copy constructor" << std::endl;
 				this->N = m.N;
@@ -1216,7 +1238,7 @@ namespace mytools
 				this->data = m.data;
 			}
 
-			explicit Dmatrix(vector<vector<T>>& data, int _N, int _M)
+			Dmatrix(vector<vector<T>>& data, int _N, int _M)
 			{
 				this->N = _N;
 				this->M = _M;
@@ -1360,7 +1382,8 @@ namespace mytools
 
 		// multiplies a matrix by a value ct
 		template<typename M, typename T>
-	        void times(Dmatrix<M>& a, T ct)
+	    void 
+		times(Dmatrix<M>& a, T ct)
 		{
 			for (int i = 0; i < a.rows(); i++)
 			{
@@ -1373,7 +1396,8 @@ namespace mytools
 
 		// useful debug, prints all info on a matrix
 		template<typename M>
-		void d(Dmatrix<M>& a)
+		void 
+		d(Dmatrix<M>& a)
 		{
 			cout << "Size: " << a.rows() << " x " << a.cols() << endl;
 			cout << "Contents:" << endl;
@@ -1381,7 +1405,8 @@ namespace mytools
 		}
 
 		// converts a vector of a vector to a matrix
-		Dmatrix<double> convertVector2Matrix(vector<vector<double>>& data)
+		Dmatrix<double> 
+		convertVector2Matrix(vector<vector<double>>& data)
 		{
 
 			int N = data.size();
@@ -1401,7 +1426,8 @@ namespace mytools
 		}
 
 		// converts a matrix to a vector of a vector
-		vector<vector<double>> convertMatrix2vector(Dmatrix<double>& mat)
+		vector<vector<double>> 
+		convertMatrix2vector(Dmatrix<double>& mat)
 		{
 
 			int N = mat.rows();
@@ -1424,7 +1450,8 @@ namespace mytools
 
 		// converts a vector ( typically a collumn of a csv file )
 		// to a matrix
-		Dmatrix<double> convertcol2Matrix(vector<double>& y)
+		Dmatrix<double> 
+		convertcol2Matrix(vector<double>& y)
 		{
 
 			int N = y.size();
@@ -1441,7 +1468,8 @@ namespace mytools
 
 		// transpose NxN matrix and 1xN or Nx1
 		template<typename T>
-		Dmatrix<T> transpose(const Dmatrix<T>& m1)
+		Dmatrix<T> 
+		transpose(const Dmatrix<T>& m1)
 		{
 			int rows = m1.rows();
 			int cols = m1.cols();

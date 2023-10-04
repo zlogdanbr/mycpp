@@ -98,7 +98,6 @@ void matrix_ops_tests()
 									{ 1,2},
 									{ 1,2},
 									{ 1,2}};	
-
 	
 	Dmatrix<double> d1{data1,3,3};
 	Dmatrix<double> d2{data2,3,3};

@@ -145,8 +145,6 @@ void test5()
 	
 }
 
-using namespace std;
-
 // https://learn.microsoft.com/en-us/cpp/cpp/decltype-cpp?view=msvc-170
 template<typename T1, typename T2>
 auto Plus(T1&& t1, T2&& t2) ->decltype(forward<T1>(t1) + forward<T2>(t2))
@@ -159,6 +157,7 @@ auto Mult(T1&& t1, T2&& t2) ->decltype(forward<T1>(t1)*forward<T2>(t2))
 {
    return forward<T1>(t1)*forward<T2>(t2);
 }
+
 
 int main()
 {
