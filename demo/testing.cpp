@@ -171,7 +171,7 @@ int main()
 									
 	Dmatrix<double> d1{data1,3,3};
 	Dmatrix<double> d2{data2,3,3};
-	std::cout << Plus(d1,d2);
-	std::cout << Mult(d1,d2);;
+	debug_Dmatrix(Plus(d1,d2));
+	debug_Dmatrix(Mult(d1,d2));
    
 }

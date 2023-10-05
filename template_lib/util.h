@@ -19,7 +19,7 @@
 //  Linear algebra, matrix, numerical methods
 //
 //--------------------------------------------------------------------------
-//	2020/2021/2022 Daniel V. Gomes
+//	2020/2021/2022/2023 Daniel V. Gomes
 //--------------------------------------------------------------------------
 
 
@@ -52,9 +52,9 @@
 using namespace std;
 using namespace std::chrono;
 
-typedef long long ll;
-typedef multiset<long long> mset_long;
-typedef high_resolution_clock::time_point tp;
+using  ll = long long ;
+using  mset_long =  multiset<long long>;
+using  tp = high_resolution_clock::time_point;
 
 namespace mytools
 {
@@ -1397,7 +1397,7 @@ namespace mytools
 		// useful debug, prints all info on a matrix
 		template<typename M>
 		void 
-		d(Dmatrix<M>& a)
+		debug_Dmatrix(Dmatrix<M>&& a)
 		{
 			cout << "Size: " << a.rows() << " x " << a.cols() << endl;
 			cout << "Contents:" << endl;
