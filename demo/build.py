@@ -70,9 +70,8 @@ def main(argv):
     
     build_cmd = []
 
-    if ( len(argv) > 2 ):
-        str = concatstrs(argv[1:])
-        build_cmd = BUILD + TEMPLATE_LIB + INCLUDE + str + LINK
+    if len(argv) > 2:
+        build_cmd = BUILD + TEMPLATE_LIB + INCLUDE + concatstrs(argv[1:]) + LINK
     else:
         build_cmd = BUILD + TEMPLATE_LIB + INCLUDE + argv[1]
     
