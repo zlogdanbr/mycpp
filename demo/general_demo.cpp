@@ -2,6 +2,8 @@
 
 using namespace mytools;
 using namespace mytools::util;
+using namespace mytools::unittest;
+using namespace mytools::algo;
 
 
 void testcase1(int N, int pos )
@@ -172,5 +174,5 @@ void testcase6()
 
 int main()
 {
-	testcase6();
+	testcase2(20000000);
 }

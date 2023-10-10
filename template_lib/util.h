@@ -52,15 +52,14 @@
 using namespace std;
 using namespace std::chrono;
 
-using  ll = long long ;
-using  mset_long =  multiset<long long>;
-using  tp = high_resolution_clock::time_point;
-
 namespace mytools
 {
 
 	namespace algo
 	{
+		
+		using  ll = long long ;
+		using  mset_long =  multiset<long long>;
 
 		// Some useful lambda functions
 		auto compstrsize =
@@ -313,7 +312,7 @@ namespace mytools
 
 			friend bool operator!=(const mPair& p1, const mPair& p2)
 			{
-				return (p1.first != p2.first);
+				return (p1.first != p2.first || p1.second == p2.second);
 			}
 
 			T first;
@@ -987,7 +986,17 @@ namespace mytools
 			std::string filename;
 		};
 
+	}
 
+	namespace unittest
+	{
+		
+		// useful alias
+		using  	v1dint = std::vector<int>;
+		using 	v2dint = std::vector< v1dint >;
+		using 	v3dint = std::vector<v2dint>;		
+		using   tp = high_resolution_clock::time_point;
+		
 		// starts computing the execution time of a code
 		const tp 
 		start_tracking()
@@ -1004,18 +1013,6 @@ namespace mytools
 			auto duration = duration_cast<microseconds>(stop - start);
 			cout << "Execution time(ms): " << duration.count() / 1000 << endl;
 		}
-
-
-
-	}
-
-	namespace unittest
-	{
-		// useful alias
-		using  	v1dint = std::vector<int>;
-		using 	v2dint = std::vector< v1dint >;
-		using 	v3dint = std::vector<v2dint>;
-
 
 		// Prints a one D vector
 		template<typename T>
