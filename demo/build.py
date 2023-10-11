@@ -7,10 +7,7 @@ import subprocess
 import datetime
 import pathlib
 
-BUILD           =  "cl /W4 /EHsc /std:c++17 "  
-LINK            = " /link"
-TEMPLATE_LIB    = "/I"+"C:\\Users\\Administrador\\Documents\\GitHub\\mycpp\\mycpp\\template_lib "
-INCLUDE         = ""
+from config import *
 
         
 def run_win_cmd(cmd):
@@ -71,9 +68,9 @@ def main(argv):
     build_cmd = []
 
     if len(argv) > 2:
-        build_cmd = BUILD + TEMPLATE_LIB + INCLUDE + concatstrs(argv[1:]) + LINK
+        build_cmd = BUILD + TEMPLATE_LIB + INCLUDE + concatstrs(argv[1:]) + LINK + LIB_WINDOWS
     else:
-        build_cmd = BUILD + TEMPLATE_LIB + INCLUDE + argv[1]
+        build_cmd = BUILD + TEMPLATE_LIB + INCLUDE + argv[1] + LIB_WINDOWS
     
     print("Running {}".format(build_cmd))
     result = run_win_cmd(build_cmd)

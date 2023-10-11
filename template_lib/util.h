@@ -174,15 +174,15 @@ namespace mytools
 				return true;
 			}
 			else
-				if (*mid > N)
-				{
-					binary_search_recursive_set(N, mid, last);
-				}
-				else
-					if (*mid < N)
-					{
-						binary_search_recursive_set(N, first, mid);
-					}
+			if (*mid > N)
+			{
+				binary_search_recursive_set(N, mid, last);
+			}
+			else
+			if (*mid < N)
+			{
+				binary_search_recursive_set(N, first, mid);
+			}
 
 			return true;
 
