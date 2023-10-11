@@ -1,6 +1,6 @@
+LIB_WINDOWS     = ""
 BUILD           =  "cl /W4 /EHsc /std:c++17 /GA /MT "  
 LINK            = " /link"
 TEMPLATE_LIB    = "/I"+"C:\\Users\\Administrador\\Documents\\GitHub\\mycpp\\mycpp\\template_lib "
 INCLUDE         = ""
-SRC             = ""
-LIB_WINDOWS     = ""
+SRC             = "main.cpp func.cpp"

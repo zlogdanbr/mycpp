@@ -65,23 +65,39 @@ def main(argv):
          
     os.system("cls")
     
-    build_cmd = []
+    if len(argv) < 2:
+        print("Error missing parameters")
+        return
+    
+    build_cmd = ""    
+    type = argv[1]
 
-    if len(argv) > 2:
-        build_cmd = BUILD + TEMPLATE_LIB + INCLUDE + concatstrs(argv[1:]) + LINK + LIB_WINDOWS
-    else:
-        build_cmd = BUILD + TEMPLATE_LIB + INCLUDE + argv[1] + LIB_WINDOWS
-    
-    print("Running {}".format(build_cmd))
-    result = run_win_cmd(build_cmd)
-    
-    if result == 0:
+    if type == "--project":
         
-        dir = os.getcwd()
-        file_name, t = os.path.splitext(argv[1])
-        remove_files(dir,"obj")        
-        create_folder(dir,"out")
-        move(file_name+".exe", dir+"\\out")
+        if SRC == "":
+            print("This option expects a list of sources")
+            return
+        build_cmd = BUILD + TEMPLATE_LIB + INCLUDE + SRC + LINK + LIB_WINDOWS
+        print("Running {}".format(build_cmd))
+        result = run_win_cmd(build_cmd)
+        
+        if result == 0:
+            dir = os.getcwd()
+            remove_files(dir,"obj")
+    else:
+        
+        build_cmd = BUILD + TEMPLATE_LIB + INCLUDE + argv[1] + LIB_WINDOWS
+        print("Running {}".format(build_cmd))
+        result = run_win_cmd(build_cmd)
+        
+        if result == 0:
+            
+            dir = os.getcwd()
+            file_name, t = os.path.splitext(argv[1])
+            remove_files(dir,"obj")        
+            create_folder(dir,"out")
+            move(file_name+".exe", dir+"\\out")        
+   
                  
 if __name__ == '__main__':
     
