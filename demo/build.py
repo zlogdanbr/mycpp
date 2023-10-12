@@ -7,8 +7,11 @@ import subprocess
 import datetime
 import pathlib
 
-from config import *
 
+#change this include to reflect your configuration for the build
+from config import *
+#from proj_demo.config_proj import *
+#from img.config_cimg import *
         
 def run_win_cmd(cmd):
     
@@ -53,13 +56,6 @@ def checklastchanged(file):
     filename = pathlib.Path(file)
     modify_timestamp = filename.stat().st_mtime
     print(modify_timestamp)
-
-def concatstrs( argv ):
-    
-    strttoconcat = ""
-    for f in argv:
-        strttoconcat = f + " " + strttoconcat 
-    return strttoconcat
     
 def main(argv):
          
@@ -74,20 +70,44 @@ def main(argv):
 
     if type == "--project":
         
+        print("------------------------------------------------------------------")
+        print("Build parameters: {}".format(BUILD))
+        print("Windows libraries linked: {}".format(LIB_WINDOWS))
+        print("Include files: {}".format(INCLUDE))
+        print("My library: {}".format(TEMPLATE_LIB))
+        print("Sources: {}".format(SRC))
+        print("------------------------------------------------------------------")
+        
         if SRC == "":
             print("This option expects a list of sources")
             return
         build_cmd = BUILD + TEMPLATE_LIB + INCLUDE + SRC + LINK + LIB_WINDOWS
+      
         print("Running {}".format(build_cmd))
+        print("--------------------------------------------------------------")
+        
         result = run_win_cmd(build_cmd)
         
         if result == 0:
             dir = os.getcwd()
             remove_files(dir,"obj")
+           
+            print("-------------------------------------------------------------")
     else:
         
+        print("--------------------------------------------------------------")
+        print("Build parameters: {}".format(BUILD))
+        print("Windows libraries linked: {}".format(LIB_WINDOWS))
+        print("Include files: {}".format(INCLUDE))
+        print("My library: {}".format(TEMPLATE_LIB))
+        print("Source: {}".format(argv[1] ))        
+        print("--------------------------------------------------------------")
+        
         build_cmd = BUILD + TEMPLATE_LIB + INCLUDE + argv[1] + LIB_WINDOWS
+        
         print("Running {}".format(build_cmd))
+        print("--------------------------------------------------------------")
+        
         result = run_win_cmd(build_cmd)
         
         if result == 0:
@@ -97,7 +117,7 @@ def main(argv):
             remove_files(dir,"obj")        
             create_folder(dir,"out")
             move(file_name+".exe", dir+"\\out")        
-   
+            print("-------------------------------------------------------------")
                  
 if __name__ == '__main__':
     
