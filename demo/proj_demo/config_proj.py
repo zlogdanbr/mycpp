@@ -18,38 +18,20 @@ INCLUDE         = ""
 SRC             = "main.cpp func.cpp"
 #-------------------------------------------------------------------------------------------------------------
 #   WINDOWS NECESSARY LIBS
+#   Cimg for example requires:
+#   " kernel32.lib user32.lib gdi32.lib Shell32.lib"
 #-------------------------------------------------------------------------------------------------------------
 LIB_WINDOWS     = ""
 #-------------------------------------------------------------------------------------------------------------
 #   BOOST HEADERS AND LIBS
 #-------------------------------------------------------------------------------------------------------------
-#BOOST_HEADERS   = "/"+"C:\\boost_1_83_0\\boost_lib\\include\\boost-1_83\\boost"
-#BOOST_LIBS      = "C:\\boost_1_83_0\\boost_lib\\lib"
-BOOST_HEADERS   = ""
-BOOST_LIBS      = ""
+LIB_HEADERS   = "/I"+""
+LIB           = ""
 #-------------------------------------------------------------------------------------------------------------
 #   CMD TO BUILD
 #   EG: 
 #       BUILD + TEMPLATE_LIB + INCLUDE + SRC + LINK + LIB_WINDOWS
-#       BUILD + TEMPLATE_LIB + INCLUDE + argv[1] + LIB_WINDOWS
+#       BUILD + TEMPLATE_LIB + INCLUDE + "%%SRC%%" + LIB_WINDOWS
 #-------------------------------------------------------------------------------------------------------------
-BUILD_CMD        = COMPILER + FLAGS + TEMPLATE_LIB + INCLUDE + SRC + LINK + LIB_WINDOWS
-#-------------------------------------------------------------------------------------------------------------
-#   MACROS
-#-------------------------------------------------------------------------------------------------------------
-def printifnotempty(str):
-
-    if len(str) != 0:
-        print("Using {}".format(str))   
-#-------------------------------------------------------------------------------------------------------------    
-def print_build_info():
-    
-    print("Compiler: {}".format(COMPILER))
-    print("Flags: {}".format(FLAGS))
-    printifnotempty(INCLUDE)
-    printifnotempty(SRC)
-    printifnotempty(LIB_WINDOWS)
-    printifnotempty(BOOST_HEADERS)
-    printifnotempty(BOOST_LIBS)
-  
+BUILD_CMD     = COMPILER + FLAGS + TEMPLATE_LIB + SRC + LINK
 #-------------------------------------------------------------------------------------------------------------

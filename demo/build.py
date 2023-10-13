@@ -9,10 +9,10 @@ import pathlib
 
 
 #change this include to reflect your configuration for the build, EG:
-#   from proj_demo.config_proj import *
-#   from img.config_cimg import *
+from proj_demo.config_proj import *
+#from img.config_cimg import *
 
-from config import *
+#from config import *
         
 def run_win_cmd(cmd):
     
@@ -58,16 +58,19 @@ def checklastchanged(file):
     modify_timestamp = filename.stat().st_mtime
     print(modify_timestamp)
     
+def add_source_to_cmd(cmd, actual_src ):
+    str =  cmd.replace("%%SRC%%",actual_src)
+    return str
+    
 
 def build_single(build_cmd, src):
 
-    build_cmd = build_cmd + " " + src
+    build_cmd_effective = add_source_to_cmd(build_cmd,src)
     print("-------------------------------------------------------------------------------------------------------------------------") 
-    print("Running {}".format(build_cmd))
-    print_build_info()
+    print("Running {}".format(build_cmd_effective))
     print("-------------------------------------------------------------------------------------------------------------------------") 
     
-    result = run_win_cmd(build_cmd)
+    result = run_win_cmd(build_cmd_effective)
     
     if result == 0:
         
@@ -82,7 +85,6 @@ def build_project(build_cmd):
     
     print("-------------------------------------------------------------------------------------------------------------------------") 
     print("Running {}".format(build_cmd))
-    print_build_info()
     print("-------------------------------------------------------------------------------------------------------------------------") 
     
     result = run_win_cmd(build_cmd)
@@ -101,8 +103,7 @@ def main(argv):
     if len(argv) < 2:
         print("Error missing parameters")
         return
-    
-    build_cmd = ""    
+     
     type = argv[1]
 
     if type == "--project":        
