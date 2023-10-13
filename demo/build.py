@@ -8,10 +8,11 @@ import datetime
 import pathlib
 
 
-#change this include to reflect your configuration for the build
+#change this include to reflect your configuration for the build, EG:
+#   from proj_demo.config_proj import *
+#   from img.config_cimg import *
+
 from config import *
-#from proj_demo.config_proj import *
-#from img.config_cimg import *
         
 def run_win_cmd(cmd):
     
@@ -57,6 +58,42 @@ def checklastchanged(file):
     modify_timestamp = filename.stat().st_mtime
     print(modify_timestamp)
     
+
+def build_single(build_cmd, src):
+
+    build_cmd = build_cmd + " " + src
+    print("-------------------------------------------------------------------------------------------------------------------------") 
+    print("Running {}".format(build_cmd))
+    print_build_info()
+    print("-------------------------------------------------------------------------------------------------------------------------") 
+    
+    result = run_win_cmd(build_cmd)
+    
+    if result == 0:
+        
+        dir = os.getcwd()
+        file_name, t = os.path.splitext(src)
+        remove_files(dir,"obj")        
+        create_folder(dir,"out")
+        move(file_name+".exe", dir+"\\out")        
+        print("-------------------------------------------------------------------------------------------------------------------------") 
+        
+def build_project(build_cmd):      
+    
+    print("-------------------------------------------------------------------------------------------------------------------------") 
+    print("Running {}".format(build_cmd))
+    print_build_info()
+    print("-------------------------------------------------------------------------------------------------------------------------") 
+    
+    result = run_win_cmd(build_cmd)
+    
+    if result == 0:
+        dir = os.getcwd()
+        remove_files(dir,"obj")           
+    
+    print("-------------------------------------------------------------------------------------------------------------------------") 
+            
+    
 def main(argv):
          
     os.system("cls")
@@ -68,56 +105,10 @@ def main(argv):
     build_cmd = ""    
     type = argv[1]
 
-    if type == "--project":
-        
-        print("------------------------------------------------------------------")
-        print("Build parameters: {}".format(BUILD))
-        print("Windows libraries linked: {}".format(LIB_WINDOWS))
-        print("Include files: {}".format(INCLUDE))
-        print("My library: {}".format(TEMPLATE_LIB))
-        print("Sources: {}".format(SRC))
-        print("------------------------------------------------------------------")
-        
-        if SRC == "":
-            print("This option expects a list of sources")
-            return
-        build_cmd = BUILD + TEMPLATE_LIB + INCLUDE + SRC + LINK + LIB_WINDOWS
-      
-        print("Running {}".format(build_cmd))
-        print("--------------------------------------------------------------")
-        
-        result = run_win_cmd(build_cmd)
-        
-        if result == 0:
-            dir = os.getcwd()
-            remove_files(dir,"obj")
-           
-            print("-------------------------------------------------------------")
+    if type == "--project":        
+        build_project(BUILD_CMD)        
     else:
-        
-        print("--------------------------------------------------------------")
-        print("Build parameters: {}".format(BUILD))
-        print("Windows libraries linked: {}".format(LIB_WINDOWS))
-        print("Include files: {}".format(INCLUDE))
-        print("My library: {}".format(TEMPLATE_LIB))
-        print("Source: {}".format(argv[1] ))        
-        print("--------------------------------------------------------------")
-        
-        build_cmd = BUILD + TEMPLATE_LIB + INCLUDE + argv[1] + LIB_WINDOWS
-        
-        print("Running {}".format(build_cmd))
-        print("--------------------------------------------------------------")
-        
-        result = run_win_cmd(build_cmd)
-        
-        if result == 0:
-            
-            dir = os.getcwd()
-            file_name, t = os.path.splitext(argv[1])
-            remove_files(dir,"obj")        
-            create_folder(dir,"out")
-            move(file_name+".exe", dir+"\\out")        
-            print("-------------------------------------------------------------")
+        build_single(BUILD_CMD,argv[1])
                  
 if __name__ == '__main__':
     
