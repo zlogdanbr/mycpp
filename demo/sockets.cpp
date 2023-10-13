@@ -1,8 +1,15 @@
-/*win_init.c*/
+
+#ifndef _WIN32_WINNT
+#define _WIN32_WINNT 0x0600
+#endif
 
 #include <iostream>
 #include <winsock2.h>
+#include <iphlpapi.h>
+#include <ws2tcpi
+
 #pragma comment(lib, "ws2_32.lib")
+#pragma comment(lib, "iphlpapi.lib")
 
 int main() 
 {
