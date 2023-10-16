@@ -9,10 +9,10 @@ import pathlib
 
 
 #change this include to reflect your configuration for the build, EG:
-from proj_demo.config_proj import *
+#from proj_demo.config_proj import *
 #from img.config_cimg import *
 
-#from config import *
+from config import *
         
 def run_win_cmd(cmd):
     

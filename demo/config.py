@@ -23,15 +23,15 @@ SRC             = ""
 #-------------------------------------------------------------------------------------------------------------
 LIB_WINDOWS     = ""
 #-------------------------------------------------------------------------------------------------------------
-#   BOOST HEADERS AND LIBS
+#  HEADERS AND LIBS
 #-------------------------------------------------------------------------------------------------------------
 LIB_HEADERS   = "/I"+""
 LIB           = ""
 #-------------------------------------------------------------------------------------------------------------
 #   CMD TO BUILD
-#   EG: 
-#       BUILD + TEMPLATE_LIB + INCLUDE + SRC + LINK + LIB_WINDOWS
-#       BUILD + TEMPLATE_LIB + INCLUDE + "%%SRC%%" + LIB_WINDOWS
+#   if you want to build only one file using build.bat just leave as "%%SRC%%"
+#   and use build yourfile.cpp
+#   otherwise you can add sources above in the SRC variable
 #-------------------------------------------------------------------------------------------------------------
-BUILD_CMD     = COMPILER + FLAGS + TEMPLATE_LIB + "%%SRC%%"
+BUILD_CMD     = COMPILER + FLAGS + TEMPLATE_LIB + "%%SRC%%" + LINK
 #-------------------------------------------------------------------------------------------------------------
