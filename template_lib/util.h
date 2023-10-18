@@ -849,56 +849,7 @@ namespace mytools
 
 	namespace util
 	{
-
-
-		// this is a c++ thread wrapper pool
-		using  myThreads = std::vector< std::thread >;
-
-		class ThreadWrapper
-		{
-		public:
-			ThreadWrapper()
-			{
-				NumberOfCrtThreads = 0;
-				alljoined = false;
-			}
-
-			~ThreadWrapper()
-			{
-				if (alljoined == false)
-				{
-					Join();
-				}
-			}
-
-			// f function is the actual execution thread code
-			template<typename F>
-			void AddAndRun(F& f)
-			{
-				std::thread t{ f };
-				NumberOfCrtThreads++;
-				// you need to move t 
-				ThreadDataPool.push_back(std::move(t));
-			}
-
-			void Join()
-			{
-				for (auto& t : ThreadDataPool)
-				{
-					t.join();
-				}
-
-				ThreadDataPool.clear();
-				alljoined = true;
-
-			}
-			int GetNumberOfCrtThreads()const { return NumberOfCrtThreads; };
-		private:
-			myThreads ThreadDataPool;
-			int NumberOfCrtThreads;
-			bool alljoined;
-		};
-
+				
 		// Basically it reads a csv file and copies it to a const vector<vector<double>>& obs
 		// after you calling the readCSV method
 		class csvprocessing

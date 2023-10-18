@@ -6,7 +6,7 @@
 #include <iostream>
 #include <winsock2.h>
 #include <iphlpapi.h>
-#include <ws2tcpi
+#include <ws2tcpi.h>
 
 #pragma comment(lib, "ws2_32.lib")
 #pragma comment(lib, "iphlpapi.lib")
