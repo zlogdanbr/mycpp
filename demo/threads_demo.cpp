@@ -51,24 +51,24 @@ private:
 	bool alljoined;
 };
 
-class D
+class DataContainerDemo
 {
 public:
 	int a;
-	void jaca(){std::cout << "running jaca: " << a << std::endl;};
-	bool pog = true;
+	void _printValue() const {std::cout << "Value: " << a << std::endl;};
+	bool _flagleave = true;
 };
 
 
-D d;
+DataContainerDemo d;
 
 	
 void foo1()
 {
 	std::mutex mymutex;	
-	std::cout << "foo1" << std::endl;
+	std::cout << "foo1 started" << std::endl;
 	mymutex.lock();
-	bool f = d.pog ;
+	bool f = d._flagleave ;
 	mymutex.unlock();
 	while(f)
 	{
@@ -76,7 +76,7 @@ void foo1()
 		d.a++;	
 		mymutex.unlock();
 		mymutex.lock();
-		f = d.pog ;
+		f = d._flagleave ;
 		mymutex.unlock();	
 		this_thread::sleep_for(chrono::milliseconds(50));		
 	}
@@ -86,10 +86,10 @@ void foo1()
 void foo2()
 {
 	std::mutex mymutex;	
-	std::cout << "foo2" << std::endl;
+	std::cout << "foo2 started" << std::endl;
 	
 	mymutex.lock();
-	bool f = d.pog ;
+	bool f = d._flagleave ;
 	mymutex.unlock();
 	while(f)
 	{
@@ -97,7 +97,7 @@ void foo2()
 		d.a++;	
 		mymutex.unlock();		
 		mymutex.lock();
-		f = d.pog ;
+		f = d._flagleave ;
 		mymutex.unlock();	
 		this_thread::sleep_for(chrono::milliseconds(50));
 	}
@@ -107,7 +107,7 @@ void foo2()
 void foo3()
 {
 	this_thread::sleep_for(chrono::milliseconds(5000));
-	d.pog = false;
+	d._flagleave = false;
 }
 
 int main()
@@ -127,6 +127,6 @@ int main()
 		
 	mts.Join();
 	
-	d.jaca();
+	d._printValue();
 	
 }
