@@ -1,3 +1,4 @@
+// http://cimg.eu
 #include "CImg.h"
 using namespace cimg_library;
  
