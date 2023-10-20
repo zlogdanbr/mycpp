@@ -58,6 +58,63 @@ In order to use:
 You can use it at your will, and please remember to mention me if possible.
 
 
+
+-----------------------------------------------------------------------------------------------
+
+Install and configure libcurl Windows/VS Studio Command Line:
+
+https://juhilee.hashnode.dev/configuring-libcurl-in-visual-studio-2022
+
+-----------------------------------------------------------------------------------------------
+
+Single header REST API:
+
+https://github.com/yhirose/cpp-httplib
+
+-----------------------------------------------------------------------------------------------
+
+Single header JSON API:
+
+https://github.com/nlohmann/json
+
+-----------------------------------------------------------------------------------------------
+
+Windows C++ System Programming:
+
+https://caiorss.github.io/C-Cpp-Notes/WindowsAPI-cpp.html#org9c1b3fd
+
+-----------------------------------------------------------------------------------------------
+
+CImg Single Header C++ Image Processing:
+
+http://cimg.eu
+
+needs the following Windows libraries
+kernel32.lib user32.lib gdi32.lib Shell32.lib
+
+-----------------------------------------------------------------------------------------------
+
+Libcurl:
+
+https://curl.se/libcurl/
+
+-----------------------------------------------------------------------------------------------
+
+OpenSSL:
+
+https://www.openssl.org
+
+Use chocolatey to download
+
+https://community.chocolatey.org/packages/openssl
+
+-----------------------------------------------------------------------------------------------
+
+Windows package manager:
+
+https://chocolatey.org
+
+-----------------------------------------------------------------------------------------------
 _________________________________________________
 **2020, 2021, 2022, 2023 Daniel Vasconcelos Gomes**
 **You can use this freely but I don't take responsibility for whatever problems this will likely cause. I use this as a library for my code.**
