@@ -47,7 +47,7 @@ In order to use:
    https://github.com/zlogdanbr/mycpp/blob/main/demo/config.py
   So, edit your config file and import it in the build.py script
   
-- I added the folder with build.bat to my windows path so I can call it anytime and build using
+- I added the build_tool/folder with build.bat to my windows path so I can call it anytime and build using
   build mycpp.cpp
 
   But it also supports building projects using build --projects, just remember to change the config.py file.
