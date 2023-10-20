@@ -19,7 +19,7 @@ TEMPLATE_LIB    = "/I"+ HOME + "Documents\\GitHub\\mycpp\\mycpp\\template_lib "
 #   INCLUDE FOLDERS AND SRC FOLDERS
 #-------------------------------------------------------------------------------------------------------------
 INCLUDE         = ""
-SRC             = ""
+SRC             = "test.cpp"
 #-------------------------------------------------------------------------------------------------------------
 #   WINDOWS NECESSARY LIBS
 #   Cimg for example requires:
@@ -37,5 +37,5 @@ LIB           = ""
 #   and use build yourfile.cpp
 #   otherwise you can add sources above in the SRC variable
 #-------------------------------------------------------------------------------------------------------------
-BUILD_CMD     = COMPILER + FLAGS + TEMPLATE_LIB + INCLUDE + "%%SRC%%" + LINK + LIB_WINDOWS
+BUILD_CMD     = COMPILER + FLAGS + TEMPLATE_LIB + INCLUDE + SRC + LINK + LIB_WINDOWS
 #-------------------------------------------------------------------------------------------------------------

@@ -37,5 +37,5 @@ LIB           = ""
 #   and use build yourfile.cpp
 #   otherwise you can add sources above in the SRC variable
 #-------------------------------------------------------------------------------------------------------------
-BUILD_CMD     = COMPILER + FLAGS + TEMPLATE_LIB + "%%SRC%%" + LINK
+BUILD_CMD     = COMPILER + FLAGS + LIB_HEADERS + "%%SRC%%" + LINK + LIB
 #-------------------------------------------------------------------------------------------------------------
