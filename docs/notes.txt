@@ -1,0 +1,4 @@
+
+Install and configure libcurl Windows/VS Studio Command Line:
+
+https://juhilee.hashnode.dev/configuring-libcurl-in-visual-studio-2022
