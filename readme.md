@@ -47,19 +47,22 @@ In order to use:
    https://github.com/zlogdanbr/mycpp/blob/main/demo/config.py
   So, edit your config file and import it in the build.py script
   
-- I added the build_tool/folder with build.bat to my windows path so I can call it anytime and build using
-  build mycpp.cpp
+- Download the contents of 
+https://github.com/zlogdanbr/mycpp/tree/main/build_tool
+And add the folder you downloaded them to your windows path
 
-  But it also supports building projects using build --projects, just remember to change the config.py file.
-  There is an example of this at:
+Once you do that you may edit the config.py file and configure your build. 
+They are easy to use and more fun than makefiles. I suspect that you can port than to Linux easily.
 
-  https://github.com/zlogdanbr/mycpp/tree/main/demo/proj_demo
+build --s yoursource.cpp 	# builds the select source ignoring the SRC variable
+build						# expects you to have set the SRC variable at config.py
+build --clean				# removes OBJs and EXEs files
 
 You can use it at your will, and please remember to mention me if possible.
 
-
-
 -----------------------------------------------------------------------------------------------
+As you will notice I have left examples on how to use the following libraries, using my python script.
+
 
 Install and configure libcurl Windows/VS Studio Command Line:
 
@@ -107,6 +110,16 @@ https://www.openssl.org
 Use chocolatey to download
 
 https://community.chocolatey.org/packages/openssl
+
+
+
+-----------------------------------------------------------------------------------------------
+
+Eigen:
+
+Great lib for manipulating matrix and linear algebra ( this is what basically you do with Machine Learning and AI )
+
+https://eigen.tuxfamily.org/index.php?title=Main_Page
 
 -----------------------------------------------------------------------------------------------
 
