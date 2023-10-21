@@ -110,7 +110,7 @@ namespace mytools
 		template<typename T, typename M>
 		void 
 		print_pairs(	const list<pair<T, M> >& m,
-						stringstream& out)
+						std::stringstream& out)
 		{
 			for (const auto& im : m)
 			{
@@ -125,8 +125,8 @@ namespace mytools
 		*/
 		template<typename T, typename M>
 		void 
-		print_vectoe(	const vector<pair<T, M> >& m,
-						stringstream& out)
+		print_vectoe(	const std::vector<pair<T, M> >& m,
+						std::stringstream& out)
 		{
 			for (const auto& im : m)
 			{
@@ -142,12 +142,12 @@ namespace mytools
 		void 
 		print_stlc(T& m)
 		{
-			cout << "[ ";
+			std::cout << "[ ";
 			for (const auto& im : m)
 			{
-				cout << im << " ";
+				std::cout << im << " ";
 			}
-			cout << "]\n";
+			std::cout << "]\n";
 		}
 
 		/*
@@ -405,7 +405,7 @@ namespace mytools
 
 			void print_me() const
 			{
-				stringstream out;
+				std::stringstream out;
 				// print_vector
 				for (const auto& rows : data)
 				{
@@ -414,11 +414,11 @@ namespace mytools
 					else
 						out << "[empty]" << "\n";
 				}
-				cout << out.str();
+				std::cout << out.str();
 			}
 
 		private:
-			vector< vector< pair<int, int> > > data;
+			std::vector< std::vector< pair<int, int> > > data;
 			int n_nodes;
 		};
 
@@ -615,7 +615,7 @@ namespace mytools
 					delete c;
 				}
 				size = 0;
-				cout << "all cleared " << endl;
+				std::cout << "all cleared " << std::endl;
 			}
 
 			virtual int push(T v) final
@@ -962,7 +962,7 @@ namespace mytools
 		{
 			auto stop = high_resolution_clock::now();
 			auto duration = duration_cast<microseconds>(stop - start);
-			cout << "Execution time(ms): " << duration.count() / 1000 << endl;
+			std::cout << "Execution time(ms): " << duration.count() / 1000 << endl;
 		}
 
 		// Prints a one D vector
@@ -1347,9 +1347,9 @@ namespace mytools
 		void 
 		debug_Dmatrix(Dmatrix<M>&& a)
 		{
-			cout << "Size: " << a.rows() << " x " << a.cols() << endl;
-			cout << "Contents:" << endl;
-			cout << a;
+			std::cout << "Size: " << a.rows() << " x " << a.cols() << std::endl;
+			std::cout << "Contents:" << std::endl;
+			std::cout << a;
 		}
 
 		// converts a vector of a vector to a matrix
@@ -1422,8 +1422,8 @@ namespace mytools
 			int rows = m1.rows();
 			int cols = m1.cols();
 
-			cout << "rows: " << rows << endl;
-			cout << "cols: " << cols << endl;
+			std::cout << "rows: " << rows << std::endl;
+			std::cout << "cols: " << cols << std::endl;
 
 			Dmatrix<T> out(cols, rows);
 
