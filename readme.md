@@ -54,9 +54,9 @@ And add the folder you downloaded them to your windows path
 Once you do that you may edit the config.py file and configure your build. 
 They are easy to use and more fun than makefiles. I suspect that you can port than to Linux easily.
 
-build --s yoursource.cpp 	# builds the select source ignoring the SRC variable
-build						# expects you to have set the SRC variable at config.py
-build --clean				# removes OBJs and EXEs files
+build --s yoursource.cpp 	> builds the select source ignoring the SRC variable
+build						> expects you to have set the SRC variable at config.py
+build --clean				> removes OBJs and EXEs files
 
 You can use it at your will, and please remember to mention me if possible.
 
