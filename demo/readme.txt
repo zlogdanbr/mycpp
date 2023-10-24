@@ -1,2 +1,7 @@
+edit config.py by having
+
+BUILD_CMD     = COMPILER + FLAGS + TEMPLATE_LIB + "%%SRC%%" + LINK + LIB
+
+
 run 
-build <source_file>.cpp
+build --s <source_file>.cpp
