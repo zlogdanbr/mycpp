@@ -1,22 +1,16 @@
 _________________________________________________
 
-This repository contains
-=========================
 
-template_lib
-===============
-
-A large header file with the useful code I wrote or found on books, the internet, or forums. ( The sources are always mentioned when applicable ). 
+This repo contais large header file with the useful code I wrote or found on books, the internet, or forums. ( The sources are always mentioned when applicable ). 
 It is a large header file with a few namespaces. It contains useful code for search, debug, file, buffer handling, etc.
 
 
-The usage is simple. Copy the util.h header file to your project and include it. Or:
+The usage is simple. Copy the util.h header file to your project and include it. 
 
 		
-It also includes examples of their usage in the subfolder demo, plus some examples of modern C++ I have been learning.		
+It also includes examples of their usage in the subfolder demo, plus some examples of modern C++ I have been learning, and examples of using libraries.	
 
-**IMPORTANT:**
-I use STL and C++17
+
 
 >namespace mytools::algo
 Contains code to be used with STL, DS and algorithms]
@@ -31,39 +25,36 @@ Unit testing functions
 Linear algebra, matrix, numerical methods
 
 
+**IMPORTANT:**
+I use STL and C++17
+
 Building files:
 
-In order to use:
 
-> git clone https://github.com/zlogdanbr/images.git
-> Install python 3.10 or above
-> Install Visual Studio 2022 and C++ tools
-> Install https://chocolatey.org
-
-  
-> Download the contents of 
-https://github.com/zlogdanbr/mycpp/tree/main/build_tool
-And add the folder you downloaded them to your windows path
+* git clone https://github.com/zlogdanbr/images.git
+* Install python 3.10 or above
+* Install Visual Studio 2022 and C++ tools
+* Install https://chocolatey.org
+* Download the contents of https://github.com/zlogdanbr/mycpp/tree/main/build_tool
+* And add the folder you downloaded them to your windows path
 
 Once you do that you may edit the config.py file and configure your build. 
 They are easy to use and more fun than makefiles. I suspect that you can port than to Linux easily.
 
-> build --s yoursource.cpp 	 builds the select source ignoring the SRC variable (*)
-> build						 expects you to have set the SRC variable at config.py
-> build --clean				 removes OBJs and EXEs files
+* build --s yoursource.cpp 	 (builds the select source ignoring the SRC variable see below )
+* build						 (expects you to have set the SRC variable at config.py)
+* build --clean				 (removes OBJs and EXEs files)
 
 
-(*)
-Please change your local config.sys to have 
+If you want to build only one source, please change your local config.sys to have 
 
 BUILD_CMD     = COMPILER + FLAGS + TEMPLATE_LIB + "%%SRC%%" + LINK + LIB
 
-this will allow the option to build a single source
+this will allow the option to build a single source.
 
------------------------------------------------------------------------------------------------
-As you will notice I have left examples on how to use the following libraries as well, 
-using my python script.
------------------------------------------------------------------------------------------------
+
+As you will notice I have left examples on how to use the a few important libraries as well, 
+using my python script. The list of the libraries with examples is below.
 
 
 -----------------------------------------------------------------------------------------------
