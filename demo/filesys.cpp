@@ -81,30 +81,30 @@ bool create_dir( const std::string& _directory )
 
 int main() 
 {
-  std::string path = "C:\\Users\\Administrador\\Documents\\GitHub\\mycpp\\mycpp\\demo";
-  
-  if (directory_exists(path)) 
-  {
-    std::cout << "The location exists" << std::endl;;
-  }
+	std::string path = "C:\\Users\\Administrador\\Documents\\GitHub\\mycpp\\mycpp\\demo";
 
-  if (is_directory(path))
-  {
-    std::cout << "It is a directory" << std::endl;;
-  }
+	if (directory_exists(path)) 
+	{
+		std::cout << "The location exists" << std::endl;;
+	}
 
-  if (!is_file(path)) 
-  {
-    std::cout << "It is not a file" << std::endl;;
-  }
-  
-  if (create_dir(path+"\\out"))
-  {
-    std::cout << "Cannot create directory" << std::endl;;
-  }  
-  
-  std::string filename = path + "\\" + "filesys.cpp";
-  std::cout << filename << " has size " << getFileSize(filename) << std::endl;
-  std::cout << filename << " last updated " << getLastTime(filename) << std::endl;
+	if (is_directory(path))
+	{
+		std::cout << "It is a directory" << std::endl;;
+	}
+
+	if (!is_file(path)) 
+	{
+		std::cout << "It is not a file" << std::endl;;
+	}
+
+	if (create_dir(path+"\\out"))
+	{
+		std::cout << "Cannot create directory" << std::endl;;
+	}  
+
+	std::string filename = path + "\\" + "filesys.cpp";
+	std::cout << filename << " has size " << getFileSize(filename) << std::endl;
+	std::cout << filename << " last updated " << getLastTime(filename) << std::endl;
   
 }

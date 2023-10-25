@@ -12,11 +12,6 @@ It is a large header file with a few namespaces. It contains useful code for sea
 
 The usage is simple. Copy the util.h header file to your project and include it. Or:
 
-If you want to build them, more easily, on Windows automatically, please:
-	- install python
-	- Visual Studio 2022 compiler/SDK
-	- Then go to the folder demo and type:
-		build your_cpp.cpp
 		
 It also includes examples of their usage in the subfolder demo, plus some examples of modern C++ I have been learning.		
 
@@ -40,10 +35,10 @@ Building files:
 
 In order to use:
 
-- git clone https://github.com/zlogdanbr/images.git
-- Install python 3.10 or above
-- Install Visual Studio 2022 and C++ tools
-- Install https://chocolatey.org
+> git clone https://github.com/zlogdanbr/images.git
+> Install python 3.10 or above
+> Install Visual Studio 2022 and C++ tools
+> Install https://chocolatey.org
 
   
 - Download the contents of 
@@ -53,11 +48,10 @@ And add the folder you downloaded them to your windows path
 Once you do that you may edit the config.py file and configure your build. 
 They are easy to use and more fun than makefiles. I suspect that you can port than to Linux easily.
 
-build --s yoursource.cpp 	> builds the select source ignoring the SRC variable (*)
-build						> expects you to have set the SRC variable at config.py
-build --clean				> removes OBJs and EXEs files
+> build --s yoursource.cpp 	# builds the select source ignoring the SRC variable (*)
+> build						# expects you to have set the SRC variable at config.py
+> build --clean				# removes OBJs and EXEs files
 
-You can use it at your will, and please remember to mention me if possible.
 
 (*)
 Please change your local config.sys to have 

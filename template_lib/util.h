@@ -1093,7 +1093,7 @@ namespace mytools
 			A = ((sumx2 * sumy - sumx * sumxy) * 1.0 / (n * sumx2 - sumx * sumx) * 1.0);
 			b = ((n * sumxy - sumx * sumy) * 1.0 / (n * sumx2 - sumx * sumx) * 1.0);
 			a = exp(A);
-			printf("The curve is Y= %4.3fe^%4.3fX\n", a, b);
+			//printf("The curve is Y= %4.3fe^%4.3fX\n", a, b);
 			return 0;
 		}
 
@@ -1102,9 +1102,11 @@ namespace mytools
 		// Solves a linear system of size n, implicit at the vector a size
 		// I was looking for an algorithm for this when I stumbled upon the
 		// C++ code so why do it myself :-) ?
+		// vector a is a augmented matrix where AX=Y
+		// AY form a new matrix
 		template<typename T >
 		int 
-		gauss(	vector < vector<T> > a, 
+		gauss(	vector < vector<T> >& a, 
 				vector<T>& ans)
 		{
 			const double EPS = 1e-9;
