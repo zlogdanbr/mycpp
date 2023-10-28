@@ -65,29 +65,6 @@ Easiest way to install, using
 https://community.chocolatey.org/packages/boost-msvc-14.3
 
 
-
------------------------------------------------------------------------------------------------
-Crow:
-
-https, rest, etc 
-https://crowcpp.org/master/
-
-requires boost.
-
------------------------------------------------------------------------------------------------
-
------------------------------------------------------------------------------------------------
-libcurl:
-
-Install and configure libcurl Windows/VS Studio Command Line:
-
-https://juhilee.hashnode.dev/configuring-libcurl-in-visual-studio-2022
-
------------------------------------------------------------------------------------------------
-Single header REST API:
-
-https://github.com/yhirose/cpp-httplib
-
 -----------------------------------------------------------------------------------------------
 Single header JSON API:
 

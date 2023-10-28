@@ -76,8 +76,8 @@ def build_single(build_cmd, src):
         dir = os.getcwd()
         file_name, t = os.path.splitext(src)
         remove_files(dir,"obj")        
-        create_folder(dir,"out")
-        move(file_name+".exe", dir+"\\out")        
+        #create_folder(dir,"out")
+        #move(file_name+".exe", dir+"\\out")        
         print("-------------------------------------------------------------------------------------------------------------------------") 
         
 def build_project(build_cmd):      
