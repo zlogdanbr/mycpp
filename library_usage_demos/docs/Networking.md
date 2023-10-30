@@ -7,7 +7,7 @@
 
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------
-Blocking Socket I/O
+#Blocking Socket I/O
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 					
 
@@ -47,11 +47,11 @@ https://www.studytonight.com/network-programming-in-python/blocking-and-nonblock
 
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------
-HTTP protocol
+#HTTP protocol
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
-REQUEST
+##REQUEST
 --------------------------
 
 The only header field that is actually required is Host. The Host field tells the web server
@@ -86,7 +86,7 @@ server wouldn't know whether any additional header fields were still going to be
 In C, the blank line looks like this: \r\n\r\n
 
 
-RESPONSE
+##RESPONSE
 -----------------------
 
 __________________________________________________________________________
@@ -127,7 +127,7 @@ In the preceding example, we see the HTTP body starts with 44 followed by a newl
 interpret hexadecimal numb
 
 
-RESPONSE CODES
+##RESPONSE CODES
 -----------------
 
 200 OK: The client's request is successful, and the server sends the requested
@@ -233,7 +233,7 @@ Book "Network programming in C"  by Lewis Van Winkle
 
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------
-The REST API
+#The REST API
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 
 All resource identifiers are specified relative to the root:
@@ -359,8 +359,33 @@ Como podemos perceber, o modelo é simples e intuitivo, o que nos leva a percebe
 Felizmente, o REST veio para nos mostrar como é possível realizar praticamente qualquer operação utilizando puramente os recursos desse protocolo.
 
 
+
+Here are a few common examples of headers that are frequently used in REST APIs:
+
+"Content-Type":
+Specifies the format of the request body. For example, a value of "application/json" indicates that the request body is in JSON format.
+"Accept": 
+Specifies the preferred format of the response. For example, a value of "application/json" indicates that the client prefers a response in JSON format.
+"Authorization": 
+Used to send authentication information, such as an access token or API key.
+"User-Agent": 
+Identifies the client software and version.
+"Accept-Encoding": 
+Specifies the preferred encoding for the response, such as "gzip" or "deflate".
+"Accept-Language": 
+Specifies the preferred language of the response. For example, a value of "en-US" indicates that the client prefers a response in US English.
+"Cache-Control": 
+Specifies the cache control directives for the response. For example, a value of "no-cache" indicates that the response should not be cached.
+"If-Modified-Since": 
+Specifies a date, and the server only returns the response if it has been modified since the specified date.
+These are just a few examples of headers that are commonly used in REST APIs. 
+Depending on the specific needs of the API, there may be other headers that are used as well. 
+The use of headers in REST APIs provides a flexible mechanism for sending additional information 
+about the request and customizing the behavior of the API.
+
 Sources:
 https://www.ibm.com/docs/en/odm/8.8.1?topic=resources-rest-api
 https://aws.amazon.com/pt/what-is/restful-api/
 https://www.devmedia.com.br/rest-tutorial/28912
+https://www.torocloud.com/blog/using-query-parameters-and-headers-in-rest-api-design#:~:text=Some%20common%20headers%20used%20in,the%20behavior%20of%20the%20API.
 
