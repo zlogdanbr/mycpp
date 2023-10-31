@@ -125,7 +125,7 @@ namespace mytools
 		*/
 		template<typename T, typename M>
 		void 
-		print_vectoe(	const std::vector<pair<T, M> >& m,
+		print_vector(	const std::vector<pair<T, M> >& m,
 						std::stringstream& out)
 		{
 			for (const auto& im : m)
@@ -898,7 +898,7 @@ namespace mytools
 						{
 							if (cnt < nfields)
 							{
-								pos = Line.find(',', start);
+								pos = static_cast<int>(Line.find(',', start));
 								string tmp = Line.substr(start, pos - start);
 								start = pos + 1;
 								double f = stof(tmp);
@@ -1079,7 +1079,7 @@ namespace mytools
 				Y.push_back(log(tmp));
 			}
 
-			int n = Y.size();
+			int n = static_cast<int>(Y.size());
 
 			for (int i = 0; i <= n - 1; i++)
 			{
@@ -1203,7 +1203,7 @@ namespace mytools
 				return *this;
 			}
 
-			Dmatrix(Dmatrix&& m)
+			Dmatrix(Dmatrix&& m) noexcept
 			{
 				this->N = m.N;
 				this->M = m.M;
@@ -1359,8 +1359,8 @@ namespace mytools
 		convertVector2Matrix(vector<vector<double>>& data)
 		{
 
-			int N = data.size();
-			int M = data[0].size() - 1;
+			int N = static_cast<int>(data.size());
+			int M = static_cast<int>(data[0].size() - 1);
 
 			Dmatrix<double> t(N, M);
 
@@ -1404,7 +1404,7 @@ namespace mytools
 		convertcol2Matrix(vector<double>& y)
 		{
 
-			int N = y.size();
+			int N = static_cast<int>(y.size());
 
 			Dmatrix<double> t(N, 1);
 

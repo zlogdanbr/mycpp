@@ -1,15 +1,18 @@
 # My CPP files, projects and tools
 
-This repo contais large header file with the useful code I wrote or found on books, the internet, or forums. ( The sources are always mentioned when applicable ). 
+
+## Description:
+
+This repo contais large header file with the useful code I wrote or found on books, the internet, or forums. 
+( The sources are always mentioned when applicable ). 
 It is a large header file with a few namespaces. It contains useful code for search, debug, file, buffer handling, etc.
 
 
-The usage is simple. Copy the util.h header file to your project and include it. 
-
-		
-It also includes examples of their usage in the subfolder demo, plus some examples of modern C++ I have been learning, and examples of using libraries.	
+The usage is simple. 
+Copy the util.h header file to your project and include it. 
 
 
+###Namespaces
 
 >namespace mytools::algo
 Contains code to be used with STL, DS and algorithms]
@@ -23,11 +26,15 @@ Unit testing functions
 >namespace mytools::mymath
 Linear algebra, matrix, numerical methods
 
+It also contains a few examples of using some important C++ libraries for Image Processing, Linear Algebra, networking, etc
+
 
 **IMPORTANT:**
 I use STL and C++17
 
-Building files:
+## Building files:
+
+It is possible to use Microsoft C++ compiler without VS IDE.  See below, how.
 
 
 * git clone https://github.com/zlogdanbr/images.git
@@ -53,7 +60,17 @@ this will allow the option to build a single source.
 
 
 As you will notice I have left examples on how to use the a few important libraries as well, 
-using my python script. The list of the libraries with examples is below.
+using my python script. 
+
+## Useful links
+
+The list of the libraries with examples is below along with some recommended sites and tools.
+
+-----------------------------------------------------------------------------------------------
+Microsoft C/C++ Compiler: 
+
+https://learn.microsoft.com/en-us/cpp/build/building-on-the-command-line?view=msvc-170
+https://learn.microsoft.com/en-us/cpp/build/reference/compiler-options-listed-by-category?view=msvc-170
 
 
 -----------------------------------------------------------------------------------------------
@@ -87,6 +104,7 @@ kernel32.lib user32.lib gdi32.lib Shell32.lib
 Libcurl:
 
 https://curl.se/libcurl/
+https://curl.se/libcurl/c/libcurl-tutorial.html
 
 -----------------------------------------------------------------------------------------------
 OpenSSL:
