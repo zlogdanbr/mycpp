@@ -3,7 +3,7 @@
 
 ## Description:
 
-This repo contais large header file with the useful code I wrote or found on books, the internet, or forums. 
+This repo contanis a large header file with the useful code I wrote or found on books, the internet, or forums. 
 ( The sources are always mentioned when applicable ). 
 It is a large header file with a few namespaces. It contains useful code for search, debug, file, buffer handling, etc.
 
