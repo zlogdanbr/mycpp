@@ -12,7 +12,7 @@ The usage is simple.
 Copy the util.h header file to your project and include it. 
 
 
-###Namespaces
+### Namespaces
 
 >namespace mytools::algo
 Contains code to be used with STL, DS and algorithms]
@@ -105,6 +105,8 @@ Libcurl:
 
 https://curl.se/libcurl/
 https://curl.se/libcurl/c/libcurl-tutorial.html
+https://everything.curl.dev/libcurl/getinfo
+
 
 -----------------------------------------------------------------------------------------------
 OpenSSL:
