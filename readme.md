@@ -43,7 +43,7 @@ I use STL and C++17
 It is possible to use Microsoft C++ compiler without VS IDE.  See below, how.
 
 
-* git clone https://github.com/zlogdanbr/images.git
+* git clone this repo
 * Install python 3.10 or above
 * Install Visual Studio 2022 and C++ tools
 * Install https://chocolatey.org
