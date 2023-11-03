@@ -5,10 +5,12 @@
 
 This repo contains a large header file with the useful code I wrote or found on books, the internet, or forums. 
 ( The sources are always mentioned when applicable ). 
-It is a large header file with a few namespaces. It contains useful code for search, debug, file, buffer handling, etc.
+It is a large header file with a few namespaces. 
+It contains useful code for search, debug, file, buffer handling, etc.
 
 
-The usage is simple. 
+The usage is simple:
+
 Copy the util.h header file to your project and include it. 
 
 
@@ -27,6 +29,10 @@ Unit testing functions
 Linear algebra, matrix, numerical methods
 
 It also contains a few examples of using some important C++ libraries for Image Processing, Linear Algebra, networking, etc
+
+## Sqlite
+
+There are a small class written to be used with sqlite. It assumes you had it installed in your system and that the compiler and linker know where it is.
 
 
 **IMPORTANT:**
