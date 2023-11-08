@@ -232,6 +232,8 @@
 
 [MinGW installation - CodeBlocks](http://wiki.codeblocks.org/index.php/MinGW_installation)
 
+[WxWidgets Exampples](https://github.com/gammasoft71/Examples_wxWidgets)
+
 ### Libraries
 
 
