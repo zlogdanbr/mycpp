@@ -5,6 +5,19 @@
 
 using namespace mytools::util;
 
+
+// if using inside a class
+// std::thread th_obj( fn_object( ) , params ) 
+class th_obj {
+public:
+    void operator()(/*function, params*/)
+    {
+    }
+};		
+
+
+
+
 // this is a c++ thread wrapper pool
 using  myThreads = std::vector< std::thread >;
 
