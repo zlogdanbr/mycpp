@@ -12,6 +12,7 @@
 
 using namespace mytools::util;
 using namespace mytools::mymath;
+using namespace mytools::algo;
 
 class B
 {
@@ -158,9 +159,9 @@ auto Mult(T1&& t1, T2&& t2) ->decltype(forward<T1>(t1)*forward<T2>(t2))
    return forward<T1>(t1)*forward<T2>(t2);
 }
 
-
-int main()
+void test_operator_crazy()
 {
+	
 	vector<vector<double>> data1  	{{1,1, 1},
 									{1, 1, 1},
 									{1, 1, 1}};
@@ -174,4 +175,25 @@ int main()
 	debug_Dmatrix(Plus(d1,d2));
 	debug_Dmatrix(Mult(d1,d2));
    
+}
+
+
+
+
+int main()
+{
+	std::stack<int>  s1;
+	
+	s1.push(1);
+	s1.push(2);
+	s1.push(3);
+	
+	printstack(s1);
+	
+	s1.pop();
+	
+	printstack(s1);
+
+	
+	
 }
